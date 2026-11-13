@@ -50,7 +50,7 @@ window.Presentation = (() => {
  }
  function backward(){
   if(revealIndex>0){
-   stage.querySelector(".reveal-area")?.querySelector(".reveal-item:last-of-type")?.remove();
+   const rows=stage.querySelectorAll(".reveal-item");rows[rows.length-1]?.remove();
    revealIndex--;updateRevealHint();updateControls();return;
   }
   if(index>0){index--;revealIndex=slides[index]?.reveals?.length||0;render()}
