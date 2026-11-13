@@ -25,9 +25,9 @@ window.Presentation = (() => {
   next.setAttribute("aria-label",revealIndex<(slide.reveals?.length||0)?"Показать следующий ответ":"Следующий слайд");
  }
  function show(content,afterEnd){slides=content;index=0;revealIndex=0;onEnd=afterEnd;render()}
- function forward(){const reveals=slides[index]?.reveals||[];if(revealIndex<reveals.length){revealIndex++;render();return}if(index<slides.length-1){index++;revealIndex=0;render()}else if(onEnd)onEnd()}
+ function first(){index=0;revealIndex=0;render()}\n function last(){index=slides.length-1;revealIndex=slides[index]?.reveals?.length||0;render()}\n function forward(){const reveals=slides[index]?.reveals||[];if(revealIndex<reveals.length){revealIndex++;render();return}if(index<slides.length-1){index++;revealIndex=0;render()}else if(onEnd)onEnd()}
  function backward(){if(revealIndex>0){revealIndex--;render();return}if(index>0){index--;revealIndex=slides[index]?.reveals?.length||0;render()}}
  next.addEventListener("click",forward);prev.addEventListener("click",backward);
  document.getElementById("fullscreen").addEventListener("click",()=>{if(!document.fullscreenElement)document.getElementById("lessonView").requestFullscreen?.();else document.exitFullscreen?.()});
- return {show,forward,backward};
+ return {show,forward,backward,first,last};
 })();
