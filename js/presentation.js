@@ -7,7 +7,9 @@ window.Presentation = (() => {
  function makeRevealRow(item,number){const row=el("div","reveal-item");row.append(el("span","reveal-number",String(number).padStart(2,"0")));row.append(el("p","",item));return row}
  function updateControls(){
   const slide=slides[index];if(!slide)return;
-  updateControls();
+  prev.disabled=index===0&&revealIndex===0;
+  next.disabled=index===slides.length-1&&revealIndex>=(slide.reveals?.length||0);
+  next.setAttribute("aria-label",revealIndex<(slide.reveals?.length||0)?"Показать следующий ответ":"Следующий слайд");
  }
  function updateRevealHint(){
   const area=stage.querySelector(".reveal-area");if(!area)return;
