@@ -15,7 +15,7 @@
   lessonView.classList.add("active");lessonView.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
   const lesson=window.LESSONS?.[`${module.id}-${li+1}`];
   const slides=lesson||[{kicker:`${module.month.toUpperCase()} · ЗАНЯТИЕ ${String(number).padStart(2,"0")}`,title,lead:"Подробное содержание этого занятия мы разработаем отдельно.",placeholder:true,note:"Пока это заглушка. Уроки создаём и утверждаем последовательно."}];
-  Presentation.show(slides,()=>{if(li<3)openLesson(mi,li+1);else if(mi<8)openLesson(mi+1,0)});
+  Presentation.show(slides);
  }
  function closeLesson(){lessonView.classList.remove("active");lessonView.setAttribute("aria-hidden","true");document.body.style.overflow="";if(document.fullscreenElement)document.exitFullscreen?.()}
  document.getElementById("backHome").addEventListener("click",closeLesson);
@@ -23,11 +23,11 @@
  CourseNavigation.renderDrawer(openLesson);
  document.addEventListener("keydown",e=>{
   if(!lessonView.classList.contains("active"))return;
-  const tag=document.activeElement?.tagName;if(["INPUT","TEXTAREA","SELECT","BUTTON"].includes(tag))return;
+  const tag=document.activeElement?.tagName;if(["INPUT","TEXTAREA","SELECT"].includes(tag)||document.activeElement?.isContentEditable)return;
   if(e.key==="ArrowRight"){e.preventDefault();Presentation.forward()}
   if(e.key==="ArrowLeft"){e.preventDefault();Presentation.backward()}
   if(e.key.toLowerCase()==="m")CourseNavigation.open();
-  if(e.key==="Home"){e.preventDefault();document.getElementById("backHome").focus()}
+  if(e.key==="Home"){e.preventDefault();Presentation.first()}\n  if(e.key==="End"){e.preventDefault();Presentation.last()}
   if(e.key==="f"&&!e.ctrlKey&&!e.metaKey){e.preventDefault();document.getElementById("fullscreen").click()}
  });
 })();
