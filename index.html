@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080d1a">
+  <meta name="description" content="Учебный курс Python для начинающих — 36 практических занятий.">
+  <title>Python Lab — курс программирования</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="#home" aria-label="Python Lab — главная">
+      <span class="brand-mark">Py</span><span>PYTHON<span class="brand-light">LAB</span></span>
+    </a>
+    <div class="topbar-meta"><span class="status-dot"></span> УЧЕБНЫЙ КУРС <span class="meta-divider">/</span> 2026—2027</div>
+    <button class="icon-button menu-toggle" id="menuToggle" aria-label="Открыть меню курса" aria-expanded="false">☰</button>
+  </header>
+
+  <main id="app">
+    <section class="hero page-shell" id="home">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="eyebrow-line"></span> ОТ ПЕРВОЙ СТРОКИ КОДА ДО СВОЕГО ПРОЕКТА</div>
+        <h1>Думай.<br><span class="gradient-text">Кодируй.</span><br>Создавай.</h1>
+        <p class="hero-description">Практический курс Python, где каждая новая идея превращается в работающую программу.</p>
+        <div class="hero-actions">
+          <button class="button button-primary" id="startCourse">Начать обучение <span>→</span></button>
+          <a class="text-link" href="#curriculum">Посмотреть программу <span>↘</span></a>
+        </div>
+        <div class="hero-stats">
+          <div><strong>36</strong><span>ЗАНЯТИЙ</span></div><div><strong>9</strong><span>МЕСЯЦЕВ</span></div><div><strong>72</strong><span>ЧАСА КОДА</span></div>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div>
+        <div class="code-window">
+          <div class="window-bar"><div class="window-dots"><i></i><i></i><i></i></div><span>first_program.py</span><span class="window-language">PY</span></div>
+          <div class="code-content"><div><span class="line-no">01</span><span class="code-purple">def</span> <span class="code-blue">create_future</span>():</div><div><span class="line-no">02</span>    idea = <span class="code-green">"something great"</span></div><div><span class="line-no">03</span>    <span class="code-purple">print</span>(<span class="code-green">"Hello, Python!"</span>)</div><div><span class="line-no">04</span>    <span class="code-purple">return</span> idea</div><div class="code-cursor-row"><span class="line-no">05</span><span class="cursor"></span></div></div>
+          <div class="window-footer"><span><i></i> READY TO RUN</span><span>PYTHON 3</span></div>
+        </div>
+        <div class="floating-chip chip-top"><span>✳</span> творческий подход</div>
+        <div class="floating-chip chip-bottom"><span>⌘</span> учимся на практике</div>
+        <div class="visual-cross cross-one">+</div><div class="visual-cross cross-two">+</div>
+      </div>
+    </section>
+
+    <section class="curriculum page-shell" id="curriculum">
+      <div class="section-heading">
+        <div><div class="eyebrow"><span class="eyebrow-line"></span> ТВОЯ ТРАЕКТОРИЯ</div><h2>Путь разработчика<span class="heading-period">.</span></h2></div>
+        <p>Девять месяцев открытий.<br>От простых команд до собственного проекта.</p>
+      </div>
+      <div class="progress-overview"><div><span class="progress-label">ПРОГРАММА КУРСА</span><strong>36 <small>занятий</small></strong></div><div class="progress-track"><span style="width:0%"></span></div><span class="progress-caption">0 / 36 завершено</span></div>
+      <div class="module-grid" id="moduleGrid"></div>
+    </section>
+
+    <section class="bottom-cta page-shell">
+      <div class="cta-orb"></div><div class="eyebrow"><span class="eyebrow-line"></span> ТВОЯ ИСТОРИЯ НАЧИНАЕТСЯ ЗДЕСЬ</div>
+      <h2>Большие идеи<br>начинаются с <span class="gradient-text">маленького кода.</span></h2>
+      <button class="button button-primary" id="startCourseBottom">К первому занятию <span>→</span></button>
+    </section>
+  </main>
+
+  <aside class="course-drawer" id="courseDrawer" aria-hidden="true">
+    <div class="drawer-header"><div><span class="eyebrow">НАВИГАЦИЯ</span><h2>Курс Python</h2></div><button class="icon-button" id="closeDrawer" aria-label="Закрыть меню">×</button></div>
+    <div class="drawer-content" id="drawerContent"></div>
+  </aside>
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+  <section class="lesson-view" id="lessonView" aria-hidden="true">
+    <div class="lesson-topbar"><button class="back-button" id="backHome">← <span>К программе</span></button><div class="lesson-crumb" id="lessonCrumb"></div><button class="icon-button lesson-menu-button" id="lessonMenu" aria-label="Открыть меню">☰</button></div>
+    <div class="slide-stage" id="slideStage"></div>
+    <div class="lesson-controls"><div class="slide-progress"><span id="slideProgress"></span></div><span class="slide-counter" id="slideCounter">01 / 01</span><div class="slide-buttons"><button class="nav-button" id="prevSlide" aria-label="Предыдущий слайд">←</button><button class="nav-button nav-next" id="nextSlide" aria-label="Следующий слайд">→</button><button class="nav-button fullscreen-button" id="fullscreen" aria-label="Полноэкранный режим">⛶</button></div></div>
+  </section>
+
+  <script src="js/course-data.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/presentation.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
