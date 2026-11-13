@@ -11,7 +11,7 @@ window.Presentation = (() => {
   const slide=slides[index];if(!slide)return;
   prev.disabled=index===0&&revealIndex===0&&!outputShown;
   next.disabled=index===slides.length-1&&revealIndex>=(slide.reveals?.length||0)&&!outputIsPending(slide);
-  next.setAttribute("aria-label",revealIndex<(slide.reveals?.length||0)?"Показать следующий ответ":"Следующий слайд");
+  next.setAttribute("aria-label",revealIndex<(slide.reveals?.length||0)?"Показать следующий ответ":outputIsPending(slide)?"Показать результат":"Следующий слайд");
  }
  function updateRevealHint(){
   const area=stage.querySelector(".reveal-area");if(!area)return;
