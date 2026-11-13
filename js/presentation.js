@@ -4,9 +4,19 @@ window.Presentation = (() => {
  const stage=document.getElementById("slideStage"),counter=document.getElementById("slideCounter"),progress=document.getElementById("slideProgress");
  const prev=document.getElementById("prevSlide"),next=document.getElementById("nextSlide");
  function el(tag,cls,text){const node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node}
+ function makeRevealRow(item,number){const row=el("div","reveal-item");row.append(el("span","reveal-number",String(number).padStart(2,"0")));row.append(el("p","",item));return row}
+ function updateControls(){
+  const slide=slides[index];if(!slide)return;
+  updateControls();
+ }
+ function updateRevealHint(){
+  const area=stage.querySelector(".reveal-area");if(!area)return;
+  area.querySelector(".reveal-hint")?.remove();
+  if(revealIndex<(slides[index]?.reveals?.length||0))area.append(el("div","reveal-hint","НАЖМИ →, ЧТОБЫ ОТКРЫТЬ ОТВЕТ"));
+ }
  function render(){
   const slide=slides[index];if(!slide)return;stage.innerHTML="";
-  const article=el("article","slide-content");
+  const article=el("article","slide-content slide-enter");
   article.append(el("div","slide-kicker",slide.kicker||"PYTHON / ЗАНЯТИЕ"));
   article.append(el("h1","slide-title",slide.title||""));
   if(slide.lead)article.append(el("p","slide-lead",slide.lead));
@@ -16,7 +26,7 @@ window.Presentation = (() => {
   if(slide.list?.length){const list=el("ul","slide-checklist");slide.list.forEach(item=>list.append(el("li","",item)));article.append(list)}
   if(slide.note)article.append(el("div","slide-note",slide.note));
   if(slide.placeholder)article.append(el("div","placeholder-label","МАТЕРИАЛ БУДЕТ ДОБАВЛЕН ПОЗЖЕ"));
-  if(slide.reveals?.length){const revealBox=el("div","reveal-area");slide.reveals.slice(0,revealIndex).forEach((item,i)=>{const row=el("div","reveal-item");row.append(el("span","reveal-number",String(i+1).padStart(2,"0")));row.append(el("p","",item));revealBox.append(row)});if(revealIndex<slide.reveals.length)revealBox.append(el("div","reveal-hint","НАЖМИ →, ЧТОБЫ ОТКРЫТЬ ОТВЕТ"));article.append(revealBox)}
+  if(slide.reveals?.length){const revealBox=el("div","reveal-area");slide.reveals.slice(0,revealIndex).forEach((item,i)=>revealBox.append(makeRevealRow(item,i+1)));if(revealIndex<slide.reveals.length)revealBox.append(el("div","reveal-hint","НАЖМИ →, ЧТОБЫ ОТКРЫТЬ ОТВЕТ"));article.append(revealBox)}
   stage.append(article);
   counter.textContent=`${String(index+1).padStart(2,"0")} / ${String(slides.length).padStart(2,"0")}`;
   progress.style.width=`${(index+1)/slides.length*100}%`;
@@ -27,8 +37,24 @@ window.Presentation = (() => {
  function show(content,afterEnd){slides=content;index=0;revealIndex=0;onEnd=afterEnd;render()}
  function first(){index=0;revealIndex=0;render()}
  function last(){index=slides.length-1;revealIndex=slides[index]?.reveals?.length||0;render()}
- function forward(){const reveals=slides[index]?.reveals||[];if(revealIndex<reveals.length){revealIndex++;render();return}if(index<slides.length-1){index++;revealIndex=0;render()}else if(onEnd)onEnd()}
- function backward(){if(revealIndex>0){revealIndex--;render();return}if(index>0){index--;revealIndex=slides[index]?.reveals?.length||0;render()}}
+ function forward(){
+  const reveals=slides[index]?.reveals||[];
+  if(revealIndex<reveals.length){
+   const area=stage.querySelector(".reveal-area");
+   area?.querySelector(".reveal-hint")?.remove();
+   revealIndex++;
+   area?.append(makeRevealRow(reveals[revealIndex-1],revealIndex));
+   updateRevealHint();updateControls();return;
+  }
+  if(index<slides.length-1){index++;revealIndex=0;render()}else if(onEnd)onEnd();
+ }
+ function backward(){
+  if(revealIndex>0){
+   stage.querySelector(".reveal-area")?.querySelector(".reveal-item:last-of-type")?.remove();
+   revealIndex--;updateRevealHint();updateControls();return;
+  }
+  if(index>0){index--;revealIndex=slides[index]?.reveals?.length||0;render()}
+ }
  next.addEventListener("click",forward);prev.addEventListener("click",backward);
  document.getElementById("fullscreen").addEventListener("click",()=>{if(!document.fullscreenElement)document.getElementById("lessonView").requestFullscreen?.();else document.exitFullscreen?.()});
  return {show,forward,backward,first,last};
