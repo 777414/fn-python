@@ -27,3 +27,12 @@
 .reveal-item p{margin:0;color:#d0dcf1;font-size:13px;line-height:1.6}
 .reveal-hint{padding:10px 13px;color:#8192b2;font:9px var(--mono);letter-spacing:.12em}
 @media(max-width:620px){.code-pre,.output-pre{padding:15px;font-size:12px}.slide-checklist li{font-size:12px}.slide-panel{padding:17px}}
+
+/* Keep slide transitions separate from progressive answer reveals. */
+.slide-content{animation:none}
+.slide-content.slide-enter{animation:slideIn .35s ease}
+.reveal-item{animation:revealIn .25s ease both}
+@keyframes revealIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+/* Hide the scrollbar in the lesson viewport on desktop and mobile, while keeping scrolling. */
+.slide-stage{scrollbar-width:none;-ms-overflow-style:none}
+.slide-stage::-webkit-scrollbar{display:none;width:0;height:0}
