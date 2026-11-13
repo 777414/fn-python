@@ -27,7 +27,8 @@
   if(e.key==="ArrowRight"){e.preventDefault();Presentation.forward()}
   if(e.key==="ArrowLeft"){e.preventDefault();Presentation.backward()}
   if(e.key.toLowerCase()==="m")CourseNavigation.open();
-  if(e.key==="Home"){e.preventDefault();Presentation.first()}\n  if(e.key==="End"){e.preventDefault();Presentation.last()}
+  if(e.key==="Home"){e.preventDefault();Presentation.first()}
+  if(e.key==="End"){e.preventDefault();Presentation.last()}
   if(e.key==="f"&&!e.ctrlKey&&!e.metaKey){e.preventDefault();document.getElementById("fullscreen").click()}
  });
 })();
