@@ -13,7 +13,7 @@
    const lessonButton=document.createElement("button");lessonButton.className="module-lesson";
    const number=document.createElement("span");number.className="module-lesson-number";number.textContent=String(index*4+lessonIndex+1).padStart(2,"0");
    const name=document.createElement("span");name.className="module-lesson-name";name.textContent=lessonTitle;
-   const status=document.createElement("span");status.className="module-lesson-status";const ready=!!window.LESSONS[module.id+"-"+(lessonIndex+1)];status.textContent=ready?"ГОТОВ":"СКОРО";if(ready)status.classList.add("is-ready");
+   const status=document.createElement("span");status.className="module-lesson-status";const ready=!!window.LESSONS[module.id+"-"+(lessonIndex+1)];status.textContent=ready?"ПЕРЕЙТИ":"СКОРО";if(ready)status.classList.add("is-ready");
    lessonButton.append(number,name,status);lessonButton.addEventListener("click",()=>openLesson(index,lessonIndex));lessonList.append(lessonButton);
   });
   card.addEventListener("click",()=>{lessonList.hidden=!lessonList.hidden;card.classList.toggle("is-expanded",!lessonList.hidden)});
