@@ -36,3 +36,16 @@
 /* Hide the scrollbar in the lesson viewport on desktop and mobile, while keeping scrolling. */
 .slide-stage{scrollbar-width:none;-ms-overflow-style:none}
 .slide-stage::-webkit-scrollbar{display:none;width:0;height:0}
+
+
+/* Floating Telegram feedback link */
+.telegram-feedback{position:fixed;right:26px;bottom:24px;z-index:8;display:flex;align-items:center;gap:12px;min-width:238px;padding:13px 15px;border:1px solid #5b9ddf55;border-radius:15px;background:linear-gradient(135deg,#172943f5,#111d32f5);box-shadow:0 12px 34px #0005;color:#edf5ff;text-decoration:none;backdrop-filter:blur(12px);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.telegram-feedback:hover{transform:translateY(-3px);border-color:#5b9dDF;box-shadow:0 16px 38px #0007}
+.telegram-feedback-icon{width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;border-radius:11px;background:#229ed91f;color:#54b9f5}
+.telegram-feedback-icon svg{width:21px;height:21px}
+.telegram-feedback-copy{display:grid;gap:3px;flex:1}
+.telegram-feedback-copy strong{font-size:12px;font-weight:800;letter-spacing:-.01em}
+.telegram-feedback-copy small{font-size:10px;color:#9eafca}
+.telegram-feedback-arrow{font-size:16px;color:#70bff1}
+@media(max-width:620px){.telegram-feedback{right:14px;bottom:14px;min-width:0;padding:10px 12px;gap:9px;border-radius:13px}.telegram-feedback-icon{width:34px;height:34px;flex-basis:34px}.telegram-feedback-copy strong{font-size:11px}.telegram-feedback-copy small{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.telegram-feedback{transition:none}}
