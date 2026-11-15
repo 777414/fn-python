@@ -98,3 +98,18 @@
 .variable-lab-action:disabled{opacity:.35;cursor:default}
 .variable-lab-reset{margin-left:auto;color:#92a1bb}
 @media(max-width:620px){.variable-lab{padding:13px}.variable-lab-main{grid-template-columns:1fr}.variable-lab-box,.variable-lab-drop{min-height:112px}.variable-lab-reset{margin-left:0}}
+
+/* Выбор конкретного занятия внутри карточки модуля */
+.module-entry{min-width:0}
+.module-card.is-expanded{border-color:var(--accent);border-radius:13px 13px 0 0;transform:none}
+.module-card.is-expanded .module-arrow{transform:rotate(45deg)}
+.module-arrow{transition:transform .2s}
+.module-lessons{padding:8px 10px 10px;background:#0d1729;border:1px solid var(--line);border-top:0;border-radius:0 0 13px 13px}
+.module-lessons[hidden]{display:none}
+.module-lesson{display:flex;align-items:center;gap:9px;width:100%;padding:10px 7px;border:0;border-radius:7px;background:transparent;color:#aab8cf;text-align:left;font:11px var(--sans);cursor:pointer}
+.module-lesson:hover{background:#1a2942;color:#fff}
+.module-lesson-number{flex:0 0 22px;color:#7185aa;font:10px var(--mono)}
+.module-lesson-name{flex:1;line-height:1.45}
+.module-lesson-status{color:#71819d;font:9px var(--mono);white-space:nowrap}
+.module-lesson-status.is-ready,.drawer-lesson.is-ready .lesson-state{color:#67d9bd}
+.drawer-lesson.is-ready .lesson-state{font-weight:700}
