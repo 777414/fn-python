@@ -6,6 +6,42 @@ window.Presentation = (() => {
  function el(tag,cls,text){const node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node}
  function makeRevealRow(item,number){const row=el("div","reveal-item");row.append(el("span","reveal-number",String(number).padStart(2,"0")));row.append(el("p","",item));return row}
  function makeOutput(slide){const out=el("div","code-output");out.append(el("div","output-caption","РЕЗУЛЬТАТ"));out.append(el("pre","output-pre",slide.output));return out}
+ function makeVariablePlayground(){
+  const data={name:{value:"Иван",options:["Иван","Анна","Пётр","Мария"]},city:{value:"Москва",options:["Москва","Казань","Сочи","Минск"]},game:{value:"Minecraft",options:["Minecraft","Roblox","шахматы","Тетрис"]}};
+  let active="name";
+  const root=el("section","variable-lab"),tabs=el("div","variable-lab-tabs"),area=el("div","variable-lab-main");
+  const box=el("div","variable-lab-box"),boxHead=el("div","variable-lab-box-head"),boxName=el("span","variable-lab-box-name","name"),boxTag=el("span","variable-lab-box-tag","ПЕРЕМЕННАЯ");
+  const boxBody=el("div","variable-lab-box-body"),value=el("button","variable-lab-value"),empty=el("div","variable-lab-empty","Переменная пуста"),boxHint=el("div","variable-lab-hint","Перетащи значение наружу");
+  const side=el("div","variable-lab-side"),drop=el("div","variable-lab-drop","Перетащи значение сюда");
+  const code=el("div","variable-lab-code"),codeLabel=el("div","variable-lab-code-label","ТАК ВЫГЛЯДИТ В PYTHON"),codeLine=el("code","variable-lab-code-line");
+  const choices=el("div","variable-lab-choices"),choicesLabel=el("div","variable-lab-choices-label","ИЛИ ВЫБЕРИ ДРУГОЕ ЗНАЧЕНИЕ");
+  const actions=el("div","variable-lab-actions"),take=el("button","variable-lab-action","Достать значение"),put=el("button","variable-lab-action","Положить обратно"),reset=el("button","variable-lab-reset","Сбросить");
+  value.type="button";value.draggable=true;take.type=put.type=reset.type="button";
+  boxHead.append(boxName,boxTag);boxBody.append(value,empty);box.append(boxHead,boxBody,boxHint);side.append(drop);area.append(box,side);
+  code.append(codeLabel,codeLine);actions.append(take,put,reset);root.append(tabs,area,choicesLabel,choices,code,actions);
+  function render(){
+   tabs.innerHTML="";choices.innerHTML="";
+   Object.keys(data).forEach(key=>{const tab=el("button","variable-lab-tab"+(active===key?" is-active":""),key);tab.type="button";tab.addEventListener("click",()=>{active=key;render()});tabs.append(tab)});
+   const item=data[active];boxName.textContent=active;value.textContent=item.value===null?"":('"'+item.value+'"');value.hidden=item.value===null;empty.hidden=item.value!==null;
+   boxHint.textContent=item.value===null?"Выбери значение ниже или положи его обратно":"Перетащи значение наружу или нажми на него";
+   drop.textContent=item.value===null?"Переменная пустая":"Отпусти здесь, чтобы вернуть значение";drop.classList.toggle("is-ready",item.value===null);
+   codeLine.textContent=active+" = "+(item.value===null?"None":JSON.stringify(item.value));take.disabled=item.value===null;put.disabled=item.value!==null;
+   item.options.forEach(option=>{const chip=el("button","variable-lab-chip",'"'+option+'"');chip.type="button";chip.addEventListener("click",()=>{item.value=option;render()});choices.append(chip)});
+  }
+  function takeValue(){data[active].value=null;render()}
+  function putValue(){if(data[active].value===null)data[active].value=data[active].options[0];render()}
+  value.addEventListener("click",takeValue);
+  value.addEventListener("dragstart",event=>{event.dataTransfer.setData("text/plain",active);event.dataTransfer.effectAllowed="move"});
+  drop.addEventListener("dragover",event=>{event.preventDefault();drop.classList.add("is-over")});
+  drop.addEventListener("dragleave",()=>drop.classList.remove("is-over"));
+  drop.addEventListener("drop",event=>{event.preventDefault();drop.classList.remove("is-over");putValue()});
+  box.addEventListener("dragover",event=>{if(data[active].value===null){event.preventDefault();box.classList.add("is-over")}});
+  box.addEventListener("dragleave",()=>box.classList.remove("is-over"));
+  box.addEventListener("drop",event=>{event.preventDefault();box.classList.remove("is-over");putValue()});
+  take.addEventListener("click",takeValue);put.addEventListener("click",putValue);
+  reset.addEventListener("click",()=>{Object.keys(data).forEach(key=>data[key].value=data[key].options[0]);active="name";render()});
+  render();return root;
+ }
  function outputIsPending(slide){return !!(slide.outputAfterReveal&&slide.output!==undefined&&!outputShown)}
  function updateControls(){
   const slide=slides[index];if(!slide)return;
@@ -26,19 +62,7 @@ window.Presentation = (() => {
   article.append(el("div","slide-kicker",slide.kicker||"PYTHON / ЗАНЯТИЕ"));
   article.append(el("h1","slide-title",slide.title||""));
   if(slide.lead)article.append(el("p","slide-lead",slide.lead));
-  if(slide.variableDiagram){
-   const diagram=el("div","variable-diagram");
-   const labelName=el("div","variable-diagram-label","ИМЯ ПЕРЕМЕННОЙ");
-   const labelValue=el("div","variable-diagram-label","ЗНАЧЕНИЕ");
-   const nameBox=el("div","variable-diagram-box variable-name","name");
-   const valueBox=el("div","variable-diagram-box variable-value",'"Аня"');
-   const arrow=el("div","variable-diagram-arrow","→");
-   const nameCol=el("div","variable-diagram-column");nameCol.append(labelName,nameBox);
-   const valueCol=el("div","variable-diagram-column");valueCol.append(labelValue,valueBox);
-   diagram.append(nameCol,arrow,valueCol);
-   const caption=el("div","variable-diagram-caption","name = \"Аня\"  ·  имя связано со значением");
-   const group=el("div","variable-diagram-wrap");group.append(diagram,caption);article.append(group);
-  }
+  if(slide.variablePlayground)article.append(makeVariablePlayground());
   if(slide.code){const wrap=el("div","code-example");if(slide.codeCaption)wrap.append(el("div","code-caption",slide.codeCaption));wrap.append(el("pre","code-pre",slide.code));article.append(wrap)}
   if(slide.output!==undefined&&(!slide.outputAfterReveal||outputShown))article.append(makeOutput(slide))
   if(slide.items?.length){const cards=el("div","slide-columns");slide.items.forEach(item=>{const box=el("div","slide-panel");box.append(el("h3","",item.title));box.append(el("p","",item.text));cards.append(box)});article.append(cards)}
