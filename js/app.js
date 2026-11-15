@@ -2,22 +2,24 @@
 (() => {
  const grid=document.getElementById("moduleGrid"),lessonView=document.getElementById("lessonView");
  COURSE_MODULES.forEach((module,index)=>{
-  const entry=document.createElement("div");entry.className="module-entry";entry.style.setProperty("--accent",module.accent);const card=document.createElement("button");card.className="module-card";
+  const entry=document.createElement("div");entry.className="module-entry";entry.style.setProperty("--accent",module.accent);
+  const card=document.createElement("div");card.className="module-card";
   const top=document.createElement("div");top.className="module-top";top.innerHTML=`<span class="module-number">МОДУЛЬ 0${index+1}</span><span class="module-icon">${module.icon}</span>`;
   const title=document.createElement("h3");title.textContent=module.title;
   const desc=document.createElement("p");desc.textContent=module.subtitle;
   const bottom=document.createElement("div");bottom.className="module-bottom";bottom.innerHTML=`<span>4 ЗАНЯТИЯ · ${module.month.toUpperCase()}</span><span class="module-arrow">↗</span>`;
-  card.append(top,title,desc,bottom);
-  const lessonList=document.createElement("div");lessonList.className="module-lessons";lessonList.hidden=true;
+  const lessons=document.createElement("div");lessons.className="module-lesson-squares";lessons.setAttribute("aria-label","Занятия модуля");
   module.lessons.forEach((lessonTitle,lessonIndex)=>{
-   const lessonButton=document.createElement("button");lessonButton.className="module-lesson";
-   const number=document.createElement("span");number.className="module-lesson-number";number.textContent=String(index*4+lessonIndex+1).padStart(2,"0");
-   const name=document.createElement("span");name.className="module-lesson-name";name.textContent=lessonTitle;
-   const status=document.createElement("span");status.className="module-lesson-status";const ready=!!window.LESSONS[module.id+"-"+(lessonIndex+1)];status.textContent=ready?"ПЕРЕЙТИ":"СКОРО";if(ready)status.classList.add("is-ready");
-   lessonButton.append(number,name,status);lessonButton.addEventListener("click",()=>openLesson(index,lessonIndex));lessonList.append(lessonButton);
+   const ready=!!window.LESSONS[module.id+"-"+(lessonIndex+1)];
+   const lessonButton=document.createElement("button");lessonButton.type="button";
+   lessonButton.className="module-lesson-square"+(ready?" is-ready":"");lessonButton.textContent=String(lessonIndex+1);
+   lessonButton.setAttribute("aria-label","Занятие "+(lessonIndex+1)+": "+lessonTitle+(ready?" — перейти":" — скоро"));
+   lessonButton.title=lessonTitle+(ready?" — Перейти":" — Скоро");
+   lessonButton.disabled=!ready;
+   if(ready)lessonButton.addEventListener("click",()=>openLesson(index,lessonIndex));
+   lessons.append(lessonButton);
   });
-  card.addEventListener("click",()=>{lessonList.hidden=!lessonList.hidden;card.classList.toggle("is-expanded",!lessonList.hidden)});
-  entry.append(card,lessonList);grid.append(entry);
+  card.append(top,title,desc,bottom,lessons);entry.append(card);grid.append(entry);
  });
  function openLesson(mi,li){
   const module=COURSE_MODULES[mi],title=module.lessons[li],number=mi*4+li+1;
