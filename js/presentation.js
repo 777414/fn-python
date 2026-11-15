@@ -34,7 +34,7 @@ window.Presentation = (() => {
   value.addEventListener("dragstart",event=>{event.dataTransfer.setData("text/plain",active);event.dataTransfer.effectAllowed="move"});
   drop.addEventListener("dragover",event=>{event.preventDefault();drop.classList.add("is-over")});
   drop.addEventListener("dragleave",()=>drop.classList.remove("is-over"));
-  drop.addEventListener("drop",event=>{event.preventDefault();drop.classList.remove("is-over");putValue()});
+  drop.addEventListener("drop",event=>{event.preventDefault();drop.classList.remove("is-over");takeValue()});
   box.addEventListener("dragover",event=>{if(data[active].value===null){event.preventDefault();box.classList.add("is-over")}});
   box.addEventListener("dragleave",()=>box.classList.remove("is-over"));
   box.addEventListener("drop",event=>{event.preventDefault();box.classList.remove("is-over");putValue()});
