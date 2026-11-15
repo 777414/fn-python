@@ -26,6 +26,19 @@ window.Presentation = (() => {
   article.append(el("div","slide-kicker",slide.kicker||"PYTHON / ЗАНЯТИЕ"));
   article.append(el("h1","slide-title",slide.title||""));
   if(slide.lead)article.append(el("p","slide-lead",slide.lead));
+  if(slide.variableDiagram){
+   const diagram=el("div","variable-diagram");
+   const labelName=el("div","variable-diagram-label","ИМЯ ПЕРЕМЕННОЙ");
+   const labelValue=el("div","variable-diagram-label","ЗНАЧЕНИЕ");
+   const nameBox=el("div","variable-diagram-box variable-name","name");
+   const valueBox=el("div","variable-diagram-box variable-value",'"Аня"');
+   const arrow=el("div","variable-diagram-arrow","→");
+   const nameCol=el("div","variable-diagram-column");nameCol.append(labelName,nameBox);
+   const valueCol=el("div","variable-diagram-column");valueCol.append(labelValue,valueBox);
+   diagram.append(nameCol,arrow,valueCol);
+   const caption=el("div","variable-diagram-caption","name = \"Аня\"  ·  имя связано со значением");
+   const group=el("div","variable-diagram-wrap");group.append(diagram,caption);article.append(group);
+  }
   if(slide.code){const wrap=el("div","code-example");if(slide.codeCaption)wrap.append(el("div","code-caption",slide.codeCaption));wrap.append(el("pre","code-pre",slide.code));article.append(wrap)}
   if(slide.output!==undefined&&(!slide.outputAfterReveal||outputShown))article.append(makeOutput(slide))
   if(slide.items?.length){const cards=el("div","slide-columns");slide.items.forEach(item=>{const box=el("div","slide-panel");box.append(el("h3","",item.title));box.append(el("p","",item.text));cards.append(box)});article.append(cards)}
