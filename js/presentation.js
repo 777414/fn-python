@@ -59,7 +59,7 @@ window.Presentation = (() => {
   }
   function arrow(d){node("path",{d,fill:"none",stroke:"#aab7ca","stroke-width":2,"stroke-linecap":"round","stroke-linejoin":"round","marker-end":"url(#branch-arrow)"})}
   const defs=node("defs",{});const marker=node("marker",{id:"branch-arrow",markerWidth:8,markerHeight:8,refX:6,refY:3,orient:"auto"},defs);node("path",{d:"M0 0 L6 3 L0 6",fill:"none",stroke:"#aab7ca","stroke-width":1.2},marker);
-  label(8,48,"БЕЗ ОПЕРАТОРА ВЕТВЛЕНИЯ","#9eacc5",12,"700","start");
+  label(8,12,"БЕЗ ОПЕРАТОРА ВЕТВЛЕНИЯ","#9eacc5",12,"700","start");
   const topXs=[95,275,455,635,815];topXs.forEach((x,i)=>command(x,20,i+1));
   for(let i=0;i<4;i++)arrow("M"+(topXs[i]+112)+" 53 H"+(topXs[i+1]-8));
   node("line",{x1:0,y1:120,x2:980,y2:120,stroke:"#52627b","stroke-opacity":".45","stroke-width":1});
