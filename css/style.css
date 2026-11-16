@@ -227,3 +227,26 @@
   .hero-visual .chip-bottom{left:4px}
   .curriculum,.section-heading,.module-grid,.module-entry,.module-card{min-width:0;max-width:100%}
 }
+
+
+/* Keep the closed course drawer clipped to the viewport.
+   A translated fixed drawer can create horizontal overflow in Android Chrome. */
+.course-drawer{
+  right:0!important;
+  transform:none!important;
+  clip-path:inset(0 0 0 100%);
+  visibility:hidden;
+  pointer-events:none;
+  transition:clip-path .28s ease,visibility .28s step-end;
+}
+.course-drawer.open{
+  transform:none!important;
+  clip-path:inset(0);
+  visibility:visible;
+  pointer-events:auto;
+  transition:clip-path .28s ease,visibility 0s;
+}
+@media(max-width:620px){
+  html,body{overflow-x:hidden!important}
+  #app{overflow-x:clip}
+}
