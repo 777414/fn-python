@@ -94,7 +94,7 @@ window.Presentation = (() => {
   svg.setAttribute("viewBox","0 0 900 430");
   svg.setAttribute("class","wl-diagram");
   svg.setAttribute("role","img");
-  svg.setAttribute("aria-label","Схема цикла: старт ведёт к проверке условия. Из проверки путь ведёт к командам цикла и возвращается обратно к проверке; второй путь ведёт к выходу.");
+  svg.setAttribute("aria-label","Схема цикла: значение переменной ведёт к проверке условия. Из проверки путь ведёт к командам цикла и возвращается обратно к проверке; второй путь ведёт к выходу.");
   function shape(tag,attrs,parent=svg){const n=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>n.setAttribute(k,v));parent.append(n);return n}
   const defs=shape("defs",{});
   const marker=shape("marker",{id:"wl-arrow-head",markerWidth:10,markerHeight:10,refX:8,refY:5,orient:"auto"},defs);
@@ -111,7 +111,7 @@ window.Presentation = (() => {
    const s=shape("text",{x:x+w/2,y:y+59,class:"wl-sub"},g);s.textContent=sub;
    return g;
   }
-  const startNode=node("start",20,105,200,80,"СТАРТ","number = 1","wl-start");
+  const variableNode=node("variable",20,105,200,80,"ЗНАЧЕНИЕ ПЕРЕМЕННОЙ","number = 1","wl-variable");
   const conditionNode=node("condition",300,105,220,100,"ПРОВЕРКА УСЛОВИЯ","number ≤ 3","wl-condition");
   const bodyNode=node("body",610,105,220,100,"КОМАНДЫ ЦИКЛА","print(number)  ·  number + 1","wl-body");
   const exitNode=node("exit",300,350,220,70,"ВЫХОД","цикл завершён","wl-exit");
@@ -133,26 +133,28 @@ window.Presentation = (() => {
   const back=el("button","","← Назад");back.type="button";
   const nextStep=el("button","","Следующий шаг →");nextStep.type="button";
   const reset=el("button","","Сначала");reset.type="button";
-  const counter=el("span","wl-counter","Шаг 1 из 7");
+  const counter=el("span","wl-counter","Шаг 1 из 9");
   controls.append(back,nextStep,reset,counter);
   root.append(status,controls);
   const steps=[
-   ["Старт","Создали переменную number и присвоили ей 1. Затем программа переходит к проверке условия.","start"],
-   ["Первая проверка","number = 1. Условие number ≤ 3 выполняется. Переходим к командам цикла.","condition"],
-   ["Первая итерация","Печатается 1. Затем number увеличивается до 2. Стрелка возвращает нас к проверке.","body"],
-   ["Вторая проверка","number = 2. Условие всё ещё выполняется — снова переходим к командам цикла.","condition"],
-   ["Вторая итерация","Печатается 2. Затем number увеличивается до 3. Возвращаемся к проверке.","body"],
-   ["Третья проверка","number = 3. Условие number ≤ 3 всё ещё выполняется.","condition"],
-   ["Третья итерация","Печатается 3. Затем number увеличивается до 4. По стрелке возвращаемся к проверке.","body"],
-   ["Последняя проверка","number = 4. Условие number ≤ 3 теперь ложно. По стрелке программа переходит к выходу.","condition"],
-   ["Выход из цикла","Цикл завершён. Программа продолжает выполнение после цикла.","exit"]
+   ["Начальное значение","В переменной number хранится 1.","variable",1,[]],
+   ["Первая проверка","number = 1. Условие number ≤ 3 выполняется.","condition",1,[]],
+   ["Первая итерация","Команда print(number) выводит 1. Затем number увеличивается до 2.","body",2,[1]],
+   ["Вторая проверка","number = 2. Условие всё ещё выполняется.","condition",2,[1]],
+   ["Вторая итерация","Команда выводит 2. Затем number увеличивается до 3.","body",3,[1,2]],
+   ["Третья проверка","number = 3. Условие number ≤ 3 выполняется.","condition",3,[1,2]],
+   ["Третья итерация","Команда выводит 3. Затем number увеличивается до 4.","body",4,[1,2,3]],
+   ["Последняя проверка","number = 4. Условие number ≤ 3 ложно. Переходим к выходу.","condition",4,[1,2,3]],
+   ["Выход из цикла","Цикл завершён. Программа продолжает выполнение после цикла.","exit",4,[1,2,3]]
   ];
   let current=0;
   function renderStep(){
-   [startNode,conditionNode,bodyNode,exitNode].forEach(n=>n.classList.remove("wl-active","wl-muted"));
-   const active=steps[current][2]==="start"?startNode:steps[current][2]==="condition"?conditionNode:steps[current][2]==="body"?bodyNode:exitNode;
-   [startNode,conditionNode,bodyNode,exitNode].forEach(n=>{if(n!==active)n.classList.add("wl-muted")});
+   [variableNode,conditionNode,bodyNode,exitNode].forEach(n=>n.classList.remove("wl-active","wl-muted"));
+   const active=steps[current][2]==="variable"?variableNode:steps[current][2]==="condition"?conditionNode:steps[current][2]==="body"?bodyNode:exitNode;
+   [variableNode,conditionNode,bodyNode,exitNode].forEach(n=>{if(n!==active)n.classList.add("wl-muted")});
    active.classList.add("wl-active");
+   variableValue.textContent="number = "+steps[current][3];
+   consoleValue.textContent=steps[current][4].length?steps[current][4].join("   "):"пусто";
    status.innerHTML="<strong>"+steps[current][0]+"</strong><span>"+steps[current][1]+"</span>";
    counter.textContent="Шаг "+(current+1)+" из "+steps.length;
    back.disabled=current===0;nextStep.disabled=current===steps.length-1;
