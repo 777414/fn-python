@@ -156,7 +156,7 @@ window.LESSONS['april-2'] = [
   "kicker":"ПРЕОБРАЗУЕМ ДАННЫЕ",
   "title":"Превращаем текст в число",
   "code":"number_text = number_entry.get()\nnumber = float(number_text)\nprint(number + 10)",
-  "output":"Если в поле введено 25, результат будет 35.0",
+  "output":"35.0",
   "reveals":[
    "get() получает строку из поля.",
    "float() преобразует строку в число с возможной дробной частью.",
@@ -256,6 +256,18 @@ window.LESSONS['april-2'] = [
    "После нажатия запускается соответствующее действие."
   ]
  },
+{
+ "kicker": "ПОЛНАЯ ПРОГРАММА",
+ "title": "Графический калькулятор целиком",
+ "code": "import customtkinter as ctk\n\napp = ctk.CTk()\napp.title(\"Калькулятор\")\napp.geometry(\"420x520\")\n\nfirst_entry = ctk.CTkEntry(app, placeholder_text=\"Первое число\")\nfirst_entry.pack(pady=8)\nsecond_entry = ctk.CTkEntry(app, placeholder_text=\"Второе число\")\nsecond_entry.pack(pady=8)\nresult_label = ctk.CTkLabel(app, text=\"Результат появится здесь\")\nresult_label.pack(pady=15)\n\ndef calculate_result(operation):\n    try:\n        a = float(first_entry.get())\n        b = float(second_entry.get())\n        if operation == \"add\":\n            result = a + b\n        elif operation == \"subtract\":\n            result = a - b\n        elif operation == \"multiply\":\n            result = a * b\n        elif operation == \"divide\":\n            if b == 0:\n                result_label.configure(text=\"На ноль делить нельзя\")\n                return\n            result = a / b\n        result_label.configure(text=\"Результат: \" + str(result))\n    except ValueError:\n        result_label.configure(text=\"Введи два числа\")\n\ndef add_numbers():\n    calculate_result(\"add\")\n\ndef subtract_numbers():\n    calculate_result(\"subtract\")\n\ndef multiply_numbers():\n    calculate_result(\"multiply\")\n\ndef divide_numbers():\n    calculate_result(\"divide\")\n\nctk.CTkButton(app, text=\"+ Сложить\", command=add_numbers).pack(pady=5)\nctk.CTkButton(app, text=\"− Вычесть\", command=subtract_numbers).pack(pady=5)\nctk.CTkButton(app, text=\"× Умножить\", command=multiply_numbers).pack(pady=5)\nctk.CTkButton(app, text=\"÷ Разделить\", command=divide_numbers).pack(pady=5)\n\napp.mainloop()",
+ "reveals": [
+  "Сначала создаём окно, поля ввода и надпись результата.",
+  "Функция calculate_result() получает числа, выбирает действие и обрабатывает ошибки.",
+  "Четыре небольшие функции передают в неё нужную операцию.",
+  "Кнопки связываются с обработчиками через command.",
+  "В конце mainloop() запускает окно."
+ ]
+},
  {
   "kicker":"СОБИРАЕМ ЛОГИКУ",
   "title":"Как связаны элементы калькулятора?",
