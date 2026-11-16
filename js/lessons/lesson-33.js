@@ -79,12 +79,33 @@ window.LESSONS['may-2'] = [
    "custom — папка для записей пользователя.",
    "Сегодня сохраним первую запись в my_recording.wav.",
    "Папку custom нужно создать заранее."
-  ]
+  ],
+  "note": "Сейчас открой проект Soundboard из прошлого занятия. Код будем добавлять в существующий main.py, а не создавать второй файл. Папку sounds/custom/ создай вручную рядом с папкой default."
+ },
+ {
+  "kicker": "РАБОТАЕМ В ОДНОМ ФАЙЛЕ",
+  "title": "Куда записывать новый код?",
+  "lead": "Продолжаем проект из прошлого занятия. Открой тот же файл main.py — второй файл создавать не нужно.",
+  "items": [
+   {
+    "title": "Сохраняем основу",
+    "text": "В main.py уже есть окно, кнопки готовых звуков и функция play_sound()."
+   },
+   {
+    "title": "Добавляем новые функции",
+    "text": "Функции записи вставим рядом с функциями воспроизведения."
+   },
+   {
+    "title": "Добавляем кнопки",
+    "text": "Две новые кнопки разместим рядом с кнопкой остановки звука."
+   }
+  ],
+  "note": "В конце занятия покажем полный main.py целиком. Его можно будет сравнить со своим файлом."
  },
  {
   "kicker": "ИНСТРУМЕНТ ДЛЯ ЗАПИСИ",
   "title": "Команда sounddevice.rec()",
-  "lead": "В sounddevice есть команда rec(). Она начинает запись с выбранного микрофона.",
+  "lead": "Открой main.py. Новые команды записи будем добавлять в этот же файл. Пока разбираем их отдельно, а ниже покажем точное место для каждой части.",
   "code": "recording = sd.rec(\n    frames=220500,\n    samplerate=44100,\n    channels=1\n)",
   "reveals": [
    "rec() запускает запись звука.",
@@ -126,7 +147,8 @@ window.LESSONS['may-2'] = [
    "После этой команды можно работать с готовыми данными.",
    "Но если вызвать её прямо в обработчике кнопки, окно на время ожидания перестанет реагировать.",
    "Поэтому в приложении используем таймер окна, чтобы дать интерфейсу обновиться."
-  ]
+  ],
+  "note": "Эту команду не нужно запускать отдельно в начале программы. Она будет внутри функции finish_recording(), которую добавим ниже."
  },
  {
   "kicker": "НЕ БЛОКИРУЕМ ОКНО",
@@ -160,7 +182,8 @@ window.LESSONS['may-2'] = [
    "Сначала дожидаемся окончания записи.",
    "Затем сохраняем данные в WAV.",
    "В конце сообщаем пользователю, что файл готов."
-  ]
+  ],
+  "lead": "Эту функцию добавим в main.py рядом с функциями play_bell(), play_clap() и play_success() — до создания кнопок интерфейса."
  },
  {
   "kicker": "ПРОВЕРЯЕМ ПАПКУ",
@@ -178,7 +201,8 @@ window.LESSONS['may-2'] = [
    "play_sound() получает путь к нашей записи.",
    "Никакой новой команды воспроизведения не требуется.",
    "Сначала запись нужно сохранить, и только потом прослушивать."
-  ]
+  ],
+  "lead": "Добавь эту функцию в main.py рядом с остальными функциями. Она использует уже существующую play_sound() из прошлого занятия."
  },
  {
   "kicker": "ДОБАВЛЯЕМ КНОПКУ",
@@ -189,7 +213,8 @@ window.LESSONS['may-2'] = [
    "text задаёт надпись на кнопке.",
    "command связывает её с функцией start_recording.",
    "Функцию передаём без скобок."
-  ]
+  ],
+  "lead": "Этот код добавим в нижнюю часть main.py, где уже создаются кнопки Звонок, Аплодисменты и Победа. Размести его после status_label."
  },
  {
   "kicker": "КНОПКА ПРОСЛУШИВАНИЯ",
@@ -199,7 +224,8 @@ window.LESSONS['may-2'] = [
    "Создаём вторую кнопку.",
    "Она вызывает функцию play_recording().",
    "Пользователь сможет проверить результат записи."
-  ]
+  ],
+  "lead": "Сразу после кнопки записи добавь кнопку прослушивания. Она будет вызывать play_recording()."
  },
  {
   "kicker": "ЗАЩИЩАЕМСЯ ОТ ПОВТОРНОГО НАЖАТИЯ",
@@ -231,7 +257,8 @@ window.LESSONS['may-2'] = [
    "sd.rec() начинает запись на пять секунд.",
    "global recording позволяет сохранить результат в переменную, доступную функции завершения.",
    "app.after() назначает сохранение после окончания записи."
-  ]
+  ],
+  "lead": "В main.py найди блок с функциями воспроизведения. После stop_sound() добавь start_recording() и finish_recording(). Не вставляй эти функции внутрь других функций."
  },
  {
   "kicker": "ЗАВЕРШАЕМ ЗАПИСЬ",
@@ -242,18 +269,31 @@ window.LESSONS['may-2'] = [
    "Сохраняем её в WAV-файл.",
    "Показываем сообщение об успехе.",
    "Снова разрешаем нажимать кнопку записи."
-  ]
+  ],
+  "lead": "Это итоговый вариант функции finish_recording(). Если уже добавил её по предыдущему слайду, проверь, что код совпадает."
  },
  {
   "kicker": "ПОЛНАЯ ПРОГРАММА",
   "title": "Добавляем запись в Soundboard Studio",
-  "code": "import customtkinter as ctk\nimport sounddevice as sd\nimport soundfile as sf\n\nsamplerate = 44100\nrecording = None\n\napp = ctk.CTk()\napp.title(\"Soundboard Studio\")\napp.geometry(\"560x460\")\n\n# Здесь остаются функции play_sound(), play_bell(), play_clap(), play_success() и stop_sound() из прошлого занятия.\n\ndef start_recording():\n    global recording\n    record_button.configure(state=\"disabled\")\n    status_label.configure(text=\"Идёт запись 5 секунд…\")\n    recording = sd.rec(\n        int(5 * samplerate),\n        samplerate=samplerate,\n        channels=1\n    )\n    app.after(5200, finish_recording)\n\ndef finish_recording():\n    sd.wait()\n    sf.write(\n        \"sounds/custom/my_recording.wav\",\n        recording,\n        samplerate\n    )\n    status_label.configure(text=\"Запись сохранена!\")\n    record_button.configure(state=\"normal\")\n\ndef play_recording():\n    play_sound(\"sounds/custom/my_recording.wav\")\n\n# Здесь создаются знакомые заголовок, панель звуков и status_label.\nrecord_button = ctk.CTkButton(\n    app,\n    text=\"● Записать 5 секунд\",\n    command=start_recording\n)\nrecord_button.pack(pady=8)\n\nplay_record_button = ctk.CTkButton(\n    app,\n    text=\"▶ Прослушать запись\",\n    command=play_recording\n)\nplay_record_button.pack(pady=8)\n\napp.mainloop()",
+  "code": "import customtkinter as ctk\nimport sounddevice as sd\nimport soundfile as sf\n\nctk.set_appearance_mode(\"dark\")\nctk.set_default_color_theme(\"blue\")\n\nsamplerate = 44100\nrecording = None\n\napp = ctk.CTk()\napp.title(\"Soundboard Studio\")\napp.geometry(\"560x520\")\n\ndef play_sound(filename):\n    data, file_samplerate = sf.read(filename)\n    sd.play(data, file_samplerate)\n\ndef play_bell():\n    play_sound(\"sounds/default/bell.wav\")\n    status_label.configure(text=\"Сейчас играет: Звонок\")\n\ndef play_clap():\n    play_sound(\"sounds/default/clap.wav\")\n    status_label.configure(text=\"Сейчас играет: Аплодисменты\")\n\ndef play_success():\n    play_sound(\"sounds/default/success.wav\")\n    status_label.configure(text=\"Сейчас играет: Победа\")\n\ndef stop_sound():\n    sd.stop()\n    status_label.configure(text=\"Воспроизведение остановлено\")\n\ndef start_recording():\n    global recording\n    record_button.configure(state=\"disabled\")\n    status_label.configure(text=\"Идёт запись 5 секунд…\")\n    recording = sd.rec(\n        int(5 * samplerate),\n        samplerate=samplerate,\n        channels=1\n    )\n    app.after(5200, finish_recording)\n\ndef finish_recording():\n    sd.wait()\n    sf.write(\n        \"sounds/custom/my_recording.wav\",\n        recording,\n        samplerate\n    )\n    status_label.configure(text=\"Запись сохранена!\")\n    record_button.configure(state=\"normal\")\n\ndef play_recording():\n    play_sound(\"sounds/custom/my_recording.wav\")\n\ntitle_label = ctk.CTkLabel(\n    app,\n    text=\"Soundboard Studio\",\n    font=(\"Arial\", 26, \"bold\")\n)\ntitle_label.pack(pady=20)\n\nsound_frame = ctk.CTkFrame(app)\nsound_frame.pack(pady=15, padx=20, fill=\"x\")\n\nbell_button = ctk.CTkButton(\n    sound_frame,\n    text=\"🔔 Звонок\",\n    command=play_bell\n)\nbell_button.grid(row=0, column=0, padx=8, pady=12)\n\nclap_button = ctk.CTkButton(\n    sound_frame,\n    text=\"👏 Аплодисменты\",\n    command=play_clap\n)\nclap_button.grid(row=0, column=1, padx=8, pady=12)\n\nsuccess_button = ctk.CTkButton(\n    sound_frame,\n    text=\"🏆 Победа\",\n    command=play_success\n)\nsuccess_button.grid(row=0, column=2, padx=8, pady=12)\n\nstatus_label = ctk.CTkLabel(app, text=\"Выбери звук\")\nstatus_label.pack(pady=12)\n\nstop_button = ctk.CTkButton(\n    app,\n    text=\"■ Остановить звук\",\n    command=stop_sound\n)\nstop_button.pack(pady=8)\n\nrecord_button = ctk.CTkButton(\n    app,\n    text=\"● Записать 5 секунд\",\n    command=start_recording\n)\nrecord_button.pack(pady=8)\n\nplay_record_button = ctk.CTkButton(\n    app,\n    text=\"▶ Прослушать запись\",\n    command=play_recording\n)\nplay_record_button.pack(pady=8)\n\napp.mainloop()",
   "reveals": [
-   "Сверху подключаем три библиотеки и задаём частоту записи.",
-   "start_recording() запускает запись и планирует завершение.",
-   "finish_recording() сохраняет данные в WAV и возвращает кнопку.",
-   "play_recording() запускает сохранённый файл знакомой функцией play_sound().",
-   "Вместо комментариев оставляем элементы интерфейса и функции воспроизведения из первого занятия."
+   "Это полный файл main.py: выдели весь код и вставь его вместо старого содержимого main.py.",
+   "Вверху подключаем CustomTkinter и аудиобиблиотеки, затем создаём окно.",
+   "Функции воспроизведения из прошлого занятия остались в программе.",
+   "Новые функции start_recording(), finish_recording() и play_recording() добавляют запись и прослушивание.",
+   "Ниже создаём все кнопки. В самом конце запускаем app.mainloop()."
+  ],
+  "note": "Перед запуском проверь, что рядом с main.py есть sounds/default/ с тремя WAV-файлами и пустая папка sounds/custom/."
+ },
+ {
+  "kicker": "ПРОВЕРЯЕМ СТРУКТУРУ",
+  "title": "Как должны выглядеть папки проекта?",
+  "code": "Soundboard/\\n    main.py\\n    sounds/\\n        default/\\n            bell.wav\\n            clap.wav\\n            success.wav\\n        custom/\\n            (пока пусто)",
+  "reveals": [
+   "main.py содержит весь код приложения.",
+   "В default лежат три готовых WAV-файла.",
+   "В custom сначала пусто — сюда программа сохранит запись.",
+   "Создай папку custom вручную до запуска программы."
   ]
  },
  {
