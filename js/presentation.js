@@ -250,6 +250,71 @@ window.Presentation = (() => {
   renderStep();
   return root;
  }
+
+ function makeLoopControlAnimation(){
+  const root=el("section","control-loop-lab");
+  root.style.cssText="margin:24px 0 10px;padding:18px;border:1px solid #34445d;border-radius:16px;background:linear-gradient(145deg,#111d2d,#17263a);color:#e6edf8";
+  const style=el("style","");
+  style.textContent=".control-loop-lab .cl-diagram{display:block;width:100%;height:auto}.control-loop-lab .cl-node rect{stroke-width:2.5;transition:filter .2s,opacity .2s}.control-loop-lab .cl-node text{font-family:inherit;text-anchor:middle;fill:#edf4ff}.control-loop-lab .cl-node .cl-sub{font-size:12px;fill:#bdcbe0}.control-loop-lab .cl-node.cl-active rect{filter:drop-shadow(0 0 8px #53d99a);stroke-width:4}.control-loop-lab .cl-node.cl-muted{opacity:.38}.control-loop-lab .cl-path{fill:none;stroke:#aabbd0;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.control-loop-lab .cl-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}.control-loop-lab .cl-panel{padding:12px;border-radius:11px;min-width:0}.control-loop-lab .cl-status{margin-top:12px;padding:13px 15px;border-radius:10px;background:#0c1726;border:1px solid #34445d;min-height:76px}.control-loop-lab .cl-status strong{display:block;color:#7de3b0;margin-bottom:5px}.control-loop-lab .cl-controls{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.control-loop-lab .cl-controls button{border:1px solid #4a617d;background:#263b55;color:#f1f5fb;border-radius:9px;padding:10px 14px;font:inherit;font-size:13px;cursor:pointer}.control-loop-lab .cl-controls button:disabled{opacity:.35}.control-loop-lab .cl-counter{margin-left:auto;align-self:center;color:#9eacc1;font-size:12px}@media(max-width:620px){.control-loop-lab{padding:10px!important}.control-loop-lab .cl-counter{margin-left:0;width:100%}}";
+  root.append(style);
+  const ns="http://www.w3.org/2000/svg",svg=document.createElementNS(ns,"svg");
+  svg.setAttribute("viewBox","0 0 900 330");svg.setAttribute("class","cl-diagram");svg.setAttribute("role","img");
+  svg.setAttribute("aria-label","Интерактивная схема управления вложенными циклами: внешний цикл, внутренний цикл, пропуск итерации с continue и остановка цикла с break.");
+  function shape(tag,attrs,parent=svg){const n=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>n.setAttribute(k,v));parent.append(n);return n}
+  const defs=shape("defs",{}),marker=shape("marker",{id:"cl-arrow-head",markerWidth:10,markerHeight:10,refX:8,refY:5,orient:"auto"},defs);
+  shape("path",{d:"M0 0 L9 5 L0 10",fill:"none",stroke:"#aabbd0","stroke-width":1.8},marker);
+  function path(d){shape("path",{d,class:"cl-path","marker-end":"url(#cl-arrow-head)"})}
+  path("M220 115 H290");path("M510 115 H580");path("M690 165 V225 H400 V165");path("M400 165 V275");
+  function node(id,x,y,w,h,title,sub,fill,stroke){
+   const g=shape("g",{class:"cl-node","data-node":id});
+   shape("rect",{x,y,width:w,height:h,rx:12,fill,stroke},g);
+   const t=shape("text",{x:x+w/2,y:y+32,"font-size":15,"font-weight":"700"},g);t.textContent=title;
+   const s=shape("text",{x:x+w/2,y:y+55,class:"cl-sub"},g);s.textContent=sub;return g;
+  }
+  const outer=node("outer",20,70,200,90,"ВНЕШНИЙ ЦИКЛ","выбирает строку","#25354b","#8292a9");
+  const inner=node("inner",290,70,220,95,"ВНУТРЕННИЙ ЦИКЛ","перебирает значения","#193c5b","#5aa6e8");
+  const control=node("control",580,70,220,95,"ПРОВЕРКА","continue / break","#554a1b","#e5c84b");
+  const exit=node("exit",290,275,220,50,"ПЕРЕХОД ДАЛЬШЕ","или выход из цикла","#164832","#37c978");
+  root.append(svg);
+  const panels=el("div","cl-panels");
+  const variable=el("div","cl-panel"),consoleBox=el("div","cl-panel");
+  variable.style.cssText="background:#193c5b;border:1px solid #3978a9";
+  consoleBox.style.cssText="background:#123a30;border:1px solid #27845b";
+  const vl=el("div","","ТЕКУЩИЕ ЗНАЧЕНИЯ"),vv=el("div","","row = — · column = —");
+  vl.style.cssText="font-size:11px;font-weight:700;color:#a9d6ff;margin-bottom:7px";vv.style.cssText="font-size:17px;font-weight:700;color:#fff;overflow-wrap:anywhere";
+  const cl=el("div","","КОНСОЛЬ"),cv=el("div","","пусто");
+  cl.style.cssText="font-size:11px;font-weight:700;color:#9be7c1;margin-bottom:7px";cv.style.cssText="font-size:17px;font-weight:700;color:#fff;overflow-wrap:anywhere";
+  variable.append(vl,vv);consoleBox.append(cl,cv);panels.append(variable,consoleBox);root.append(panels);
+  const status=el("div","cl-status"),controls=el("div","cl-controls");
+  const back=el("button","","← Назад"),nextStep=el("button","","Следующий шаг →"),reset=el("button","","Сначала");
+  [back,nextStep,reset].forEach(b=>b.type="button");
+  const counter=el("span","cl-counter","Шаг 1 из 8");controls.append(back,nextStep,reset,counter);root.append(status,controls);
+  const steps=[
+   ["Внешний цикл","Внешний цикл выбирает первую строку: row = 1.","outer","row = 1 · column = —",[]],
+   ["Внутренний цикл","Для первой строки внутренний цикл начинает перебор: column = 1.","inner","row = 1 · column = 1",["1 1"]],
+   ["Продолжаем внутренний цикл","Следующее значение column = 2. Внутренний цикл продолжает работу.","inner","row = 1 · column = 2",["1 1","1 2"]],
+   ["Срабатывает continue","Допустим, пару 1 2 нужно пропустить. continue пропускает остаток этой итерации, но цикл продолжается.","control","row = 1 · column = 2",["1 1"]],
+   ["Следующее значение","Внутренний цикл получает column = 3 и продолжает перебор.","inner","row = 1 · column = 3",["1 1","1 3"]],
+   ["Срабатывает break","Теперь представим, что нужно остановить внутренний цикл. break завершает его, но внешний цикл остаётся активным.","control","row = 1 · column = 3",["1 1","1 3"]],
+   ["Внешний цикл продолжает","Внешний цикл переходит к следующей строке: row = 2. Внутренний цикл может начаться заново.","outer","row = 2 · column = —",["1 1","1 3"]],
+   ["Главное правило","continue пропускает одну итерацию, break завершает ближайший цикл. Вложенный внешний цикл может продолжить работу.","exit","row = 2 · column = —",["1 1","1 3"]]
+  ];
+  let current=0;
+  function renderStep(){
+   const s=steps[current],nodes={outer,inner,control,exit};
+   Object.values(nodes).forEach(n=>n.classList.remove("cl-active","cl-muted"));
+   Object.entries(nodes).forEach(([key,n])=>{if(key!==s[2])n.classList.add("cl-muted")});
+   nodes[s[2]].classList.add("cl-active");
+   vv.textContent=s[3];cv.textContent=s[4].length?s[4].join("   "):"пусто";
+   status.innerHTML="<strong>"+s[0]+"</strong><span>"+s[1]+"</span>";
+   counter.textContent="Шаг "+(current+1)+" из "+steps.length;
+   back.disabled=current===0;nextStep.disabled=current===steps.length-1;
+  }
+  back.addEventListener("click",()=>{if(current>0){current--;renderStep()}});
+  nextStep.addEventListener("click",()=>{if(current<steps.length-1){current++;renderStep()}});
+  reset.addEventListener("click",()=>{current=0;renderStep()});
+  renderStep();return root;
+ }
  function outputIsPending(slide){return !!(slide.outputAfterReveal&&slide.output!==undefined&&!outputShown)}
  function updateControls(){
   const slide=slides[index];if(!slide)return;
@@ -272,6 +337,7 @@ window.Presentation = (() => {
   if(slide.lead)article.append(el("p","slide-lead",slide.lead));
   if(slide.variablePlayground)article.append(makeVariablePlayground());
   if(slide.whileAnimation)article.append(makeWhileAnimation());
+  if(slide.loopControlAnimation)article.append(makeLoopControlAnimation());
   if(slide.forAnimation)article.append(makeForAnimation());
   if(slide.branchDiagram)article.append(makeBranchDiagram());
   if(slide.code){const wrap=el("div","code-example");if(slide.codeCaption)wrap.append(el("div","code-caption",slide.codeCaption));wrap.append(el("pre","code-pre",slide.code));article.append(wrap)}
