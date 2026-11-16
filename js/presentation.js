@@ -81,13 +81,15 @@ window.Presentation = (() => {
   inputs.append(fieldA,fieldB);
   const run=el("button","function-box-run","Запустить функцию");run.type="button";
   const flow=el("div","function-box-flow");
+  const parameters=el("div","function-box-parameters");
+  parameters.append(el("div","function-box-parameters-title","ПАРАМЕТРЫ ФУНКЦИИ"),inputs,run);
   const incoming=el("div","function-box-values");
   const valueA=el("span","function-box-value","5"),plus=el("span","function-box-plus","+"),valueB=el("span","function-box-value","3");
   incoming.append(valueA,plus,valueB);
-  const arrowIn=el("div","function-box-arrow","↓");
+  const arrowIn=el("div","function-box-arrow","→");
   const machine=el("div","function-box-machine");
   machine.append(el("div","function-box-machine-label","ЧЁРНЫЙ ЯЩИК"),el("strong","","get_sum(a, b)"),el("code","","return a + b"),el("span","","Функция выполняет вычисление"));
-  const arrowOut=el("div","function-box-arrow","↓");
+  const arrowOut=el("div","function-box-arrow","→");
   const result=el("div","function-box-result");
   result.append(el("span","","ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ"));
   const resultValue=el("strong","","8");
@@ -96,8 +98,10 @@ window.Presentation = (() => {
   code.append(el("div","function-box-code-title","ТАК ЭТО ВЫГЛЯДИТ В PYTHON"));
   code.append(el("pre","","def get_sum(a, b):\n    return a + b\n\nanswer = get_sum(5, 3)"));
   const status=el("p","function-box-status","Измени числа и посмотри, что вернёт функция.");
-  flow.append(incoming,arrowIn,machine,arrowOut,result);
-  root.append(inputs,run,flow,code,status);
+  const machineColumn=el("div","function-box-machine-column");
+  machineColumn.append(incoming,machine);
+  flow.append(parameters,arrowIn,machineColumn,arrowOut,result);
+  root.append(flow,code,status);
   function calculate(){
    if(inputA.value.trim()===""||inputB.value.trim()===""){status.textContent="Введи оба числа, чтобы запустить функцию.";return}
    const a=Number(inputA.value),b=Number(inputB.value);
