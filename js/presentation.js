@@ -3,6 +3,35 @@ window.Presentation = (() => {
  let slides=[],index=0,revealIndex=0,outputShown=false,onEnd=null;
  const stage=document.getElementById("slideStage"),counter=document.getElementById("slideCounter"),progress=document.getElementById("slideProgress");
  const prev=document.getElementById("prevSlide"),next=document.getElementById("nextSlide");
+ const controlsRoot=counter.closest(".lesson-controls");
+ const slideMenu=document.createElement("div");slideMenu.className="slide-jump-menu";slideMenu.hidden=true;
+ slideMenu.setAttribute("aria-label","Слайды урока");
+ controlsRoot.append(slideMenu);
+ counter.setAttribute("role","button");counter.setAttribute("tabindex","0");
+ counter.setAttribute("aria-label","Открыть список слайдов");
+ counter.setAttribute("aria-haspopup","true");counter.setAttribute("aria-expanded","false");
+ function closeSlideMenu(){slideMenu.hidden=true;counter.setAttribute("aria-expanded","false")}
+ function toggleSlideMenu(){slideMenu.hidden?openSlideMenu():closeSlideMenu()}
+ function openSlideMenu(){
+  slideMenu.innerHTML="";
+  slides.forEach((slide,i)=>{
+   const item=document.createElement("button");item.type="button";
+   item.className="slide-jump-item"+(i===index?" is-current":"");
+   item.setAttribute("aria-current",i===index?"step":"false");
+   const number=document.createElement("span");number.className="slide-jump-number";number.textContent=String(i+1).padStart(2,"0");
+   const title=document.createElement("span");title.className="slide-jump-title";title.textContent=slide.title||("Слайд "+(i+1));
+   item.append(number,title);
+   item.addEventListener("click",()=>{goToSlide(i);closeSlideMenu()});
+   slideMenu.append(item);
+  });
+  slideMenu.hidden=false;counter.setAttribute("aria-expanded","true");
+  const current=slideMenu.querySelector(".is-current");if(current)current.scrollIntoView({block:"nearest"});
+ }
+ counter.addEventListener("click",toggleSlideMenu);
+ counter.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();toggleSlideMenu()}});
+ document.addEventListener("pointerdown",event=>{if(!slideMenu.hidden&&!slideMenu.contains(event.target)&&event.target!==counter)closeSlideMenu()});
+ document.addEventListener("keydown",event=>{if(event.key==="Escape"&&!slideMenu.hidden){closeSlideMenu();counter.focus()}});
+
  function el(tag,cls,text){const node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node}
  function makeRevealRow(item,number){const row=el("div","reveal-item");row.append(el("span","reveal-number",String(number).padStart(2,"0")));row.append(el("p","",item));return row}
  function makeOutput(slide){const out=el("div","code-output");out.append(el("div","output-caption","РЕЗУЛЬТАТ"));out.append(el("pre","output-pre",slide.output));return out}
@@ -351,10 +380,12 @@ window.Presentation = (() => {
   stage.append(article);
   counter.textContent=`${String(index+1).padStart(2,"0")} / ${String(slides.length).padStart(2,"0")}`;
   progress.style.width=`${(index+1)/slides.length*100}%`;
+  if(!slideMenu.hidden)openSlideMenu();
   updateControls();
  }
  function show(content,afterEnd){slides=content;index=0;revealIndex=0;outputShown=false;onEnd=afterEnd;render()}
  function first(){index=0;revealIndex=0;outputShown=false;render()}
+ function goToSlide(target){if(!Number.isInteger(target)||target<0||target>=slides.length)return;index=target;revealIndex=0;outputShown=false;render()}
  function last(){index=slides.length-1;revealIndex=slides[index]?.reveals?.length||0;outputShown=!!slides[index]?.outputAfterReveal;render()}
  function forward(){
   const reveals=slides[index]?.reveals||[];
@@ -385,5 +416,5 @@ window.Presentation = (() => {
  }
  next.addEventListener("click",forward);prev.addEventListener("click",backward);
  document.getElementById("fullscreen").addEventListener("click",()=>{if(!document.fullscreenElement)document.getElementById("lessonView").requestFullscreen?.();else document.exitFullscreen?.()});
- return {show,forward,backward,first,last};
+ return {show,forward,backward,first,last,goToSlide};
 })();
