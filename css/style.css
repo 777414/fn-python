@@ -352,3 +352,34 @@
 .function-box-code pre{margin:0;padding:12px;color:#a9d8ff;font:12px/1.65 var(--mono);white-space:pre-wrap}
 .function-box-status{margin:12px 0 0;color:#aabbd4;font-size:12px;line-height:1.5}
 @media(max-width:620px){.function-box-lab{padding:12px}.function-box-machine{padding:13px}.function-box-inputs{gap:8px}}
+
+
+/* Compact black-box diagram so it fits comfortably within a lesson slide. */
+.function-box-lab{width:min(680px,100%);margin:12px 0 6px;padding:12px;border-radius:12px}
+.function-box-inputs{grid-template-columns:1fr 1fr;gap:8px}
+.function-box-field{gap:4px;font-size:10px}
+.function-box-input{padding:7px 9px;font-size:15px}
+.function-box-run{margin-top:8px;padding:7px 11px;font-size:11px}
+.function-box-flow{grid-template-columns:auto 18px minmax(150px,1fr) 18px auto;display:grid;align-items:center;justify-items:stretch;gap:6px;margin:12px 0}
+.function-box-values{justify-content:center;gap:7px}
+.function-box-value{min-width:40px;padding:7px 9px;font-size:16px}
+.function-box-plus{font-size:16px}
+.function-box-arrow{transform:rotate(-90deg);text-align:center;font-size:18px}
+.function-box-machine{width:100%;min-width:0;gap:5px;padding:10px}
+.function-box-machine strong{font-size:16px}
+.function-box-machine code{padding:5px 8px;font-size:11px}
+.function-box-machine>span{font-size:10px}
+.function-box-result{min-width:120px;padding:9px 12px;gap:4px}
+.function-box-result strong{font-size:21px}
+.function-box-code{margin-top:9px}
+.function-box-code-title{padding:6px 9px;font-size:8px}
+.function-box-code pre{padding:8px 10px;font-size:10px;line-height:1.45}
+.function-box-status{margin-top:7px;font-size:10px;line-height:1.4}
+@media(max-width:620px){
+ .function-box-lab{padding:10px}
+ .function-box-flow{grid-template-columns:1fr;gap:5px;margin:9px 0}
+ .function-box-arrow{transform:none}
+ .function-box-machine{max-width:320px;justify-self:center}
+ .function-box-result{min-width:120px;justify-self:center}
+ .function-box-code pre{font-size:9px}
+}
