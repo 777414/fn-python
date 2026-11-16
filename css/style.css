@@ -275,3 +275,29 @@
   .hero-visual{contain:strict;max-width:100%;overflow:clip!important}
   .orbit{max-width:100%;left:0;right:0;margin-inline:auto}
 }
+
+
+/* Mobile home: remove the decorative hero canvas and hard-clip the page width. */
+@media(max-width:620px){
+  html,body{
+    max-width:100%!important;
+    overflow-x:hidden!important;
+    overscroll-behavior-x:none;
+  }
+  body{position:relative!important}
+  #app{
+    display:block;
+    width:100%!important;
+    max-width:100%!important;
+    overflow-x:hidden!important;
+  }
+  .hero,.curriculum{
+    width:100%!important;
+    max-width:100%!important;
+    overflow-x:hidden!important;
+  }
+  .hero-visual{display:none!important}
+  .hero-copy{width:100%!important;max-width:100%!important}
+  .page-shell{width:calc(100% - 28px)!important;margin-left:auto!important;margin-right:auto!important}
+  .ambient{display:none!important}
+}
