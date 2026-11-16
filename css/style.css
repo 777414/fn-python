@@ -139,7 +139,7 @@
     max-width:100%;
     margin:0 auto;
     padding:22px 0 28px;
-    align-items:flex-start;
+    align-items:safe center;
     overflow-x:hidden;
     overflow-y:auto;
   }
