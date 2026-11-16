@@ -45,9 +45,9 @@ window.Presentation = (() => {
  function makeBranchDiagram(){
   const root=el("div","branch-diagram");
   const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
-  svg.setAttribute("viewBox","0 0 980 330");
+  svg.setAttribute("viewBox","0 0 980 430");
   svg.setAttribute("role","img");
-  svg.setAttribute("aria-label","Блок-схема: без условия команды идут подряд; с if при истинном условии выполняются две зелёные команды, при ложном они пропускаются; затем оба пути продолжаются общей командой.");
+  svg.setAttribute("aria-label","Две отдельные блок-схемы: без оператора ветвления команды идут подряд; с оператором ветвления при ответе Да выполняются зелёные команды, при ответе Нет они пропускаются, затем оба пути соединяются.");
   svg.style.cssText="display:block;width:100%;height:auto;overflow:visible";
   const ns="http://www.w3.org/2000/svg";
   function node(tag,attrs,parent=svg){const n=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>n.setAttribute(k,v));parent.append(n);return n}
@@ -59,27 +59,26 @@ window.Presentation = (() => {
   }
   function arrow(d){node("path",{d,fill:"none",stroke:"#aab7ca","stroke-width":2,"stroke-linecap":"round","stroke-linejoin":"round","marker-end":"url(#branch-arrow)"})}
   const defs=node("defs",{});const marker=node("marker",{id:"branch-arrow",markerWidth:8,markerHeight:8,refX:6,refY:3,orient:"auto"},defs);node("path",{d:"M0 0 L6 3 L0 6",fill:"none",stroke:"#aab7ca","stroke-width":1.2},marker);
-  label(8,38,"БЕЗ IF","#9eacc5",12,"700","start");
-  const topXs=[95,275,455,635,815];topXs.forEach((x,i)=>command(x,8,i+1));
-  for(let i=0;i<4;i++)arrow("M"+(topXs[i]+112)+" 41 H"+(topXs[i+1]-8));
-  node("line",{x1:0,y1:94,x2:980,y2:94,stroke:"#52627b","stroke-opacity":".35","stroke-width":1});
-  label(8,150,"С IF","#9eacc5",12,"700","start");
-  command(45,183,1);command(195,183,2);
-  node("rect",{x:345,y:183,width:130,height:66,rx:3,fill:"#625516",stroke:"#f0d84f","stroke-width":3});
-  label(410,211,"УСЛОВИЕ", "#fff0a0",13,"700");
-  label(410,230,"if", "#fff0a0",15,"700");
-  command(535,35,3,true);command(685,35,4,true);command(835,183,5);
-  arrow("M157 216 H187");arrow("M307 216 H337");
-  arrow("M475 200 H505 Q520 200 520 184 L535 68");
-  arrow("M647 68 H677");arrow("M797 68 L835 183");
-  arrow("M475 232 H820");
-  label(505,171,"ДА","#5be0a0",12,"700");
-  label(625,292,"НЕТ — зелёные команды пропускаются","#f0d84f",12,"700");
-  label(905,274,"Дальше","#aab7ca",11,"500");
+  label(8,48,"БЕЗ ОПЕРАТОРА ВЕТВЛЕНИЯ","#9eacc5",12,"700","start");
+  const topXs=[95,275,455,635,815];topXs.forEach((x,i)=>command(x,20,i+1));
+  for(let i=0;i<4;i++)arrow("M"+(topXs[i]+112)+" 53 H"+(topXs[i+1]-8));
+  node("line",{x1:0,y1:120,x2:980,y2:120,stroke:"#52627b","stroke-opacity":".45","stroke-width":1});
+  label(8,175,"С ОПЕРАТОРОМ ВЕТВЛЕНИЯ","#9eacc5",12,"700","start");
+  command(45,315,1);command(195,315,2);
+  node("rect",{x:345,y:315,width:130,height:66,rx:3,fill:"#625516",stroke:"#f0d84f","stroke-width":3});
+  label(410,343,"УСЛОВИЕ","#fff0a0",13,"700");
+  label(410,362,"ПРОВЕРКА","#fff0a0",11,"700");
+  command(535,180,3,true);command(685,180,4,true);command(835,315,5);
+  arrow("M157 348 H187");arrow("M307 348 H337");
+  arrow("M475 331 H505 Q520 331 520 310 L535 213");
+  arrow("M647 213 H677");arrow("M797 213 L835 315");
+  arrow("M475 365 H820");
+  label(505,292,"ДА","#5be0a0",12,"700");
+  label(620,405,"НЕТ — зелёные команды пропускаются","#f0d84f",12,"700");
   root.append(svg);
   const legend=el("div","branch-diagram-legend");
   legend.style.cssText="display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;margin-top:12px;color:#aab8cf;font-size:12px";
-  const items=[["#263449","#8292a9","Квадрат — команда"],["#625516","#f0d84f","Жёлтый прямоугольник — условие"],["#17613f","#37c978","Зелёные квадраты — команды внутри if"]];
+  const items=[["#263449","#8292a9","Квадрат — команда"],["#625516","#f0d84f","Жёлтый прямоугольник — условие"],["#17613f","#37c978","Зелёные квадраты — команды внутри ветки"]];
   items.forEach(([bg,border,text])=>{const item=el("span","branch-legend-item");item.style.cssText="display:inline-flex;align-items:center;gap:7px";const swatch=el("span","branch-legend-swatch");swatch.style.cssText="width:14px;height:14px;border:2px solid "+border+";background:"+bg+";border-radius:2px";item.append(swatch,el("span","",text));legend.append(item)});
   root.append(legend);
   return root;
