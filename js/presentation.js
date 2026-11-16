@@ -152,6 +152,78 @@ window.Presentation = (() => {
   renderStep();
   return root;
  }
+ function makeForAnimation(){
+  const root=el("section","for-lab");
+  root.style.cssText="margin:24px 0 10px;padding:18px;border:1px solid #34445d;border-radius:16px;background:linear-gradient(145deg,#111d2d,#17263a);color:#e6edf8";
+  const style=el("style","");
+  style.textContent=".for-lab .fl-diagram{display:block;width:100%;height:auto}.for-lab .fl-node{transition:opacity .25s,filter .25s}.for-lab .fl-node rect{stroke-width:2.5}.for-lab .fl-node text{font-family:inherit;text-anchor:middle;fill:#edf4ff}.for-lab .fl-node .fl-sub{font-size:12px;fill:#bdcbe0}.for-lab .fl-node.fl-active rect{filter:drop-shadow(0 0 8px #53d99a);stroke-width:4}.for-lab .fl-node.fl-muted{opacity:.38}.for-lab .fl-path{fill:none;stroke:#aabbd0;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.for-lab .fl-status{margin-top:14px;padding:13px 15px;border-radius:10px;background:#0c1726;border:1px solid #34445d;min-height:76px}.for-lab .fl-status strong{display:block;color:#7de3b0;margin-bottom:5px}.for-lab .fl-controls{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.for-lab .fl-controls button{border:1px solid #4a617d;background:#263b55;color:#f1f5fb;border-radius:9px;padding:10px 14px;font:inherit;font-size:13px;cursor:pointer}.for-lab .fl-controls button:disabled{opacity:.35;cursor:default}.for-lab .fl-counter{margin-left:auto;align-self:center;color:#9eacc1;font-size:12px}@media(max-width:620px){.for-lab{padding:10px!important}.for-lab .fl-counter{margin-left:0;width:100%}}";
+  root.append(style);
+  const ns="http://www.w3.org/2000/svg";
+  const svg=document.createElementNS(ns,"svg");
+  svg.setAttribute("viewBox","0 0 920 430");
+  svg.setAttribute("class","fl-diagram");
+  svg.setAttribute("role","img");
+  svg.setAttribute("aria-label","Схема цикла for: старт, получение последовательности range, получение следующего значения, выполнение команд и возврат за следующим значением. Когда значения заканчиваются, цикл переходит к выходу.");
+  function shape(tag,attrs,parent=svg){const n=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>n.setAttribute(k,v));parent.append(n);return n}
+  const defs=shape("defs",{});
+  const marker=shape("marker",{id:"fl-arrow-head",markerWidth:10,markerHeight:10,refX:8,refY:5,orient:"auto"},defs);
+  shape("path",{d:"M0 0 L9 5 L0 10",fill:"none",stroke:"#aabbd0","stroke-width":1.8},marker);
+  function path(d){shape("path",{d,class:"fl-path","marker-end":"url(#fl-arrow-head)"})}
+  path("M175 145 H225");
+  path("M395 145 H455");
+  path("M650 145 H700");
+  path("M790 200 V285 Q790 315 755 315 H555 Q520 315 520 285 V205");
+  path("M555 205 V345");
+  function node(id,x,y,w,h,title,sub,kind){
+   const g=shape("g",{class:"fl-node "+kind,"data-node":id});
+   shape("rect",{x,y,width:w,height:h,rx:13,fill:kind==="fl-condition"?"#554a1b":kind==="fl-body"?"#164832":kind==="fl-exit"?"#554a1b":"#25354b",stroke:kind==="fl-condition"||kind==="fl-exit"?"#e5c84b":kind==="fl-body"?"#34bd7b":"#8292a9"},g);
+   const t=shape("text",{x:x+w/2,y:y+31},g);t.textContent=title;
+   const s=shape("text",{x:x+w/2,y:y+53,class:"fl-sub"},g);s.textContent=sub;
+   return g;
+  }
+  const startNode=node("start",20,108,155,74,"СТАРТ","начало программы","fl-start");
+  const rangeNode=node("range",225,108,170,74,"НАБОР ЗНАЧЕНИЙ","range(1, 4)","fl-range");
+  const nextNode=node("next",455,105,195,100,"СЛЕДУЮЩЕЕ ЧИСЛО","получить значение","fl-condition");
+  const bodyNode=node("body",700,105,190,100,"КОМАНДЫ ЦИКЛА","print(number)","fl-body");
+  const exitNode=node("exit",455,345,200,68,"ВЫХОД","значения закончились","fl-exit");
+  root.append(svg);
+  const status=el("div","fl-status");
+  const controls=el("div","fl-controls");
+  const back=el("button","","← Назад");back.type="button";
+  const nextStep=el("button","","Следующий шаг →");nextStep.type="button";
+  const reset=el("button","","Сначала");reset.type="button";
+  const counter=el("span","fl-counter","Шаг 1 из 10");
+  controls.append(back,nextStep,reset,counter);
+  root.append(status,controls);
+  const steps=[
+   ["Старт","Программа начинает выполнение и доходит до цикла for.","start"],
+   ["Подготовка последовательности","range(1, 4) задаёт числа 1, 2 и 3. Граница 4 в последовательность не входит.","range"],
+   ["Получаем первое число","У последовательности есть следующее значение — 1. Передаём его в переменную number.","next"],
+   ["Выполняем команды","number равен 1. Команда print(number) выводит число 1.","body"],
+   ["Получаем следующее число","Цикл возвращается за следующим значением. Теперь number равен 2.","next"],
+   ["Выполняем команды","Команда print(number) выводит число 2.","body"],
+   ["Получаем следующее число","Цикл снова берёт следующее значение. Теперь number равен 3.","next"],
+   ["Выполняем команды","Команда print(number) выводит число 3.","body"],
+   ["Проверяем последовательность","Следующего значения больше нет: числа 1, 2 и 3 уже использованы. Цикл переходит по стрелке к выходу.","next"],
+   ["Выход из цикла","Все значения range закончились. Цикл for завершён, программа продолжает работу после него.","exit"]
+  ];
+  let current=0;
+  function renderStep(){
+   [startNode,rangeNode,nextNode,bodyNode,exitNode].forEach(n=>n.classList.remove("fl-active","fl-muted"));
+   const active=steps[current][2]==="start"?startNode:steps[current][2]==="range"?rangeNode:steps[current][2]==="next"?nextNode:steps[current][2]==="body"?bodyNode:exitNode;
+   [startNode,rangeNode,nextNode,bodyNode,exitNode].forEach(n=>{if(n!==active)n.classList.add("fl-muted")});
+   active.classList.add("fl-active");
+   status.innerHTML="<strong>"+steps[current][0]+"</strong><span>"+steps[current][1]+"</span>";
+   counter.textContent="Шаг "+(current+1)+" из "+steps.length;
+   back.disabled=current===0;nextStep.disabled=current===steps.length-1;
+   nextStep.textContent=current===steps.length-1?"Цикл завершён":"Следующий шаг →";
+  }
+  back.addEventListener("click",()=>{if(current>0){current--;renderStep()}});
+  nextStep.addEventListener("click",()=>{if(current<steps.length-1){current++;renderStep()}});
+  reset.addEventListener("click",()=>{current=0;renderStep()});
+  renderStep();
+  return root;
+ }
  function outputIsPending(slide){return !!(slide.outputAfterReveal&&slide.output!==undefined&&!outputShown)}
  function updateControls(){
   const slide=slides[index];if(!slide)return;
@@ -174,6 +246,7 @@ window.Presentation = (() => {
   if(slide.lead)article.append(el("p","slide-lead",slide.lead));
   if(slide.variablePlayground)article.append(makeVariablePlayground());
   if(slide.whileAnimation)article.append(makeWhileAnimation());
+  if(slide.forAnimation)article.append(makeForAnimation());
   if(slide.branchDiagram)article.append(makeBranchDiagram());
   if(slide.code){const wrap=el("div","code-example");if(slide.codeCaption)wrap.append(el("div","code-caption",slide.codeCaption));wrap.append(el("pre","code-pre",slide.code));article.append(wrap)}
   if(slide.output!==undefined&&(!slide.outputAfterReveal||outputShown))article.append(makeOutput(slide))
