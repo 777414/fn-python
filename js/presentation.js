@@ -181,7 +181,6 @@ window.Presentation = (() => {
    const s=shape("text",{x:x+w/2,y:y+53,class:"fl-sub"},g);s.textContent=sub;
    return g;
   }
-  const startNode=node("start",20,108,155,74,"СТАРТ","начало программы","fl-start");
   const rangeNode=node("range",225,108,170,74,"НАБОР ЗНАЧЕНИЙ","range(1, 4)","fl-range");
   const nextNode=node("next",455,105,195,100,"СЛЕДУЮЩЕЕ ЧИСЛО","получить значение","fl-condition");
   const bodyNode=node("body",700,105,190,100,"КОМАНДЫ ЦИКЛА","print(number)","fl-body");
@@ -196,7 +195,6 @@ window.Presentation = (() => {
   controls.append(back,nextStep,reset,counter);
   root.append(status,controls);
   const steps=[
-   ["Старт","Программа начинает выполнение и доходит до цикла for.","start"],
    ["Подготовка последовательности","range(1, 4) задаёт числа 1, 2 и 3. Граница 4 в последовательность не входит.","range"],
    ["Получаем первое число","У последовательности есть следующее значение — 1. Передаём его в переменную number.","next"],
    ["Выполняем команды","number равен 1. Команда print(number) выводит число 1.","body"],
@@ -209,9 +207,9 @@ window.Presentation = (() => {
   ];
   let current=0;
   function renderStep(){
-   [startNode,rangeNode,nextNode,bodyNode,exitNode].forEach(n=>n.classList.remove("fl-active","fl-muted"));
-   const active=steps[current][2]==="start"?startNode:steps[current][2]==="range"?rangeNode:steps[current][2]==="next"?nextNode:steps[current][2]==="body"?bodyNode:exitNode;
-   [startNode,rangeNode,nextNode,bodyNode,exitNode].forEach(n=>{if(n!==active)n.classList.add("fl-muted")});
+   [rangeNode,nextNode,bodyNode,exitNode].forEach(n=>n.classList.remove("fl-active","fl-muted"));
+   const active=steps[current][2]==="range"?rangeNode:steps[current][2]==="next"?nextNode:steps[current][2]==="body"?bodyNode:exitNode;
+   [rangeNode,nextNode,bodyNode,exitNode].forEach(n=>{if(n!==active)n.classList.add("fl-muted")});
    active.classList.add("fl-active");
    status.innerHTML="<strong>"+steps[current][0]+"</strong><span>"+steps[current][1]+"</span>";
    counter.textContent="Шаг "+(current+1)+" из "+steps.length;
