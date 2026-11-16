@@ -94,7 +94,7 @@ window.Presentation = (() => {
   result.append(resultValue);
   const code=el("div","function-box-code");
   code.append(el("div","function-box-code-title","ТАК ЭТО ВЫГЛЯДИТ В PYTHON"));
-  code.append(el("pre","","def get_sum(a, b):\\n    return a + b\\n\\nanswer = get_sum(5, 3)"));
+  code.append(el("pre","","def get_sum(a, b):\n    return a + b\n\nanswer = get_sum(5, 3)"));
   const status=el("p","function-box-status","Измени числа и посмотри, что вернёт функция.");
   flow.append(incoming,arrowIn,machine,arrowOut,result);
   root.append(inputs,run,flow,code,status);
