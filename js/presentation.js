@@ -125,18 +125,20 @@ window.Presentation = (() => {
   controls.append(back,nextStep,reset,counter);
   root.append(status,controls);
   const steps=[
-   ["Старт","Создали переменную number и присвоили ей 1. Затем программа переходит к проверке условия."],
-   ["Первая проверка","number = 1. Условие number ≤ 3 выполняется, поэтому программа переходит к командам цикла."],
-   ["Первая итерация","Печатается 1. Затем number увеличивается до 2. Стрелка возвращает нас к проверке."],
-   ["Вторая проверка","number = 2. Условие всё ещё выполняется — снова переходим к командам цикла."],
-   ["Вторая итерация","Печатается 2. Затем number увеличивается до 3. Возвращаемся к проверке."],
-   ["Третья итерация","number = 3: условие ещё выполняется. Печатается 3, затем number становится 4."],
-   ["Выход из цикла","Теперь number = 4, и условие number ≤ 3 уже не выполняется. Программа переходит по второй стрелке к выходу."]
+   ["Старт","Создали переменную number и присвоили ей 1. Затем программа переходит к проверке условия.","start"],
+   ["Первая проверка","number = 1. Условие number ≤ 3 выполняется. Переходим к командам цикла.","condition"],
+   ["Первая итерация","Печатается 1. Затем number увеличивается до 2. Стрелка возвращает нас к проверке.","body"],
+   ["Вторая проверка","number = 2. Условие всё ещё выполняется — снова переходим к командам цикла.","condition"],
+   ["Вторая итерация","Печатается 2. Затем number увеличивается до 3. Возвращаемся к проверке.","body"],
+   ["Третья проверка","number = 3. Условие number ≤ 3 всё ещё выполняется.","condition"],
+   ["Третья итерация","Печатается 3. Затем number увеличивается до 4. По стрелке возвращаемся к проверке.","body"],
+   ["Последняя проверка","number = 4. Условие number ≤ 3 теперь ложно. По стрелке программа переходит к выходу.","condition"],
+   ["Выход из цикла","Цикл завершён. Программа продолжает выполнение после цикла.","exit"]
   ];
   let current=0;
   function renderStep(){
    [startNode,conditionNode,bodyNode,exitNode].forEach(n=>n.classList.remove("wl-active","wl-muted"));
-   const active=current===0?startNode:current===6?exitNode:(current===2||current===4||current===5?bodyNode:conditionNode);
+   const active=steps[current][2]==="start"?startNode:steps[current][2]==="condition"?conditionNode:steps[current][2]==="body"?bodyNode:exitNode;
    [startNode,conditionNode,bodyNode,exitNode].forEach(n=>{if(n!==active)n.classList.add("wl-muted")});
    active.classList.add("wl-active");
    status.innerHTML="<strong>"+steps[current][0]+"</strong><span>"+steps[current][1]+"</span>";
