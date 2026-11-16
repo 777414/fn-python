@@ -219,15 +219,15 @@ window.Presentation = (() => {
   controls.append(back,nextStep,reset,counter);
   root.append(status,controls);
   const steps=[
-   ["Подготовка последовательности","range(1, 4) задаёт числа 1, 2 и 3. Граница 4 в последовательность не входит.","range"],
-   ["Получаем первое число","У последовательности есть следующее значение — 1. Передаём его в переменную number.","next"],
-   ["Выполняем команды","number равен 1. Команда print(number) выводит число 1.","body"],
-   ["Получаем следующее число","Цикл возвращается за следующим значением. Теперь number равен 2.","next"],
-   ["Выполняем команды","Команда print(number) выводит число 2.","body"],
-   ["Получаем следующее число","Цикл снова берёт следующее значение. Теперь number равен 3.","next"],
-   ["Выполняем команды","Команда print(number) выводит число 3.","body"],
-   ["Проверяем последовательность","Следующего значения больше нет: числа 1, 2 и 3 уже использованы. Цикл переходит по стрелке к выходу.","next"],
-   ["Выход из цикла","Все значения range закончились. Цикл for завершён, программа продолжает работу после него.","exit"]
+   ["Подготовка последовательности","range(1, 4) задаёт числа 1, 2 и 3. Граница 4 в последовательность не входит.","range",null,[]],
+   ["Получаем первое число","У последовательности есть следующее значение — 1. Передаём его в переменную number.","next",1,[]],
+   ["Выполняем команды","Команда print(number) выводит число 1.","body",1,[1]],
+   ["Получаем следующее число","Цикл берёт следующее значение — 2. Теперь number = 2.","next",2,[1]],
+   ["Выполняем команды","Команда print(number) выводит число 2.","body",2,[1,2]],
+   ["Получаем следующее число","Цикл берёт следующее значение — 3. Теперь number = 3.","next",3,[1,2]],
+   ["Выполняем команды","Команда print(number) выводит число 3.","body",3,[1,2,3]],
+   ["Проверяем последовательность","Следующего значения больше нет. Все числа уже использованы.","next",3,[1,2,3]],
+   ["Выход из цикла","Все значения range закончились. Цикл for завершён.","exit",3,[1,2,3]]
   ];
   let current=0;
   function renderStep(){
@@ -235,6 +235,8 @@ window.Presentation = (() => {
    const active=steps[current][2]==="range"?rangeNode:steps[current][2]==="next"?nextNode:steps[current][2]==="body"?bodyNode:exitNode;
    [rangeNode,nextNode,bodyNode,exitNode].forEach(n=>{if(n!==active)n.classList.add("fl-muted")});
    active.classList.add("fl-active");
+   variableValue.textContent=steps[current][3]===null?"number = —":"number = "+steps[current][3];
+   consoleValue.textContent=steps[current][4].length?steps[current][4].join("   "):"пусто";
    status.innerHTML="<strong>"+steps[current][0]+"</strong><span>"+steps[current][1]+"</span>";
    counter.textContent="Шаг "+(current+1)+" из "+steps.length;
    back.disabled=current===0;nextStep.disabled=current===steps.length-1;
