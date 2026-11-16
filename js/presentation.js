@@ -106,7 +106,7 @@ window.Presentation = (() => {
   path("M410 200 V350");
   function node(id,x,y,w,h,title,sub,kind){
    const g=shape("g",{class:"wl-node "+kind,"data-node":id});
-   shape("rect",{x,y,width:w,height:h,rx:13,fill:kind==="wl-condition"?"#554a1b":kind==="wl-body"?"#164832":kind==="wl-exit"?"#554a1b":"#25354b",stroke:kind==="wl-condition"||kind==="wl-exit"?"#e5c84b":kind==="wl-body"?"#34bd7b":"#8292a9"},g);
+   shape("rect",{x,y,width:w,height:h,rx:13,fill:kind==="wl-variable"?"#193c5b":kind==="wl-condition"?"#554a1b":kind==="wl-body"?"#164832":kind==="wl-exit"?"#554a1b":"#25354b",stroke:kind==="wl-variable"?"#5aa6e8":kind==="wl-condition"||kind==="wl-exit"?"#e5c84b":kind==="wl-body"?"#34bd7b":"#8292a9"},g);
    const t=shape("text",{x:x+w/2,y:y+34},g);t.textContent=title;
    const s=shape("text",{x:x+w/2,y:y+59,class:"wl-sub"},g);s.textContent=sub;
    return g;
