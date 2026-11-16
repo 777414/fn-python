@@ -129,7 +129,7 @@ window.LESSONS['may-1'] = [
  {
   "kicker": "СТРУКТУРА ПРОЕКТА",
   "title": "К чему мы придём в конце проекта?",
-  "code": "SoundboardStudio/\\n├── main.py\\n├── storage.py\\n├── recorder.py\\n├── requirements.txt\\n├── README.md\\n├── interface/\\n│   ├── __init__.py\\n│   ├── window.py\\n│   ├── header.py\\n│   ├── sound_panel.py\\n│   └── controls.py\\n├── sounds/\\n│   └── custom/\\n└── data/\\n    └── sounds.json",
+  "code": "SoundboardStudio/\\n  main.py\\n  storage.py\\n  recorder.py\\n  requirements.txt\\n  README.md\\n  interface/\\n    __init__.py\\n    window.py\\n    header.py\\n    sound_panel.py\\n    controls.py\\n  sounds/\\n    custom/\\n  data/\\n    sounds.json",
   "reveals": [
    "main.py запускает приложение.",
    "interface/ содержит части интерфейса.",
