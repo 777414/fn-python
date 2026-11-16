@@ -250,3 +250,28 @@
   html,body{overflow-x:hidden!important}
   #app{overflow-x:clip}
 }
+
+
+/* Mobile home: no duplicate drawer button; the lesson menu remains in lesson view. */
+@media(max-width:620px){
+  .topbar .menu-toggle{display:none!important}
+  html{width:100%;max-width:100%;overflow-x:clip!important}
+  body{
+    position:relative;
+    width:100%;
+    max-width:100%;
+    overflow-x:clip!important;
+    overscroll-behavior-x:none;
+  }
+  #app{
+    position:relative;
+    width:100%;
+    max-width:100%;
+    overflow-x:clip!important;
+    contain:layout paint;
+  }
+  .ambient-one,.ambient-two{display:none}
+  .hero,.curriculum{width:100%;max-width:100%;margin-left:auto;margin-right:auto}
+  .hero-visual{contain:strict;max-width:100%;overflow:clip!important}
+  .orbit{max-width:100%;left:0;right:0;margin-inline:auto}
+}
