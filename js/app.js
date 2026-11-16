@@ -7,7 +7,7 @@
   const top=document.createElement("div");top.className="module-top";top.innerHTML=`<span class="module-number">МОДУЛЬ 0${index+1}</span><span class="module-icon">${module.icon}</span>`;
   const title=document.createElement("h3");title.textContent=module.title;
   const desc=document.createElement("p");desc.textContent=module.subtitle;
-  const bottom=document.createElement("div");bottom.className="module-bottom";bottom.innerHTML=`<span>4 ЗАНЯТИЯ · ${module.month.toUpperCase()}</span><span class="module-arrow">↗</span>`;
+  const bottom=document.createElement("div");bottom.className="module-bottom";bottom.innerHTML=`<span>${module.lessons.length} ЗАНЯТИЯ · ${module.month.toUpperCase()}</span><span class="module-arrow">↗</span>`;
   const lessons=document.createElement("div");lessons.className="module-lesson-squares";lessons.setAttribute("aria-label","Занятия модуля");
   module.lessons.forEach((lessonTitle,lessonIndex)=>{
    const ready=!!window.LESSONS[module.id+"-"+(lessonIndex+1)];
