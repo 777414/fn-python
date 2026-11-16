@@ -185,3 +185,25 @@
   .slide-counter{font-size:8px}
   .telegram-feedback{left:9px;right:9px}
 }
+
+
+/* Final mobile viewport correction for Chrome on Android. */
+@media(max-width:620px){
+  .telegram-feedback{
+    position:fixed!important;box-sizing:border-box!important;
+    left:10px!important;right:10px!important;width:auto!important;
+    max-width:calc(100vw - 20px)!important;min-width:0!important;
+    margin:0!important;transform:none!important;
+    display:flex!important;flex-direction:row!important;
+    align-items:center!important;overflow:hidden;
+  }
+  .telegram-feedback-copy{min-width:0;max-width:100%;flex:1 1 auto}
+  .telegram-feedback-copy strong,.telegram-feedback-copy small{display:block;white-space:normal;overflow-wrap:anywhere}
+  .telegram-feedback-arrow{flex:0 0 auto}
+  .slide-stage{
+    display:flex;flex-direction:column;align-items:stretch;
+    justify-content:flex-start;min-height:0;height:auto;
+    overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  }
+  .slide-content{flex:0 0 auto;width:100%;margin-block:auto}
+}
