@@ -45,13 +45,27 @@ window.LESSONS['february-1'] = [
   "kicker":"ПЕРВАЯ КОМАНДА",
   "title":"Открываем файл",
   "lead":"Функция open() открывает файл. Ей нужно передать имя файла и режим работы.",
-  "code":"file = open(\"notes.txt\", \"w\")",
+  "code":"file = open(\"notes.txt\", \"w\", encoding=\"utf-8\")",
   "codeCaption":"ОТКРЫЛИ ФАЙЛ ДЛЯ ЗАПИСИ",
   "reveals":[
    "notes.txt — имя файла.",
    "w означает режим записи (write).",
    "Если файла ещё нет, Python создаст его."
   ]
+ },
+ {
+  "kicker":"КИРИЛЛИЦА В ФАЙЛАХ",
+  "title":"Укажем кодировку UTF-8",
+  "lead":"Чтобы русский текст правильно записывался и читался на разных компьютерах, будем явно указывать кодировку UTF-8 при открытии текстового файла.",
+  "code":"file = open('notes.txt', 'w', encoding='utf-8')",
+  "codeCaption":"ОТКРЫВАЕМ ФАЙЛ С УКАЗАНИЕМ КОДИРОВКИ",
+  "reveals":[
+   "encoding — дополнительный параметр функции open().",
+   "encoding='utf-8' сообщает Python, в какой кодировке читать или записывать текст.",
+   "Пиши этот параметр и при записи (w), и при чтении (r).",
+   "Шаблон: open(имя_файла, режим, encoding='utf-8')."
+  ],
+  "note":"UTF-8 поддерживает русские буквы, английский текст и многие другие символы."
  },
  {
   "kicker":"ВАЖНО ЗНАТЬ",
@@ -67,7 +81,7 @@ window.LESSONS['february-1'] = [
   "kicker":"ЗАПИСЫВАЕМ ТЕКСТ",
   "title":"Метод write() записывает данные",
   "lead":"После открытия файла вызываем у него метод write() и передаём текст.",
-  "code":"file = open(\"notes.txt\", \"w\")\nfile.write(\"Моя первая заметка!\")\nfile.close()",
+  "code":"file = open(\"notes.txt\", \"w\", encoding=\"utf-8\")\nfile.write(\"Моя первая заметка!\")\nfile.close()",
   "codeCaption":"ОТКРЫЛИ → ЗАПИСАЛИ → ЗАКРЫЛИ",
   "reveals":[
    "open() открывает файл.",
@@ -101,7 +115,7 @@ window.LESSONS['february-1'] = [
   "kicker":"ЧИТАЕМ ФАЙЛ",
   "title":"Режим r — открыть для чтения",
   "lead":"Чтобы получить сохранённый текст, откроем файл в режиме r (read).",
-  "code":"file = open(\"notes.txt\", \"r\")\ntext = file.read()\nfile.close()\n\nprint(text)",
+  "code":"file = open(\"notes.txt\", \"r\", encoding=\"utf-8\")\ntext = file.read()\nfile.close()\n\nprint(text)",
   "codeCaption":"ЧИТАЕМ ВСЁ СОДЕРЖИМОЕ",
   "output":"Моя первая заметка!",
   "outputAfterReveal":true,
@@ -125,7 +139,7 @@ window.LESSONS['february-1'] = [
   "title":"Какая команда прочитает файл?",
   "lead":"Вспомни, какой режим открывает файл для чтения и какой метод получает его содержимое.",
   "reveals":[
-   "Нужно открыть файл через open(\"notes.txt\", \"r\").",
+   "Нужно открыть файл через open(\"notes.txt\", \"r\", encoding=\"utf-8\").",
    "Затем вызвать file.read().",
    "Не забудь закрыть файл с помощью file.close()."
   ]
@@ -134,7 +148,7 @@ window.LESSONS['february-1'] = [
   "kicker":"ЧИТАЕМ НЕСКОЛЬКО РАЗ",
   "title":"Сохраним текст в переменную",
   "lead":"После read() содержимое файла можно использовать как обычную строку Python.",
-  "code":"file = open(\"notes.txt\", \"r\")\nnote = file.read()\nfile.close()\n\nprint(\"Твоя заметка:\")\nprint(note)",
+  "code":"file = open(\"notes.txt\", \"r\", encoding=\"utf-8\")\nnote = file.read()\nfile.close()\n\nprint(\"Твоя заметка:\")\nprint(note)",
   "reveals":[
    "note — обычная строковая переменная.",
    "В ней находится текст, который был прочитан из файла.",
@@ -166,7 +180,7 @@ window.LESSONS['february-1'] = [
  {
   "kicker":"МИНИ-ПРАКТИКА · ПОДСКАЗКА",
   "title":"Один из возможных вариантов",
-  "code":"file = open(\"greeting.txt\", \"w\")\nfile.write(\"Привет! Рад тебя видеть!\")\nfile.close()",
+  "code":"file = open(\"greeting.txt\", \"w\", encoding=\"utf-8\")\nfile.write(\"Привет! Рад тебя видеть!\")\nfile.close()",
   "codeCaption":"ТВОЁ СООБЩЕНИЕ МОЖЕТ БЫТЬ ДРУГИМ",
   "note":"После запуска найди greeting.txt в папке проекта и открой его."
  },
@@ -174,7 +188,7 @@ window.LESSONS['february-1'] = [
   "kicker":"СОБИРАЕМ ПРОЕКТ",
   "title":"Программа «Мои заметки»",
   "lead":"Сделаем простую программу, которая сохраняет заметку в файл, а затем может прочитать её.",
-  "code":"note = input(\"Напиши заметку: \")\n\nfile = open(\"notes.txt\", \"w\")\nfile.write(note)\nfile.close()\n\nprint(\"Заметка сохранена!\")",
+  "code":"note = input(\"Напиши заметку: \")\n\nfile = open(\"notes.txt\", \"w\", encoding=\"utf-8\")\nfile.write(note)\nfile.close()\n\nprint(\"Заметка сохранена!\")",
   "codeCaption":"ШАГ 1. СОХРАНЯЕМ ЗАМЕТКУ",
   "note":"Каждый новый запуск с режимом w заменяет предыдущую заметку. Пока это ожидаемое поведение."
  },
@@ -182,7 +196,7 @@ window.LESSONS['february-1'] = [
   "kicker":"МОИ ЗАМЕТКИ · ЧИТАЕМ",
   "title":"Добавим просмотр сохранённой заметки",
   "lead":"После сохранения откроем файл для чтения и покажем текст пользователю.",
-  "code":"file = open(\"notes.txt\", \"r\")\nsaved_note = file.read()\nfile.close()\n\nprint(\"Сохранено в файле:\")\nprint(saved_note)",
+  "code":"file = open(\"notes.txt\", \"r\", encoding=\"utf-8\")\nsaved_note = file.read()\nfile.close()\n\nprint(\"Сохранено в файле:\")\nprint(saved_note)",
   "codeCaption":"ШАГ 2. ЧИТАЕМ ЗАМЕТКУ",
   "outputAfterReveal":true,
   "reveals":[
@@ -194,7 +208,7 @@ window.LESSONS['february-1'] = [
  {
   "kicker":"МОИ ЗАМЕТКИ · ПОЛНАЯ ПРОГРАММА",
   "title":"Сохраняем и сразу читаем",
-  "code":"note = input(\"Напиши заметку: \")\n\nfile = open(\"notes.txt\", \"w\")\nfile.write(note)\nfile.close()\n\nfile = open(\"notes.txt\", \"r\")\nsaved_note = file.read()\nfile.close()\n\nprint(\"Твоя заметка сохранена:\")\nprint(saved_note)",
+  "code":"note = input(\"Напиши заметку: \")\n\nfile = open(\"notes.txt\", \"w\", encoding=\"utf-8\")\nfile.write(note)\nfile.close()\n\nfile = open(\"notes.txt\", \"r\", encoding=\"utf-8\")\nsaved_note = file.read()\nfile.close()\n\nprint(\"Твоя заметка сохранена:\")\nprint(saved_note)",
   "codeCaption":"ДВА ОТКРЫТИЯ: СНАЧАЛА w, ЗАТЕМ r",
   "note":"Запусти программу, введи текст, а затем открой notes.txt в папке проекта."
  },
@@ -213,7 +227,7 @@ window.LESSONS['february-1'] = [
   "kicker":"ПОИСК ОШИБКИ",
   "title":"Почему файл пустой?",
   "lead":"Посмотри на программу и найди, чего в ней не хватает.",
-  "code":"file = open(\"notes.txt\", \"w\")\nfile.write(\"Важная запись\")\nprint(\"Готово!\")",
+  "code":"file = open(\"notes.txt\", \"w\", encoding=\"utf-8\")\nfile.write(\"Важная запись\")\nprint(\"Готово!\")",
   "reveals":[
    "Текст записывается, но файл не закрывается.",
    "После write() нужно вызвать file.close().",
