@@ -76,8 +76,8 @@ window.Presentation = (() => {
   code.append(codeText);right.append(feature,code);
   layout.append(left,right);root.append(layout);
   const actions=el("div","ml-actions");
-  const all=el("button","","Подключить все"),extras=el("button","","Оставить math и random"),reset=el("button","","Вернуть исходный вариант");
-  [all,extras,reset].forEach(b=>{b.type="button";actions.append(b)});
+  const all=el("button","","Подключить все"),extras=el("button","","Оставить math и random"),disableAll=el("button","","Отключить все");
+  [all,extras,disableAll].forEach(b=>{b.type="button";actions.append(b)});
   root.append(actions);
   root.append(el("p","ml-foot","Это учебная модель, а не измерение реальной скорости или размера программы. Сам import не добавляет автоматически код для использования функций."));
   function render(){
@@ -91,7 +91,7 @@ window.Presentation = (() => {
   }
   all.addEventListener("click",()=>{modules.forEach(m=>selected.add(m.name));render()});
   extras.addEventListener("click",()=>{selected.clear();selected.add("math");selected.add("random");render()});
-  reset.addEventListener("click",()=>{selected.clear();selected.add("math");selected.add("random");render()});
+  disableAll.addEventListener("click",()=>{selected.clear();render()});
   render();return root;
  }
  function makeVariablePlayground(){
