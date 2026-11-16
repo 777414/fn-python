@@ -1,459 +1,422 @@
-/* Занятие 32. Проектирование Soundboard Studio и воспроизведение готовых WAV-файлов. */
+/* Занятие 32. Soundboard Studio: проект и окно приложения. */
 window.LESSONS = window.LESSONS || {};
 window.LESSONS['may-1'] = [
  {
   "kicker": "МАЙ · ЗАНЯТИЕ 01",
-  "title": "Создаём Soundboard Studio",
-  "lead": "Сегодня начнём итоговый проект курса — настольную звуковую панель. В ней можно будет запускать разные звуки нажатием на большие кнопки.",
-  "note": "В конце занятия у нас будет первое рабочее приложение с несколькими готовыми звуками."
+  "title": "Знакомимся с Soundboard Studio",
+  "lead": "Начинаем итоговый проект курса. Сегодня подготовим папки, файлы и окно приложения. Звуки пока не воспроизводим: сначала создадим основу, к которой будем подключать новые возможности.",
+  "note": "Результат: окно с заголовком, областью звуковой коллекции и панелью управления."
  },
  {
   "kicker": "ИТОГОВЫЙ ПРОЕКТ",
-  "title": "Что такое Soundboard Studio?",
-  "lead": "Это программа, в которой звуки собраны в одном удобном окне.",
+  "title": "Что будет уметь Soundboard Studio?",
   "items": [
    {
-    "title": "Кнопки звуков",
-    "text": "Нажимаем кнопку — запускается выбранный звук."
+    "title": "Импортировать WAV",
+    "text": "Добавлять звуковые файлы с компьютера."
    },
    {
-    "title": "Своя коллекция",
-    "text": "Позже добавим звуки, записанные через микрофон."
+    "title": "Воспроизводить и останавливать",
+    "text": "Запускать выбранный звук из карточки."
    },
    {
-    "title": "Сохранение",
-    "text": "Программа сможет запоминать названия и файлы звуков."
+    "title": "Записывать звуки",
+    "text": "Записывать фрагмент до пяти секунд и прослушивать его."
+   },
+   {
+    "title": "Управлять коллекцией",
+    "text": "Давать звукам названия, переименовывать и удалять их."
+   },
+   {
+    "title": "Сохранять коллекцию",
+    "text": "Запоминать список звуков в JSON и загружать его при запуске."
    }
   ]
  },
  {
-  "kicker": "ПРИМЕР ИНТЕРФЕЙСА",
-  "title": "Как может выглядеть наша звуковая панель?",
-  "lead": "Представь окно с крупными кнопками: «Аплодисменты», «Звонок», «Победа». Каждая кнопка отвечает за свой звук.",
-  "note": "Сегодня сделаем основу: окно, несколько кнопок и воспроизведение подготовленных WAV-файлов."
+  "kicker": "АРХИТЕКТУРА",
+  "title": "Не будем писать всё в одном файле",
+  "lead": "Разделим программу на части. Каждая будет отвечать за свою задачу.",
+  "items": [
+   {
+    "title": "main.py",
+    "text": "Точка входа: собирает приложение и запускает окно."
+   },
+   {
+    "title": "interface/",
+    "text": "Файлы оконного интерфейса."
+   },
+   {
+    "title": "recorder.py",
+    "text": "Запись и предварительное прослушивание."
+   },
+   {
+    "title": "storage.py",
+    "text": "Загрузка и сохранение коллекции."
+   }
+  ]
  },
  {
-  "kicker": "ПЛАН НА СЕГОДНЯ",
-  "title": "Соберём первую рабочую версию",
+  "kicker": "ПЛАН",
+  "title": "Что сделаем сегодня?",
   "list": [
-   "Подготовим папку проекта и звуковые файлы.",
-   "Подключим библиотеки для окна и звука.",
-   "Создадим окно CustomTkinter.",
-   "Разместим несколько кнопок звуков.",
-   "Свяжем каждую кнопку с функцией воспроизведения.",
-   "Проверим, что звуки запускаются."
+   "Создадим папку SoundboardStudio.",
+   "Установим библиотеки из requirements.txt.",
+   "Создадим папку interface и файлы интерфейса.",
+   "Соберём окно на CustomTkinter.",
+   "Добавим заголовок, область коллекции и панель управления.",
+   "Запустим и проверим приложение."
   ]
  },
  {
-  "kicker": "ГРАНИЦЫ ЗАНЯТИЯ",
-  "title": "Что пока не будем делать?",
-  "items": [
-   {
-    "title": "Не записываем звук",
-    "text": "Запись с микрофона будет на следующем занятии."
-   },
-   {
-    "title": "Не сохраняем коллекцию",
-    "text": "JSON и пользовательские звуки добавим позже."
-   },
-   {
-    "title": "Сначала основа",
-    "text": "Сегодня важно надёжно запускать готовые звуковые файлы."
-   }
+  "kicker": "ВАЖНОЕ ПРАВИЛО",
+  "title": "При первом запуске коллекция пустая",
+  "lead": "В проекте не будет встроенных звуков и заранее созданных категорий. Пользователь сам наполнит свою коллекцию.",
+  "note": "Сегодня покажем сообщение «Коллекция пока пуста». Это правильное начальное состояние."
+ },
+ {
+  "kicker": "ПАПКА ПРОЕКТА",
+  "title": "Создаём SoundboardStudio",
+  "lead": "Создай папку с точным названием SoundboardStudio и открой её в редакторе кода.",
+  "code": "SoundboardStudio/",
+  "reveals": [
+   "Название пишем слитно, без пробелов.",
+   "Все файлы проекта будут внутри этой папки.",
+   "Терминал для запуска программы тоже откроем здесь."
   ]
  },
  {
-  "kicker": "ВСПОМИНАЕМ",
-  "title": "Что из CustomTkinter нам уже знакомо?",
+  "kicker": "БИБЛИОТЕКИ",
+  "title": "Какие инструменты понадобятся?",
   "items": [
    {
-    "title": "CTk()",
-    "text": "Создаёт главное окно приложения."
+    "title": "customtkinter",
+    "text": "Современное графическое окно и элементы интерфейса."
    },
-   {
-    "title": "CTkLabel()",
-    "text": "Показывает надписи."
-   },
-   {
-    "title": "CTkButton()",
-    "text": "Создаёт кнопку."
-   },
-   {
-    "title": "command",
-    "text": "Связывает кнопку с функцией."
-   },
-   {
-    "title": "pack() и grid()",
-    "text": "Размещают элементы в окне."
-   }
-  ]
- },
- {
-  "kicker": "НОВЫЕ ИНСТРУМЕНТЫ",
-  "title": "Как Python будет работать со звуком?",
-  "items": [
    {
     "title": "sounddevice",
-    "text": "Отправляет звуковые данные на динамики или наушники."
+    "text": "Запись и воспроизведение звука на следующих занятиях."
    },
    {
     "title": "soundfile",
-    "text": "Читает звуковые данные из WAV-файла."
+    "text": "Чтение и сохранение WAV-файлов на следующих занятиях."
    }
-  ],
-  "note": "Это две небольшие библиотеки, которые заранее установим на компьютеры."
- },
- {
-  "kicker": "ПОДГОТОВКА",
-  "title": "Устанавливаем библиотеки",
-  "lead": "Открой терминал или командную строку и выполни:",
-  "code": "pip install customtkinter sounddevice soundfile",
-  "reveals": [
-   "customtkinter создаёт графическое окно.",
-   "sounddevice отвечает за воспроизведение звука.",
-   "soundfile умеет читать WAV-файлы.",
-   "Установка выполняется для того Python, которым мы запускаем проект."
   ]
  },
  {
-  "kicker": "ФОРМАТ ЗВУКА",
-  "title": "Почему начнём с WAV?",
-  "lead": "WAV — распространённый формат звуковых файлов. Для первой версии проекта подготовим несколько коротких WAV-файлов.",
+  "kicker": "REQUIREMENTS.TXT",
+  "title": "Составляем список библиотек",
+  "lead": "В корне проекта создай файл requirements.txt. Каждую библиотеку запиши с новой строки.",
+  "code": "customtkinter\nsounddevice\nsoundfile",
+  "reveals": [
+   "Этот файл хранит список зависимостей проекта.",
+   "Сегодня используем CustomTkinter.",
+   "Аудиобиблиотеки понадобятся в следующих занятиях."
+  ]
+ },
+ {
+  "kicker": "УСТАНОВКА",
+  "title": "Устанавливаем все библиотеки",
+  "lead": "Открой терминал в папке SoundboardStudio и выполни:",
+  "code": "py -m pip install -r requirements.txt",
+  "reveals": [
+   "py запускает Python.",
+   "-m pip запускает установщик библиотек.",
+   "-r означает, что список нужно прочитать из requirements.txt.",
+   "Если команда py не работает, преподаватель поможет выбрать команду для компьютера."
+  ]
+ },
+ {
+  "kicker": "СТРУКТУРА ПРОЕКТА",
+  "title": "К чему мы придём в конце проекта?",
+  "code": "SoundboardStudio/\\n├── main.py\\n├── storage.py\\n├── recorder.py\\n├── requirements.txt\\n├── README.md\\n├── interface/\\n│   ├── __init__.py\\n│   ├── window.py\\n│   ├── header.py\\n│   ├── sound_panel.py\\n│   └── controls.py\\n├── sounds/\\n│   └── custom/\\n└── data/\\n    └── sounds.json",
+  "reveals": [
+   "main.py запускает приложение.",
+   "interface/ содержит части интерфейса.",
+   "recorder.py и storage.py добавим, когда займёмся записью и сохранением.",
+   "sounds/custom/ будет хранить WAV-файлы пользователя.",
+   "sounds.json появится при первом сохранении коллекции."
+  ]
+ },
+ {
+  "kicker": "РАБОТАЕМ ПОЭТАПНО",
+  "title": "Сегодня создаём только нужные файлы",
   "items": [
    {
-    "title": "bell.wav",
-    "text": "Например, короткий звонок."
+    "title": "Создаём сейчас",
+    "text": "main.py, requirements.txt и папку interface с четырьмя файлами."
    },
    {
-    "title": "clap.wav",
-    "text": "Например, аплодисменты."
+    "title": "Добавим позже",
+    "text": "recorder.py, storage.py, sounds/custom и data."
    },
    {
-    "title": "success.wav",
-    "text": "Например, сигнал победы."
-   }
-  ],
-  "note": "На занятие преподаватель заранее подготовит эти файлы и проверит, что они воспроизводятся."
- },
- {
-  "kicker": "ПАПКИ ПРОЕКТА",
-  "title": "Подготовим место для звуков",
-  "code": "Soundboard/\n    main.py\n    sounds/\n        default/\n            bell.wav\n            clap.wav\n            success.wav",
-  "reveals": [
-   "Soundboard — главная папка проекта.",
-   "main.py — файл с программой.",
-   "В sounds/default/ будут лежать готовые звуки.",
-   "Имена файлов в коде должны точно совпадать с именами в папке."
-  ]
- },
- {
-  "kicker": "ВАЖНО",
-  "title": "Где программа ищет WAV-файлы?",
-  "lead": "Когда мы указываем путь sounds/default/bell.wav, Python ищет папку sounds рядом с местом запуска программы.",
-  "note": "Если файл лежит в другом месте или называется иначе, программа не сможет его открыть."
- },
- {
-  "kicker": "ПОДКЛЮЧАЕМ БИБЛИОТЕКИ",
-  "title": "Два новых импорта",
-  "code": "import sounddevice as sd\nimport soundfile as sf",
-  "reveals": [
-   "import подключает библиотеку.",
-   "as sd задаёт короткое имя для sounddevice.",
-   "as sf задаёт короткое имя для soundfile.",
-   "Теперь будем писать sd и sf вместо длинных названий."
-  ]
- },
- {
-  "kicker": "ЧИТАЕМ ЗВУК",
-  "title": "Получаем данные из WAV-файла",
-  "code": "data, samplerate = sf.read(\"sounds/default/bell.wav\")",
-  "reveals": [
-   "sf.read() открывает WAV-файл и читает его содержимое.",
-   "data — сами звуковые данные.",
-   "samplerate — частота дискретизации: сколько измерений звука хранится за секунду.",
-   "Обе части результата сохраняем в переменные."
-  ]
- },
- {
-  "kicker": "ВОСПРОИЗВОДИМ",
-  "title": "Передаём звук на динамики",
-  "code": "sd.play(data, samplerate)",
-  "reveals": [
-   "sd.play() начинает воспроизведение звуковых данных.",
-   "Первый аргумент — data, второй — samplerate.",
-   "Для этого примера не нужно самостоятельно создавать аудиопоток.",
-   "Звук услышишь через выбранные в системе динамики или наушники."
-  ]
- },
- {
-  "kicker": "СОБИРАЕМ ДВЕ КОМАНДЫ",
-  "title": "Прочитать файл и запустить звук",
-  "code": "data, samplerate = sf.read(\"sounds/default/bell.wav\")\nsd.play(data, samplerate)",
-  "reveals": [
-   "Сначала читаем звуковой файл.",
-   "Затем передаём полученные данные в sd.play().",
-   "Порядок важен: сначала данные нужно получить, потом воспроизвести."
-  ]
- },
- {
-  "kicker": "ПЕРВАЯ ФУНКЦИЯ",
-  "title": "Сделаем общую функцию play_sound()",
-  "lead": "Не будем каждый раз повторять чтение файла и запуск звука. Соберём эти команды в одну функцию.",
-  "code": "def play_sound(filename):\n    data, samplerate = sf.read(filename)\n    sd.play(data, samplerate)",
-  "reveals": [
-   "filename — параметр с именем файла.",
-   "Функция читает файл, путь к которому мы передали.",
-   "Затем запускает его воспроизведение.",
-   "Одну функцию можно вызывать для разных звуков."
-  ]
- },
- {
-  "kicker": "ПРОВЕРЯЕМ ФУНКЦИЮ",
-  "title": "Запускаем один подготовленный звук",
-  "code": "play_sound(\"sounds/default/bell.wav\")",
-  "reveals": [
-   "В скобках передаём путь к WAV-файлу.",
-   "Функция получает путь в параметр filename.",
-   "Затем читает и воспроизводит этот файл."
-  ]
- },
- {
-  "kicker": "ПЛАНИРУЕМ ОКНО",
-  "title": "Какие части будут в приложении?",
-  "items": [
-   {
-    "title": "Заголовок",
-    "text": "Название Soundboard Studio."
-   },
-   {
-    "title": "Панель звуков",
-    "text": "Три большие кнопки с названиями звуков."
-   },
-   {
-    "title": "Строка состояния",
-    "text": "Подсказывает, какой звук запущен."
-   },
-   {
-    "title": "Кнопка остановки",
-    "text": "Останавливает текущее воспроизведение."
+    "title": "Не создаём заранее пустой JSON",
+    "text": "Файл sounds.json появится при первом сохранении коллекции."
    }
   ]
  },
  {
-  "kicker": "СОЗДАЁМ ОКНО",
-  "title": "Основа приложения",
-  "code": "import customtkinter as ctk\n\napp = ctk.CTk()\napp.title(\"Soundboard Studio\")\napp.geometry(\"560x420\")",
+  "kicker": "ПАПКА INTERFACE",
+  "title": "Создаём папку интерфейса",
+  "lead": "Внутри SoundboardStudio создай папку interface. В ней будут функции для отдельных областей окна.",
+  "code": "SoundboardStudio/\\n└── interface/"
+ },
+ {
+  "kicker": "INIT.PY",
+  "title": "Добавляем файл __init__.py",
+  "lead": "Создай внутри interface пустой файл __init__.py. Он обозначает папку как пакет Python.",
+  "code": "interface/\\n└── __init__.py",
   "reveals": [
-   "Создаём главное окно с помощью CTk().",
-   "title() задаёт название окна.",
-   "geometry() задаёт ширину и высоту в пикселях.",
-   "Пока окно пустое — сейчас добавим элементы."
+   "По два символа подчёркивания с каждой стороны слова init.",
+   "Файл на этом этапе остаётся пустым."
   ]
  },
  {
-  "kicker": "ВЫБИРАЕМ ОФОРМЛЕНИЕ",
-  "title": "Тёмная тема и цвет кнопок",
-  "code": "ctk.set_appearance_mode(\"dark\")\nctk.set_default_color_theme(\"blue\")",
+  "kicker": "ТОЧКА ВХОДА",
+  "title": "Файл main.py будет очень коротким",
+  "lead": "В корне проекта создай main.py. Он импортирует функцию создания окна, вызывает её и запускает приложение.",
+  "code": "from interface.window import create_window\n\napp = create_window()\napp.mainloop()\n",
   "reveals": [
-   "dark включает тёмное оформление.",
-   "blue задаёт синюю цветовую палитру элементов.",
-   "Настройки темы размещаем до создания окна."
+   "Сохрани код именно в SoundboardStudio/main.py.",
+   "from ... import подключает функцию из другого файла.",
+   "mainloop() запускает обработку действий окна.",
+   "Интерфейс не пишем в main.py."
   ]
  },
  {
-  "kicker": "ДОБАВЛЯЕМ ЗАГОЛОВОК",
-  "title": "Покажем название проекта",
-  "code": "title_label = ctk.CTkLabel(\n    app,\n    text=\"Soundboard Studio\",\n    font=(\"Arial\", 26, \"bold\")\n)\ntitle_label.pack(pady=20)",
+  "kicker": "ОКНО ПРИЛОЖЕНИЯ",
+  "title": "Создаём interface/window.py",
+  "lead": "Этот файл отвечает за создание и настройку главного окна. Он также соединит три части интерфейса.",
+  "code": "interface/window.py"
+ },
+ {
+  "kicker": "ИМПОРТЫ",
+  "title": "Подключаем библиотеку и функции интерфейса",
+  "code": "import customtkinter as ctk\\n\\nfrom interface.header import create_header\\nfrom interface.sound_panel import create_sound_panel\\nfrom interface.controls import create_controls",
   "reveals": [
-   "CTkLabel создаёт надпись внутри окна.",
-   "Параметр text задаёт текст.",
-   "font настраивает шрифт и размер.",
-   "pack() размещает надпись в окне."
+   "customtkinter подключаем под коротким именем ctk.",
+   "Остальные строки импортируют наши функции из соседних файлов.",
+   "Эти файлы создадим на следующих шагах."
   ]
  },
  {
-  "kicker": "ПАНЕЛЬ КНОПОК",
-  "title": "Соберём кнопки в отдельную область",
-  "code": "sound_frame = ctk.CTkFrame(app)\nsound_frame.pack(pady=15, padx=20, fill=\"x\")",
+  "kicker": "ФУНКЦИЯ ОКНА",
+  "title": "Настраиваем главное окно",
+  "code": "def create_window():\\n    ctk.set_appearance_mode(\\\"dark\\\")\\n    ctk.set_default_color_theme(\\\"blue\\\")\\n\\n    app = ctk.CTk()\\n    app.title(\\\"Soundboard Studio\\\")\\n    app.geometry(\\\"760x560\\\")\\n    app.minsize(620, 460)",
   "reveals": [
-   "CTkFrame создаёт область-контейнер для других элементов.",
-   "Кнопки разместим внутри sound_frame.",
-   "fill=\"x\" позволяет области растянуться по ширине.",
-   "padx и pady добавляют внешние отступы."
+   "dark включает тёмную тему.",
+   "blue выбирает синюю цветовую палитру.",
+   "CTk() создаёт окно.",
+   "title() задаёт заголовок окна.",
+   "geometry() задаёт размер, minsize() — минимальный размер."
   ]
  },
  {
-  "kicker": "РАЗМЕЩАЕМ КНОПКИ",
-  "title": "Сетка из трёх звуков",
-  "code": "bell_button = ctk.CTkButton(sound_frame, text=\"🔔 Звонок\")\nbell_button.grid(row=0, column=0, padx=8, pady=12)\n\nclap_button = ctk.CTkButton(sound_frame, text=\"👏 Аплодисменты\")\nclap_button.grid(row=0, column=1, padx=8, pady=12)\n\nsuccess_button = ctk.CTkButton(sound_frame, text=\"🏆 Победа\")\nsuccess_button.grid(row=0, column=2, padx=8, pady=12)",
+  "kicker": "СОБИРАЕМ ЧАСТИ",
+  "title": "Добавляем области и возвращаем окно",
+  "code": "    create_header(app)\\n    create_sound_panel(app)\\n    create_controls(app)\\n\\n    return app",
   "reveals": [
-   "Все кнопки находятся внутри sound_frame.",
-   "grid() размещает элементы по строкам и столбцам.",
-   "row=0 означает первую строку.",
-   "column=0, 1 и 2 — три соседних столбца.",
-   "padx и pady добавляют расстояние между кнопками."
+   "Каждая функция создаёт одну часть интерфейса.",
+   "app передаём как родительское окно.",
+   "return app возвращает окно в main.py."
+  ]
+ },
+ {
+  "kicker": "ПОЛНЫЙ ФАЙЛ",
+  "title": "Сохрани полный interface/window.py",
+  "code": "import customtkinter as ctk\n\nfrom interface.header import create_header\nfrom interface.sound_panel import create_sound_panel\nfrom interface.controls import create_controls\n\n\ndef create_window():\n    ctk.set_appearance_mode(\"dark\")\n    ctk.set_default_color_theme(\"blue\")\n\n    app = ctk.CTk()\n    app.title(\"Soundboard Studio\")\n    app.geometry(\"760x560\")\n    app.minsize(620, 460)\n\n    create_header(app)\n    create_sound_panel(app)\n    create_controls(app)\n\n    return app\n",
+  "reveals": [
+   "Этот код должен целиком находиться в interface/window.py.",
+   "Проверь отступы внутри create_window().",
+   "Остальные три файла интерфейса создадим далее."
+  ]
+ },
+ {
+  "kicker": "ЗАГОЛОВОК",
+  "title": "Создаём interface/header.py",
+  "lead": "В этом файле будет верхняя часть окна: название приложения и строка состояния.",
+  "code": "interface/header.py"
+ },
+ {
+  "kicker": "ФУНКЦИЯ ЗАГОЛОВКА",
+  "title": "Создаём рамку и название",
+  "code": "import customtkinter as ctk\\n\\n\\ndef create_header(parent):\\n    header = ctk.CTkFrame(parent, corner_radius=16)\\n    header.pack(fill=\\\"x\\\", padx=24, pady=(24, 12))\\n\\n    title = ctk.CTkLabel(\\n        header,\\n        text=\\\"Soundboard Studio\\\",\\n        font=(\\\"Arial\\\", 28, \\\"bold\\\")\\n    )\\n    title.pack(anchor=\\\"w\\\", padx=20, pady=(16, 4))",
+  "reveals": [
+   "CTkFrame создаёт контейнер.",
+   "CTkLabel показывает текст.",
+   "parent — окно, в которое добавляется заголовок.",
+   "pack() размещает элементы."
   ]
  },
  {
   "kicker": "СТРОКА СОСТОЯНИЯ",
-  "title": "Сообщим, что сейчас происходит",
-  "code": "status_label = ctk.CTkLabel(\n    app,\n    text=\"Выбери звук\"\n)\nstatus_label.pack(pady=12)",
+  "title": "Добавляем приветствие",
+  "code": "    status = ctk.CTkLabel(\\n        header,\\n        text=\\\"Добро пожаловать! Здесь появится статус приложения.\\\",\\n        anchor=\\\"w\\\"\\n    )\\n    status.pack(fill=\\\"x\\\", padx=20, pady=(0, 16))",
   "reveals": [
-   "Это обычная надпись в главном окне.",
-   "Сначала она предлагает выбрать звук.",
-   "Позже будем менять её текст после нажатия кнопки."
+   "Строка состояния будет показывать сообщения приложения.",
+   "Позже её текст будем менять после действий пользователя."
   ]
  },
  {
-  "kicker": "ОСТАНОВКА ЗВУКА",
-  "title": "Команда sd.stop()",
-  "code": "def stop_sound():\n    sd.stop()\n    status_label.configure(text=\"Воспроизведение остановлено\")",
+  "kicker": "ПОЛНЫЙ ФАЙЛ",
+  "title": "Сохрани полный interface/header.py",
+  "code": "import customtkinter as ctk\n\n\ndef create_header(parent):\n    header = ctk.CTkFrame(parent, corner_radius=16)\n    header.pack(fill=\"x\", padx=24, pady=(24, 12))\n\n    title = ctk.CTkLabel(\n        header,\n        text=\"Soundboard Studio\",\n        font=(\"Arial\", 28, \"bold\")\n    )\n    title.pack(anchor=\"w\", padx=20, pady=(16, 4))\n\n    status = ctk.CTkLabel(\n        header,\n        text=\"Добро пожаловать! Здесь появится статус приложения.\",\n        anchor=\"w\"\n    )\n    status.pack(fill=\"x\", padx=20, pady=(0, 16))\n",
   "reveals": [
-   "sd.stop() останавливает текущее воспроизведение.",
-   "configure() меняет текст уже созданной надписи.",
-   "Функция будет запускаться отдельной кнопкой."
+   "Сохрани весь код в interface/header.py.",
+   "Не добавляй этот код в main.py или window.py."
   ]
  },
  {
-  "kicker": "СВЯЗЫВАЕМ КНОПКУ С ФУНКЦИЕЙ",
-  "title": "Параметр command",
-  "code": "stop_button = ctk.CTkButton(\n    app,\n    text=\"■ Остановить звук\",\n    command=stop_sound\n)\nstop_button.pack(pady=8)",
+  "kicker": "ОБЛАСТЬ КОЛЛЕКЦИИ",
+  "title": "Создаём interface/sound_panel.py",
+  "lead": "Здесь будут располагаться карточки звуков. Пока коллекция пустая, поэтому покажем заголовок и поясняющее сообщение.",
+  "code": "interface/sound_panel.py"
+ },
+ {
+  "kicker": "ПУСТАЯ ПАНЕЛЬ",
+  "title": "Создаём область и сообщение",
+  "code": "import customtkinter as ctk\\n\\n\\ndef create_sound_panel(parent):\\n    panel = ctk.CTkFrame(parent, corner_radius=16)\\n    panel.pack(fill=\\\"both\\\", expand=True, padx=24, pady=12)\\n\\n    heading = ctk.CTkLabel(\\n        panel,\\n        text=\\\"Моя звуковая коллекция\\\",\\n        font=(\\\"Arial\\\", 20, \\\"bold\\\")\\n    )\\n    heading.pack(anchor=\\\"w\\\", padx=20, pady=(18, 8))\\n\\n    empty_message = ctk.CTkLabel(\\n        panel,\\n        text=\\\"Коллекция пока пуста. Позже здесь появятся карточки звуков.\\\"\\n    )\\n    empty_message.pack(anchor=\\\"w\\\", padx=20, pady=(0, 18))",
   "reveals": [
-   "command получает имя функции без скобок.",
-   "Не пишем stop_sound() — иначе функция запустится сразу при создании кнопки.",
-   "После нажатия кнопки CustomTkinter вызовет функцию."
+   "CTkFrame создаёт область будущих карточек.",
+   "fill=both и expand=True позволяют панели занять свободное место.",
+   "Пустая коллекция — ожидаемое начальное состояние."
   ]
  },
  {
-  "kicker": "РАЗНЫЕ ЗВУКИ",
-  "title": "Для каждой кнопки — свой обработчик",
-  "code": "def play_bell():\n    play_sound(\"sounds/default/bell.wav\")\n    status_label.configure(text=\"Сейчас играет: Звонок\")\n\ndef play_clap():\n    play_sound(\"sounds/default/clap.wav\")\n    status_label.configure(text=\"Сейчас играет: Аплодисменты\")\n\ndef play_success():\n    play_sound(\"sounds/default/success.wav\")\n    status_label.configure(text=\"Сейчас играет: Победа\")",
+  "kicker": "ПОЛНЫЙ ФАЙЛ",
+  "title": "Сохрани полный interface/sound_panel.py",
+  "code": "import customtkinter as ctk\n\n\ndef create_sound_panel(parent):\n    panel = ctk.CTkFrame(parent, corner_radius=16)\n    panel.pack(fill=\"both\", expand=True, padx=24, pady=12)\n\n    heading = ctk.CTkLabel(\n        panel,\n        text=\"Моя звуковая коллекция\",\n        font=(\"Arial\", 20, \"bold\")\n    )\n    heading.pack(anchor=\"w\", padx=20, pady=(18, 8))\n\n    empty_message = ctk.CTkLabel(\n        panel,\n        text=\"Коллекция пока пуста. Позже здесь появятся карточки звуков.\"\n    )\n    empty_message.pack(anchor=\"w\", padx=20, pady=(0, 18))\n",
   "reveals": [
-   "Каждый обработчик вызывает общую play_sound().",
-   "Внутри передаём путь к нужному файлу.",
-   "Затем меняем строку состояния.",
-   "Так мы обходимся без новых конструкций: у каждой кнопки своя небольшая функция."
+   "Сохрани код в interface/sound_panel.py.",
+   "Кнопок воспроизведения пока нет — добавим их на следующем занятии."
   ]
  },
  {
-  "kicker": "ПОДКЛЮЧАЕМ ОБРАБОТЧИКИ",
-  "title": "Теперь кнопки запускают звук",
-  "code": "bell_button.configure(command=play_bell)\nclap_button.configure(command=play_clap)\nsuccess_button.configure(command=play_success)",
+  "kicker": "ПАНЕЛЬ УПРАВЛЕНИЯ",
+  "title": "Создаём interface/controls.py",
+  "lead": "Здесь будут кнопки импорта и управления звуками. Пока оставим понятную надпись-заглушку.",
+  "code": "interface/controls.py"
+ },
+ {
+  "kicker": "НИЖНЯЯ ОБЛАСТЬ",
+  "title": "Добавляем рамку и пояснение",
+  "code": "import customtkinter as ctk\n\n\ndef create_controls(parent):\n    controls = ctk.CTkFrame(parent, corner_radius=16)\n    controls.pack(fill=\"x\", padx=24, pady=(0, 24))\n\n    hint = ctk.CTkLabel(\n        controls,\n        text=\"Здесь будут кнопки импорта и управления звуками.\"\n    )\n    hint.pack(anchor=\"w\", padx=20, pady=16)\n",
   "reveals": [
-   "configure() может изменить не только текст, но и команду кнопки.",
-   "Для каждой кнопки указываем нужную функцию.",
-   "Функции передаём без скобок — они запустятся после нажатия."
+   "Создаём рамку для будущих кнопок.",
+   "Пока внутри только поясняющая надпись.",
+   "Импорт WAV и другие действия добавим позже."
   ]
  },
  {
-  "kicker": "ПОРЯДОК В ПРОГРАММЕ",
-  "title": "В каком порядке разместить код?",
-  "list": [
-   "Импорты библиотек.",
-   "Настройка темы и создание окна.",
-   "Создание надписей, панели и кнопок.",
-   "Функции воспроизведения и остановки.",
-   "Связь кнопок с обработчиками.",
-   "Запуск app.mainloop() в самом конце."
-  ]
- },
- {
-  "kicker": "ПОЛНАЯ ПРОГРАММА",
-  "title": "Первая версия Soundboard Studio",
-  "code": "import customtkinter as ctk\nimport sounddevice as sd\nimport soundfile as sf\n\nctk.set_appearance_mode(\"dark\")\nctk.set_default_color_theme(\"blue\")\n\napp = ctk.CTk()\napp.title(\"Soundboard Studio\")\napp.geometry(\"560x420\")\n\ndef play_sound(filename):\n    data, samplerate = sf.read(filename)\n    sd.play(data, samplerate)\n\ndef play_bell():\n    play_sound(\"sounds/default/bell.wav\")\n    status_label.configure(text=\"Сейчас играет: Звонок\")\n\ndef play_clap():\n    play_sound(\"sounds/default/clap.wav\")\n    status_label.configure(text=\"Сейчас играет: Аплодисменты\")\n\ndef play_success():\n    play_sound(\"sounds/default/success.wav\")\n    status_label.configure(text=\"Сейчас играет: Победа\")\n\ndef stop_sound():\n    sd.stop()\n    status_label.configure(text=\"Воспроизведение остановлено\")\n\ntitle_label = ctk.CTkLabel(app, text=\"Soundboard Studio\", font=(\"Arial\", 26, \"bold\"))\ntitle_label.pack(pady=20)\n\nsound_frame = ctk.CTkFrame(app)\nsound_frame.pack(pady=15, padx=20, fill=\"x\")\n\nbell_button = ctk.CTkButton(sound_frame, text=\"🔔 Звонок\", command=play_bell)\nbell_button.grid(row=0, column=0, padx=8, pady=12)\nclap_button = ctk.CTkButton(sound_frame, text=\"👏 Аплодисменты\", command=play_clap)\nclap_button.grid(row=0, column=1, padx=8, pady=12)\nsuccess_button = ctk.CTkButton(sound_frame, text=\"🏆 Победа\", command=play_success)\nsuccess_button.grid(row=0, column=2, padx=8, pady=12)\n\nstatus_label = ctk.CTkLabel(app, text=\"Выбери звук\")\nstatus_label.pack(pady=12)\nstop_button = ctk.CTkButton(app, text=\"■ Остановить звук\", command=stop_sound)\nstop_button.pack(pady=8)\n\napp.mainloop()",
+  "kicker": "ПРОВЕРЯЕМ СТРУКТУРУ",
+  "title": "Все файлы должны лежать на своих местах",
+  "code": "SoundboardStudio/\\n├── main.py\\n├── requirements.txt\\n└── interface/\\n    ├── __init__.py\\n    ├── window.py\\n    ├── header.py\\n    ├── sound_panel.py\\n    └── controls.py",
   "reveals": [
-   "Сначала подключаем CustomTkinter и две аудиобиблиотеки.",
-   "Создаём окно и функции для трёх звуков.",
-   "Затем создаём заголовок, панель и кнопки.",
-   "Кнопки сразу получают обработчики через command.",
-   "В конце создаём строку состояния, кнопку остановки и запускаем mainloop()."
+   "main.py и requirements.txt лежат в корне.",
+   "Все четыре файла интерфейса лежат внутри interface/.",
+   "Не создавай window.py или header.py рядом с main.py."
   ]
  },
  {
-  "kicker": "ПРОВЕРЯЕМ ПРОЕКТ",
-  "title": "Что проверить перед тем, как считать версию готовой?",
+  "kicker": "ЗАПУСК",
+  "title": "Запускаем Soundboard Studio",
+  "lead": "Открой терминал в папке SoundboardStudio и выполни:",
+  "code": "py main.py",
+  "reveals": [
+   "Python запускает main.py.",
+   "main.py импортирует create_window().",
+   "Окно собирается из трёх отдельных частей.",
+   "Если окно появилось, основа приложения работает."
+  ]
+ },
+ {
+  "kicker": "ПРОВЕРКА",
+  "title": "Что должно быть в окне?",
   "items": [
    {
-    "title": "Окно открывается",
-    "text": "У него есть название и аккуратное оформление."
+    "title": "Сверху",
+    "text": "Название Soundboard Studio и приветственный статус."
    },
    {
-    "title": "Все кнопки видны",
-    "text": "Звонок, аплодисменты и победа."
+    "title": "В центре",
+    "text": "Заголовок «Моя звуковая коллекция» и сообщение, что коллекция пуста."
    },
    {
-    "title": "Каждая кнопка запускает свой звук",
-    "text": "Файлы не перепутаны."
+    "title": "Снизу",
+    "text": "Панель с местом для будущих кнопок импорта и управления."
+   }
+  ],
+  "note": "Звуки пока не импортируются и не воспроизводятся. Это будет темой следующего занятия."
+ },
+ {
+  "kicker": "ПОИСК ОШИБОК",
+  "title": "Если окно не открылось",
+  "items": [
+   {
+    "title": "No module named customtkinter",
+    "text": "Установи зависимости командой py -m pip install -r requirements.txt."
    },
    {
-    "title": "Остановка работает",
-    "text": "Кнопка прекращает воспроизведение."
+    "title": "No module named interface...",
+    "text": "Проверь папку interface и имена файлов."
    },
    {
-    "title": "Нет отсутствующих файлов",
-    "text": "Все три WAV лежат в нужной папке."
+    "title": "ImportError: cannot import name...",
+    "text": "Сверь названия create_header, create_sound_panel и create_controls."
+   },
+   {
+    "title": "Файл не найден",
+    "text": "Запускай py main.py из папки SoundboardStudio."
    }
   ]
  },
  {
-  "kicker": "ЕСЛИ ЗВУК НЕ ИГРАЕТ",
-  "title": "Проверяем по порядку",
+  "kicker": "ПРАКТИКА · БАЗОВЫЙ",
+  "title": "Собери окно приложения",
   "list": [
-   "Установлены ли sounddevice и soundfile?",
-   "Есть ли папка sounds/default рядом с проектом?",
-   "Совпадают ли имена WAV-файлов с путями в коде?",
-   "Выбраны ли правильные динамики или наушники?",
-   "Не выключен ли звук на компьютере?"
-  ],
-  "note": "Если появляется сообщение об ошибке, не угадывай причину — прочитай текст ошибки и проверь соответствующий пункт."
- },
- {
-  "kicker": "ПРАКТИКА · БАЗОВЫЙ УРОВЕНЬ",
-  "title": "Собери свою звуковую панель",
-  "list": [
-   "Создай окно Soundboard Studio.",
-   "Добавь две или три кнопки.",
-   "Подготовь столько же WAV-файлов.",
-   "Напиши play_sound() и отдельные функции для кнопок.",
-   "Добавь строку состояния и кнопку остановки."
+   "Создай папку проекта и requirements.txt.",
+   "Создай main.py и папку interface с четырьмя файлами.",
+   "Запусти программу.",
+   "Проверь три области окна."
   ]
  },
  {
-  "kicker": "ПРАКТИКА · УЛУЧШЕННЫЙ УРОВЕНЬ",
-  "title": "Сделай панель удобнее",
+  "kicker": "ПРАКТИКА · УЛУЧШЕННЫЙ",
+  "title": "Настрой оформление",
   "list": [
-   "Добавь ещё два звука.",
-   "Сделай кнопки одинакового размера.",
-   "Добавь заголовок или подпись к группе звуков.",
-   "Размести кнопки в две строки с помощью grid().",
-   "Измени текст строки состояния для каждого звука."
+   "Измени размер окна.",
+   "Подбери другую цветовую тему.",
+   "Измени приветствие в строке состояния.",
+   "Измени размер заголовка."
   ]
  },
  {
-  "kicker": "ПРАКТИКА · ТВОРЧЕСКИЙ УРОВЕНЬ",
-  "title": "Придумай собственную звуковую тему",
+  "kicker": "ПРАКТИКА · ТВОРЧЕСКИЙ",
+  "title": "Спроектируй будущую карточку звука",
   "list": [
-   "Собери панель звуков для игры, праздника или презентации.",
-   "Подбери собственные названия и эмодзи для кнопок.",
-   "Добавь отдельную группу звуков.",
-   "Продумай цвета и расположение элементов."
+   "Нарисуй карточку звука на бумаге.",
+   "Реши, какие сведения должны быть на карточке.",
+   "Подумай, где разместить кнопку импорта WAV.",
+   "Помни: при первом запуске коллекция и категории пустые."
   ]
  },
  {
-  "kicker": "ИТОГ ЗАНЯТИЯ",
-  "title": "У нас уже есть первая версия Soundboard Studio",
+  "kicker": "ИТОГ",
+  "title": "У нас есть основа Soundboard Studio",
   "list": [
-   "Создали окно на CustomTkinter.",
-   "Подключили sounddevice и soundfile.",
-   "Научились читать WAV-файл и воспроизводить его.",
-   "Собрали несколько кнопок и связали их с функциями.",
-   "Добавили строку состояния и остановку звука."
+   "Создали проект и список зависимостей.",
+   "Разделили интерфейс на отдельные файлы.",
+   "Создали окно CustomTkinter с тёмной темой.",
+   "Добавили заголовок и строку состояния.",
+   "Подготовили пустую область коллекции и панель управления.",
+   "Запустили приложение через main.py."
   ]
  },
  {
-  "kicker": "ЧТО ДАЛЬШЕ?",
-  "title": "На следующем занятии приложение научится записывать звуки",
-  "lead": "Добавим запись короткого звука через микрофон, кнопку начала записи и сохранение результата в WAV.",
-  "note": "Сегодня мы сделали основу, которая уже умеет воспроизводить готовые звуки."
+  "kicker": "СЛЕДУЮЩЕЕ ЗАНЯТИЕ",
+  "title": "Добавим импорт и воспроизведение WAV",
+  "lead": "Научимся импортировать WAV-файлы, описывать звуки списками и словарями, создавать карточки и запускать или останавливать воспроизведение.",
+  "note": "Сегодня мы подготовили окно. На следующем занятии оно начнёт работать со звуками."
  }
 ];
