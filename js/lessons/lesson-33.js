@@ -76,7 +76,7 @@ window.LESSONS['may-2'] = [
  {
   "kicker": "ФИЛЬТР ФАЙЛОВ",
   "title": "Показываем только WAV-файлы",
-  "code": "file_path = filedialog.askopenfilename(\\n    title=\\\"Выбери звуковой файл\\\",\\n    filetypes=[(\\\"WAV files\\\", \\\"*.wav\\\")]\\n)",
+  "code": "file_path = filedialog.askopenfilename(\n    title=\\\"Выбери звуковой файл\\\",\n    filetypes=[(\\\"WAV files\\\", \\\"*.wav\\\")]\n)",
   "reveals": [
    "askopenfilename() открывает диалог выбора файла.",
    "title задаёт заголовок окна.",
@@ -87,7 +87,7 @@ window.LESSONS['may-2'] = [
  {
   "kicker": "ПРОВЕРКА ВЫБОРА",
   "title": "Пользователь может нажать «Отмена»",
-  "code": "if not file_path:\\n    return",
+  "code": "if not file_path:\n    return",
   "reveals": [
    "Пустая строка означает, что файл не выбран.",
    "return завершает функцию без добавления звука.",
@@ -98,7 +98,7 @@ window.LESSONS['may-2'] = [
   "kicker": "КОЛЛЕКЦИЯ",
   "title": "Как будем хранить звуки?",
   "lead": "Создадим обычный список Python. Каждый элемент списка — словарь с названием звука и путём к файлу.",
-  "code": "sounds = [\\n    {\\\"name\\\": \\\"Аплодисменты\\\", \\\"path\\\": \\\"C:/Sounds/clap.wav\\\"},\\n    {\\\"name\\\": \\\"Звонок\\\", \\\"path\\\": \\\"C:/Sounds/bell.wav\\\"}\\n]",
+  "code": "sounds = [\n    {\\\"name\\\": \\\"Аплодисменты\\\", \\\"path\\\": \\\"C:/Sounds/clap.wav\\\"},\n    {\\\"name\\\": \\\"Звонок\\\", \\\"path\\\": \\\"C:/Sounds/bell.wav\\\"}\n]",
   "reveals": [
    "sounds — список звуков.",
    "Каждый словарь описывает один звук.",
@@ -110,7 +110,7 @@ window.LESSONS['may-2'] = [
  {
   "kicker": "ДОБАВЛЕНИЕ В СПИСОК",
   "title": "Создаём словарь нового звука",
-  "code": "sound = {\\n    \\\"name\\\": file_name,\\n    \\\"path\\\": file_path\\n}\\nsounds.append(sound)",
+  "code": "sound = {\n    \\\"name\\\": file_name,\n    \\\"path\\\": file_path\n}\nsounds.append(sound)",
   "reveals": [
    "Словарь собирает данные об одном звуке.",
    "append() добавляет словарь в конец списка.",
@@ -122,7 +122,7 @@ window.LESSONS['may-2'] = [
   "kicker": "ИМЯ ФАЙЛА",
   "title": "Получаем название для карточки",
   "lead": "Путь к файлу может быть длинным. Для подписи карточки нам нужно только имя файла без папок и расширения.",
-  "code": "import os\\n\\nfile_name = os.path.splitext(\\n    os.path.basename(file_path)\\n)[0]",
+  "code": "import os\n\nfile_name = os.path.splitext(\n    os.path.basename(file_path)\n)[0]",
   "reveals": [
    "os.path.basename() оставляет имя файла.",
    "os.path.splitext() отделяет расширение .wav.",
@@ -134,7 +134,7 @@ window.LESSONS['may-2'] = [
   "kicker": "ВОСПРОИЗВЕДЕНИЕ",
   "title": "Читаем звуковой файл через soundfile",
   "lead": "Библиотека soundfile умеет читать WAV-файл. Она возвращает звуковые данные и частоту дискретизации.",
-  "code": "import soundfile as sf\\n\\ndata, samplerate = sf.read(file_path)",
+  "code": "import soundfile as sf\n\ndata, samplerate = sf.read(file_path)",
   "reveals": [
    "sf.read() открывает звуковой файл.",
    "data — звуковые данные.",
@@ -145,7 +145,7 @@ window.LESSONS['may-2'] = [
  {
   "kicker": "ЗАПУСК ЗВУКА",
   "title": "Воспроизводим звук через sounddevice",
-  "code": "import sounddevice as sd\\n\\nsd.play(data, samplerate)",
+  "code": "import sounddevice as sd\n\nsd.play(data, samplerate)",
   "reveals": [
    "sd.play() отправляет звук на устройство воспроизведения.",
    "Первый аргумент — звуковые данные.",
@@ -166,7 +166,7 @@ window.LESSONS['may-2'] = [
  {
   "kicker": "ОБНОВЛЯЕМ ИНТЕРФЕЙС",
   "title": "Сообщаем пользователю, что происходит",
-  "code": "status_label.configure(\\n    text=\\\"Сейчас играет: \\\" + sound[\\\"name\\\"]\\n)",
+  "code": "status_label.configure(\n    text=\\\"Сейчас играет: \\\" + sound[\\\"name\\\"]\n)",
   "reveals": [
    "configure() меняет свойства уже созданного элемента.",
    "Мы меняем текст строки состояния.",
@@ -177,7 +177,7 @@ window.LESSONS['may-2'] = [
   "kicker": "КАРТОЧКИ",
   "title": "Один словарь — одна карточка",
   "lead": "Для каждого словаря из списка создадим карточку с названием и кнопкой воспроизведения. Функция отрисовки пройдёт по списку циклом for.",
-  "code": "for sound in sounds:\\n    print(sound[\\\"name\\\"])",
+  "code": "for sound in sounds:\n    print(sound[\\\"name\\\"])",
   "reveals": [
    "Цикл for перебирает все элементы списка.",
    "sound — текущий словарь.",
@@ -220,7 +220,7 @@ window.LESSONS['may-2'] = [
   "kicker": "СВЯЗЫВАЕМ МОДУЛИ",
   "title": "Передаём общий список между файлами",
   "lead": "Список sounds создадим один раз в window.py. Затем передадим его в функции, которые строят панель звуков и кнопки управления.",
-  "code": "sounds = []\\n\\nrefresh_sounds = create_sound_panel(\\n    app, sounds, status_label\\n)\\ncreate_controls(\\n    app, sounds, refresh_sounds, status_label\\n)",
+  "code": "sounds = []\n\nrefresh_sounds = create_sound_panel(\n    app, sounds, status_label\n)\ncreate_controls(\n    app, sounds, refresh_sounds, status_label\n)",
   "reveals": [
    "Один и тот же список используется разными частями приложения.",
    "create_sound_panel() возвращает функцию обновления карточек.",
@@ -231,7 +231,7 @@ window.LESSONS['may-2'] = [
   "kicker": "ФАЙЛ CONTROLS.PY",
   "title": "Добавляем кнопку импорта",
   "lead": "Открой interface/controls.py из прошлого занятия. Замени его содержимое кодом ниже. Здесь будет кнопка выбора WAV-файла.",
-  "code": "import os\\nimport customtkinter as ctk\\nfrom tkinter import filedialog\\n\\n\\ndef create_controls(parent, sounds, refresh_sounds, status_label):\\n    controls = ctk.CTkFrame(parent, corner_radius=16)\\n    controls.pack(fill=\\\"x\\\", padx=24, pady=(0, 24))\\n\\n    def import_sound():\\n        file_path = filedialog.askopenfilename(\\n            title=\\\"Выбери звуковой файл\\\",\\n            filetypes=[(\\\"WAV files\\\", \\\"*.wav\\\")]\\n        )\\n\\n        if not file_path:\\n            return\\n\\n        file_name = os.path.splitext(\\n            os.path.basename(file_path)\\n        )[0]\\n\\n        sound = {\\\"name\\\": file_name, \\\"path\\\": file_path}\\n        sounds.append(sound)\\n        refresh_sounds()\\n        status_label.configure(text=\\\"Добавлен звук: \\\" + file_name)\\n\\n    import_button = ctk.CTkButton(\\n        controls,\\n        text=\\\"＋ Импортировать WAV\\\",\\n        command=import_sound\\n    )\\n    import_button.pack(side=\\\"left\\\", padx=12, pady=12)",
+  "code": "import os\nimport customtkinter as ctk\nfrom tkinter import filedialog\n\n\ndef create_controls(parent, sounds, refresh_sounds, status_label):\n    controls = ctk.CTkFrame(parent, corner_radius=16)\n    controls.pack(fill=\\\"x\\\", padx=24, pady=(0, 24))\n\n    def import_sound():\n        file_path = filedialog.askopenfilename(\n            title=\\\"Выбери звуковой файл\\\",\n            filetypes=[(\\\"WAV files\\\", \\\"*.wav\\\")]\n        )\n\n        if not file_path:\n            return\n\n        file_name = os.path.splitext(\n            os.path.basename(file_path)\n        )[0]\n\n        sound = {\\\"name\\\": file_name, \\\"path\\\": file_path}\n        sounds.append(sound)\n        refresh_sounds()\n        status_label.configure(text=\\\"Добавлен звук: \\\" + file_name)\n\n    import_button = ctk.CTkButton(\n        controls,\n        text=\\\"＋ Импортировать WAV\\\",\n        command=import_sound\n    )\n    import_button.pack(side=\\\"left\\\", padx=12, pady=12)",
   "reveals": [
    "Это полный код interface/controls.py на текущем этапе.",
    "Кнопка открывает диалог выбора файла.",
@@ -244,7 +244,7 @@ window.LESSONS['may-2'] = [
   "kicker": "ФАЙЛ SOUND_PANEL.PY",
   "title": "Создаём карточки звуков",
   "lead": "Открой interface/sound_panel.py и замени его содержимое. Здесь разместим карточки, воспроизведение и остановку.",
-  "code": "import customtkinter as ctk\\nimport sounddevice as sd\\nimport soundfile as sf\\n\\n\\ndef create_sound_panel(parent, sounds, status_label):\\n    panel = ctk.CTkFrame(parent, corner_radius=16)\\n    panel.pack(fill=\\\"both\\\", expand=True, padx=24, pady=12)\\n\\n    heading = ctk.CTkLabel(\\n        panel, text=\\\"Моя звуковая коллекция\\\",\\n        font=(\\\"Arial\\\", 20, \\\"bold\\\")\\n    )\\n    heading.pack(anchor=\\\"w\\\", padx=20, pady=(18, 8))\\n\\n    cards = ctk.CTkFrame(panel, fg_color=\\\"transparent\\\")\\n    cards.pack(fill=\\\"both\\\", expand=True, padx=16, pady=8)\\n\\n    def play_sound(sound):\\n        try:\\n            data, samplerate = sf.read(sound[\\\"path\\\"])\\n            sd.play(data, samplerate)\\n            status_label.configure(\\n                text=\\\"Сейчас играет: \\\" + sound[\\\"name\\\"]\\n            )\\n        except Exception as error:\\n            status_label.configure(text=\\\"Не удалось открыть звук\\\")\\n            print(\\\"Ошибка воспроизведения:\\\", error)\\n\\n    def stop_sound():\\n        sd.stop()\\n        status_label.configure(text=\\\"Воспроизведение остановлено\\\")\\n\\n    def refresh_sounds():\\n        for widget in cards.winfo_children():\\n            widget.destroy()\\n\\n        if not sounds:\\n            empty = ctk.CTkLabel(\\n                cards, text=\\\"Коллекция пока пуста. Импортируй WAV-файл.\\\"\\n            )\\n            empty.pack(anchor=\\\"w\\\", padx=8, pady=8)\\n            return\\n\\n        for sound in sounds:\\n            button = ctk.CTkButton(\\n                cards,\\n                text=\\\"▶  \\\" + sound[\\\"name\\\"],\\n                command=lambda item=sound: play_sound(item)\\n            )\\n            button.pack(fill=\\\"x\\\", padx=8, pady=5)\\n\\n    stop_button = ctk.CTkButton(\\n        panel, text=\\\"■ Остановить звук\\\", command=stop_sound\\n    )\\n    stop_button.pack(anchor=\\\"e\\\", padx=20, pady=(4, 16))\\n\\n    refresh_sounds()\\n    return refresh_sounds",
+  "code": "import customtkinter as ctk\nimport sounddevice as sd\nimport soundfile as sf\n\n\ndef create_sound_panel(parent, sounds, status_label):\n    panel = ctk.CTkFrame(parent, corner_radius=16)\n    panel.pack(fill=\\\"both\\\", expand=True, padx=24, pady=12)\n\n    heading = ctk.CTkLabel(\n        panel, text=\\\"Моя звуковая коллекция\\\",\n        font=(\\\"Arial\\\", 20, \\\"bold\\\")\n    )\n    heading.pack(anchor=\\\"w\\\", padx=20, pady=(18, 8))\n\n    cards = ctk.CTkFrame(panel, fg_color=\\\"transparent\\\")\n    cards.pack(fill=\\\"both\\\", expand=True, padx=16, pady=8)\n\n    def play_sound(sound):\n        try:\n            data, samplerate = sf.read(sound[\\\"path\\\"])\n            sd.play(data, samplerate)\n            status_label.configure(\n                text=\\\"Сейчас играет: \\\" + sound[\\\"name\\\"]\n            )\n        except Exception as error:\n            status_label.configure(text=\\\"Не удалось открыть звук\\\")\n            print(\\\"Ошибка воспроизведения:\\\", error)\n\n    def stop_sound():\n        sd.stop()\n        status_label.configure(text=\\\"Воспроизведение остановлено\\\")\n\n    def refresh_sounds():\n        for widget in cards.winfo_children():\n            widget.destroy()\n\n        if not sounds:\n            empty = ctk.CTkLabel(\n                cards, text=\\\"Коллекция пока пуста. Импортируй WAV-файл.\\\"\n            )\n            empty.pack(anchor=\\\"w\\\", padx=8, pady=8)\n            return\n\n        for sound in sounds:\n            button = ctk.CTkButton(\n                cards,\n                text=\\\"▶  \\\" + sound[\\\"name\\\"],\n                command=lambda item=sound: play_sound(item)\n            )\n            button.pack(fill=\\\"x\\\", padx=8, pady=5)\n\n    stop_button = ctk.CTkButton(\n        panel, text=\\\"■ Остановить звук\\\", command=stop_sound\n    )\n    stop_button.pack(anchor=\\\"e\\\", padx=20, pady=(4, 16))\n\n    refresh_sounds()\n    return refresh_sounds",
   "reveals": [
    "Это полный код interface/sound_panel.py.",
    "sf.read() читает выбранный WAV-файл.",
@@ -258,7 +258,7 @@ window.LESSONS['may-2'] = [
   "kicker": "ФАЙЛ WINDOW.PY",
   "title": "Соединяем части интерфейса",
   "lead": "Теперь обновим interface/window.py. Он создаёт общий список и передаёт его в панель звуков и панель управления.",
-  "code": "import customtkinter as ctk\\n\\nfrom interface.header import create_header\\nfrom interface.sound_panel import create_sound_panel\\nfrom interface.controls import create_controls\\n\\n\\ndef create_window():\\n    ctk.set_appearance_mode(\\\"dark\\\")\\n    ctk.set_default_color_theme(\\\"blue\\\")\\n\\n    app = ctk.CTk()\\n    app.title(\\\"Soundboard Studio\\\")\\n    app.geometry(\\\"760x560\\\")\\n    app.minsize(620, 460)\\n\\n    status_label = create_header(app)\\n    sounds = []\\n\\n    refresh_sounds = create_sound_panel(\\n        app, sounds, status_label\\n    )\\n    create_controls(\\n        app, sounds, refresh_sounds, status_label\\n    )\\n\\n    return app",
+  "code": "import customtkinter as ctk\n\nfrom interface.header import create_header\nfrom interface.sound_panel import create_sound_panel\nfrom interface.controls import create_controls\n\n\ndef create_window():\n    ctk.set_appearance_mode(\\\"dark\\\")\n    ctk.set_default_color_theme(\\\"blue\\\")\n\n    app = ctk.CTk()\n    app.title(\\\"Soundboard Studio\\\")\n    app.geometry(\\\"760x560\\\")\n    app.minsize(620, 460)\n\n    status_label = create_header(app)\n    sounds = []\n\n    refresh_sounds = create_sound_panel(\n        app, sounds, status_label\n    )\n    create_controls(\n        app, sounds, refresh_sounds, status_label\n    )\n\n    return app",
   "reveals": [
    "create_header() теперь возвращает строку состояния.",
    "sounds создаётся один раз — общий список для всего окна.",
@@ -280,7 +280,7 @@ window.LESSONS['may-2'] = [
  {
   "kicker": "ПРОВЕРЯЕМ СВЯЗИ",
   "title": "Кто с кем обменивается данными?",
-  "code": "main.py\\n  ↓\\nwindow.py\\n  ├── header.py → status_label\\n  ├── sound_panel.py → sounds, refresh_sounds()\\n  └── controls.py → импорт WAV, добавление в sounds",
+  "code": "main.py\n  ↓\nwindow.py\n  ├── header.py → status_label\n  ├── sound_panel.py → sounds, refresh_sounds()\n  └── controls.py → импорт WAV, добавление в sounds",
   "reveals": [
    "main.py запускает окно.",
    "window.py создаёт общий список sounds.",
