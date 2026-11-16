@@ -22,7 +22,8 @@
   card.append(top,title,desc,bottom,lessons);entry.append(card);grid.append(entry);
  });
  function openLesson(mi,li){
-  const module=COURSE_MODULES[mi],title=module.lessons[li],number=mi*4+li+1;
+  const module=COURSE_MODULES[mi],title=module.lessons[li];
+  const number=COURSE_MODULES.slice(0,mi).reduce((sum,item)=>sum+item.lessons.length,0)+li+1;
   document.getElementById("lessonCrumb").textContent=`${module.month.toUpperCase()} / ЗАНЯТИЕ ${String(number).padStart(2,"0")}`;
   lessonView.classList.add("active");lessonView.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
   const lesson=window.LESSONS?.[`${module.id}-${li+1}`];
