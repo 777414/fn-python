@@ -71,6 +71,47 @@ window.Presentation = (() => {
   reset.addEventListener("click",()=>{Object.keys(data).forEach(key=>data[key].value=data[key].options[0]);active="name";render()});
   render();return root;
  }
+ function makeFunctionBlackBox(){
+  const root=el("section","function-box-lab");
+  const inputs=el("div","function-box-inputs");
+  const inputA=el("input","function-box-input"),inputB=el("input","function-box-input");
+  [inputA,inputB].forEach((input,i)=>{input.type="number";input.step="any";input.value=i===0?"5":"3";input.setAttribute("aria-label",i===0?"Первое число":"Второе число")});
+  const fieldA=el("label","function-box-field"),fieldB=el("label","function-box-field");
+  fieldA.append(el("span","","a — первое число"),inputA);fieldB.append(el("span","","b — второе число"),inputB);
+  inputs.append(fieldA,fieldB);
+  const run=el("button","function-box-run","Запустить функцию");run.type="button";
+  const flow=el("div","function-box-flow");
+  const incoming=el("div","function-box-values");
+  const valueA=el("span","function-box-value","5"),plus=el("span","function-box-plus","+"),valueB=el("span","function-box-value","3");
+  incoming.append(valueA,plus,valueB);
+  const arrowIn=el("div","function-box-arrow","↓");
+  const machine=el("div","function-box-machine");
+  machine.append(el("div","function-box-machine-label","ЧЁРНЫЙ ЯЩИК"),el("strong","","get_sum(a, b)"),el("code","","return a + b"),el("span","","Функция выполняет вычисление"));
+  const arrowOut=el("div","function-box-arrow","↓");
+  const result=el("div","function-box-result");
+  result.append(el("span","","ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ"));
+  const resultValue=el("strong","","8");
+  result.append(resultValue);
+  const code=el("div","function-box-code");
+  code.append(el("div","function-box-code-title","ТАК ЭТО ВЫГЛЯДИТ В PYTHON"));
+  code.append(el("pre","","def get_sum(a, b):\\n    return a + b\\n\\nanswer = get_sum(5, 3)"));
+  const status=el("p","function-box-status","Измени числа и посмотри, что вернёт функция.");
+  flow.append(incoming,arrowIn,machine,arrowOut,result);
+  root.append(inputs,run,flow,code,status);
+  function calculate(){
+   if(inputA.value.trim()===""||inputB.value.trim()===""){status.textContent="Введи оба числа, чтобы запустить функцию.";return}
+   const a=Number(inputA.value),b=Number(inputB.value);
+   if(!Number.isFinite(a)||!Number.isFinite(b)){status.textContent="Проверь введённые числа.";return}
+   valueA.textContent=inputA.value;valueB.textContent=inputB.value;
+   resultValue.textContent=String(a+b);
+   status.textContent="Функция получила "+inputA.value+" и "+inputB.value+", сложила их и вернула "+String(a+b)+".";
+   result.classList.remove("is-updated");void result.offsetWidth;result.classList.add("is-updated");
+  }
+  run.addEventListener("click",calculate);
+  [inputA,inputB].forEach(input=>input.addEventListener("keydown",event=>{if(event.key==="Enter")calculate()}));
+  calculate();
+  return root;
+ }
  function makeBranchDiagram(){
   const root=el("div","branch-diagram");
   const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
@@ -366,6 +407,7 @@ window.Presentation = (() => {
   article.append(el("h1","slide-title",slide.title||""));
   if(slide.lead)article.append(el("p","slide-lead",slide.lead));
   if(slide.variablePlayground)article.append(makeVariablePlayground());
+  if(slide.functionBlackBox)article.append(makeFunctionBlackBox());
   if(slide.whileAnimation)article.append(makeWhileAnimation());
   if(slide.loopControlAnimation)article.append(makeLoopControlAnimation());
   if(slide.forAnimation)article.append(makeForAnimation());
