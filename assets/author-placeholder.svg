@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 920" role="img" aria-labelledby="title desc">
+<title id="title">Заглушка фотографии автора</title><desc id="desc">Иллюстративный портрет, который можно заменить фотографией автора.</desc>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#172b49"/><stop offset=".55" stop-color="#101a2d"/><stop offset="1" stop-color="#123b45"/></linearGradient><radialGradient id="glow"><stop stop-color="#55e0dc" stop-opacity=".42"/><stop offset="1" stop-color="#55e0dc" stop-opacity="0"/></radialGradient><linearGradient id="shirt" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#263e61"/><stop offset="1" stop-color="#111d32"/></linearGradient></defs>
+<rect width="720" height="920" fill="url(#bg)"/><circle cx="570" cy="210" r="260" fill="url(#glow)"/><circle cx="140" cy="760" r="230" fill="url(#glow)" opacity=".45"/>
+<g opacity=".18" stroke="#8cb5d9" fill="none"><path d="M0 130h720M0 790h720M90 0v920M630 0v920"/><circle cx="560" cy="190" r="120"/><circle cx="560" cy="190" r="155"/></g>
+<path d="M85 920c18-192 118-292 275-292s257 100 275 292" fill="url(#shirt)"/>
+<path d="M267 594c14 62 38 92 93 92s79-30 93-92v-83H267z" fill="#b97859"/>
+<ellipse cx="360" cy="385" rx="167" ry="204" fill="#d69a78"/>
+<path d="M195 389c-18-155 55-258 183-258 125 0 197 82 178 251-21-34-37-70-45-113-61 44-158 59-275 43-5 33-18 60-41 77z" fill="#1b202b"/>
+<path d="M204 355c-18-65-1-145 43-191 38-39 88-57 151-53 100 6 165 63 169 161-48-40-107-60-177-56-72 4-128 41-186 139z" fill="#202a38"/>
+<ellipse cx="297" cy="400" rx="13" ry="8" fill="#202633"/><ellipse cx="423" cy="400" rx="13" ry="8" fill="#202633"/><path d="M340 470c14 10 28 10 41 0" stroke="#8b4f43" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M360 410l-12 43 20 5" stroke="#b97859" stroke-width="7" fill="none" stroke-linecap="round"/>
+<path d="M250 340c20-17 43-22 68-15M402 325c25-9 48-5 68 12" stroke="#242b38" stroke-width="13" fill="none" stroke-linecap="round"/>
+<path d="M228 920c20-105 62-176 132-211 69 36 112 106 132 211" fill="#111c30"/><path d="M317 720l43 49 43-49" fill="none" stroke="#55e0dc" stroke-width="6" opacity=".7"/>
+<text x="360" y="865" text-anchor="middle" fill="#a9bfd9" font-family="Arial,sans-serif" font-size="17" letter-spacing="4">YOUR PHOTO HERE</text>
+</svg>
