@@ -44,26 +44,44 @@ window.Presentation = (() => {
  }
  function makeBranchDiagram(){
   const root=el("div","branch-diagram");
-  const condition=el("div","branch-condition","if условие");
-  condition.style.cssText="margin:0 auto 18px;padding:13px 22px;width:max-content;max-width:100%;border:2px solid #e9c84f;border-radius:10px;background:#594b16;color:#fff0a6;font:600 16px var(--mono);text-align:center";
-  const paths=el("div","branch-paths");
-  function path(label,active,command,description){
-   const card=el("div","branch-path");
-   card.style.cssText="min-width:0;padding:15px;border:1px solid "+(active?"#39c982":"#64748b")+";border-radius:11px;background:"+(active?"#123d31":"#202a3a")+";text-align:center";
-   const tag=el("div","branch-path-tag",label);
-   tag.style.cssText="font:10px var(--mono);letter-spacing:.12em;color:"+(active?"#72e5ae":"#a8b4c7")+";margin-bottom:10px";
-   const cmd=el("div","branch-command",command);
-   cmd.style.cssText="padding:13px 8px;border-radius:7px;background:"+(active?"#1b704d":"#354154")+";color:"+(active?"#d4ffe7":"#c1cad8")+";font:600 13px var(--mono)";
-   const desc=el("div","branch-path-desc",description);
-   desc.style.cssText="margin-top:9px;color:#aab8cf;font-size:11px;line-height:1.5";
-   card.append(tag,cmd,desc);return card;
+  const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
+  svg.setAttribute("viewBox","0 0 980 330");
+  svg.setAttribute("role","img");
+  svg.setAttribute("aria-label","Блок-схема: без условия команды идут подряд; с if при истинном условии выполняются две зелёные команды, при ложном они пропускаются; затем оба пути продолжаются общей командой.");
+  svg.style.cssText="display:block;width:100%;height:auto;overflow:visible";
+  const ns="http://www.w3.org/2000/svg";
+  function node(tag,attrs,parent=svg){const n=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>n.setAttribute(k,v));parent.append(n);return n}
+  function label(x,y,value,fill="#dce6f7",size=15,weight="500",anchor="middle"){const t=node("text",{x,y,fill,"font-size":size,"font-family":"var(--mono, monospace)","font-weight":weight,"text-anchor":anchor});t.textContent=value;return t}
+  function command(x,y,n,green=false){
+   node("rect",{x,y,width:112,height:66,rx:3,fill:green?"#17613f":"#263449",stroke:green?"#37c978":"#8292a9","stroke-width":2});
+   label(x+56,y+29,"Команда",green?"#e2ffef":"#e4ebf7",13);
+   label(x+56,y+47,String(n),green?"#a8f3ca":"#bdc9da",12);
   }
-  paths.append(path("TRUE · УСЛОВИЕ ВЕРНО",true,'print("Команда")',"Зелёная команда выполняется."));
-  paths.append(path("FALSE · УСЛОВИЕ ЛОЖНО",false,'print("Команда")',"Команда пропускается — она не запускается."));
-  paths.style.cssText="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:700px;margin:auto";
-  const join=el("div","branch-join","↓  После блока if программа продолжает выполнение");
-  join.style.cssText="margin:14px auto 0;padding:11px 14px;max-width:700px;border:1px dashed #6d91d6;border-radius:9px;color:#b8c7df;text-align:center;font-size:12px";
-  root.append(condition,paths,join);
+  function arrow(d){node("path",{d,fill:"none",stroke:"#aab7ca","stroke-width":2,"stroke-linecap":"round","stroke-linejoin":"round","marker-end":"url(#branch-arrow)"})}
+  const defs=node("defs",{});const marker=node("marker",{id:"branch-arrow",markerWidth:8,markerHeight:8,refX:6,refY:3,orient:"auto"},defs);node("path",{d:"M0 0 L6 3 L0 6",fill:"none",stroke:"#aab7ca","stroke-width":1.2},marker);
+  label(8,38,"БЕЗ IF","#9eacc5",12,"700","start");
+  const topXs=[95,275,455,635,815];topXs.forEach((x,i)=>command(x,8,i+1));
+  for(let i=0;i<4;i++)arrow("M"+(topXs[i]+112)+" 41 H"+(topXs[i+1]-8));
+  node("line",{x1:0,y1:94,x2:980,y2:94,stroke:"#52627b","stroke-opacity":".35","stroke-width":1});
+  label(8,150,"С IF","#9eacc5",12,"700","start");
+  command(45,183,1);command(195,183,2);
+  node("rect",{x:345,y:183,width:130,height:66,rx:3,fill:"#625516",stroke:"#f0d84f","stroke-width":3});
+  label(410,211,"УСЛОВИЕ", "#fff0a0",13,"700");
+  label(410,230,"if", "#fff0a0",15,"700");
+  command(535,35,3,true);command(685,35,4,true);command(835,183,5);
+  arrow("M157 216 H187");arrow("M307 216 H337");
+  arrow("M475 200 H505 Q520 200 520 184 L535 68");
+  arrow("M647 68 H677");arrow("M797 68 L835 183");
+  arrow("M475 232 H820");
+  label(505,171,"ДА","#5be0a0",12,"700");
+  label(625,292,"НЕТ — зелёные команды пропускаются","#f0d84f",12,"700");
+  label(905,274,"Дальше","#aab7ca",11,"500");
+  root.append(svg);
+  const legend=el("div","branch-diagram-legend");
+  legend.style.cssText="display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;margin-top:12px;color:#aab8cf;font-size:12px";
+  const items=[["#263449","#8292a9","Квадрат — команда"],["#625516","#f0d84f","Жёлтый прямоугольник — условие"],["#17613f","#37c978","Зелёные квадраты — команды внутри if"]];
+  items.forEach(([bg,border,text])=>{const item=el("span","branch-legend-item");item.style.cssText="display:inline-flex;align-items:center;gap:7px";const swatch=el("span","branch-legend-swatch");swatch.style.cssText="width:14px;height:14px;border:2px solid "+border+";background:"+bg+";border-radius:2px";item.append(swatch,el("span","",text));legend.append(item)});
+  root.append(legend);
   return root;
  }
  function outputIsPending(slide){return !!(slide.outputAfterReveal&&slide.output!==undefined&&!outputShown)}
