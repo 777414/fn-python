@@ -6,14 +6,15 @@ window.CourseNavigation = (() => {
  function shut(){drawer.classList.remove("open");backdrop.classList.remove("open");drawer.setAttribute("aria-hidden","true");toggle?.setAttribute("aria-expanded","false")}
  function renderDrawer(onSelect){
   const root=document.getElementById("drawerContent");root.innerHTML="";
+  let lessonOffset=0;
   COURSE_MODULES.forEach((module,mi)=>{
    const section=document.createElement("section");section.className="drawer-module";
-   const heading=document.createElement("div");heading.className="drawer-module-title";heading.innerHTML=`<span>${String(mi+1).padStart(2,"0")} / ${module.month} — ${module.title}</span><span>04</span>`;section.append(heading);
+   const heading=document.createElement("div");heading.className="drawer-module-title";heading.innerHTML=`<span>${String(mi+1).padStart(2,"0")} / ${module.month} — ${module.title}</span><span>${String(module.lessons.length).padStart(2,"0")}</span>`;section.append(heading);
    module.lessons.forEach((title,li)=>{
-    const b=document.createElement("button");b.className="drawer-lesson";b.innerHTML=`<span>${String(mi*4+li+1).padStart(2,"0")}</span><span></span><span class="lesson-state">СКОРО</span>`;b.children[1].textContent=title;
+    const b=document.createElement("button");b.className="drawer-lesson";b.innerHTML=`<span>${String(lessonOffset+li+1).padStart(2,"0")}</span><span></span><span class="lesson-state">СКОРО</span>`;b.children[1].textContent=title;
     const ready=!!window.LESSONS[module.id+"-"+(li+1)];b.children[2].textContent=ready?"ПЕРЕЙТИ":"СКОРО";if(ready)b.classList.add("is-ready");
     b.addEventListener("click",()=>{shut();onSelect(mi,li)});section.append(b);
-   });root.append(section);
+   });lessonOffset+=module.lessons.length;root.append(section);
   });
  }
  toggle?.addEventListener("click",open);close?.addEventListener("click",shut);backdrop?.addEventListener("click",shut);
