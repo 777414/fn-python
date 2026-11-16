@@ -83,6 +83,58 @@ window.Presentation = (() => {
   root.append(legend);
   return root;
  }
+ function makeWhileAnimation(){
+  const root=el("section","while-lab");
+  root.style.cssText="margin:24px 0 10px;padding:18px;border:1px solid #34445d;border-radius:16px;background:linear-gradient(145deg,#111d2d,#17263a);color:#e6edf8";
+  const style=el("style","");
+  style.textContent=".while-lab .wl-flow{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:12px;align-items:center}.while-lab .wl-node{border:2px solid #64748b;background:#25354b;border-radius:12px;padding:13px 10px;text-align:center;min-height:66px;display:flex;flex-direction:column;justify-content:center;gap:5px;transition:.25s}.while-lab .wl-node strong{font-size:14px}.while-lab .wl-node small{font-size:12px;color:#b8c6d9}.while-lab .wl-condition{border-color:#e5c84b;background:#554a1b}.while-lab .wl-body{border-color:#34bd7b;background:#164832}.while-lab .wl-exit{border-color:#e5c84b;background:#554a1b}.while-lab .wl-active{box-shadow:0 0 0 3px #67d9a1,0 0 22px #39c98566;transform:translateY(-2px)}.while-lab .wl-muted{opacity:.42}.while-lab .wl-arrow{text-align:center;color:#9fb0c8;font-size:22px;line-height:1}.while-lab .wl-loop{grid-column:1/4;text-align:center;color:#69dba5;font-size:13px;padding:8px;border-top:2px dashed #328b65;margin-top:2px}.while-lab .wl-branch{font-size:12px;font-weight:800;color:#f3d95d}.while-lab .wl-status{margin-top:14px;padding:13px 15px;border-radius:10px;background:#0c1726;border:1px solid #34445d;min-height:76px}.while-lab .wl-status strong{display:block;color:#7de3b0;margin-bottom:5px}.while-lab .wl-controls{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.while-lab .wl-controls button{border:1px solid #4a617d;background:#263b55;color:#f1f5fb;border-radius:9px;padding:10px 14px;font:inherit;font-size:13px;cursor:pointer}.while-lab .wl-controls button:disabled{opacity:.35;cursor:default}.while-lab .wl-counter{margin-left:auto;align-self:center;color:#9eacc1;font-size:12px}@media(max-width:620px){.while-lab{padding:12px!important}.while-lab .wl-flow{grid-template-columns:1fr;gap:7px}.while-lab .wl-loop{grid-column:1}.while-lab .wl-arrow{transform:rotate(90deg)}.while-lab .wl-counter{margin-left:0;width:100%}}";
+  root.append(style);
+  const flow=el("div","wl-flow");
+  const start=el("div","wl-node");start.innerHTML="<strong>СТАРТ</strong><small>number = 1</small>";
+  const condition=el("div","wl-node wl-condition");condition.innerHTML="<strong>ПРОВЕРКА УСЛОВИЯ</strong><small>number ≤ 3</small>";
+  const body=el("div","wl-node wl-body");body.innerHTML="<strong>КОМАНДЫ ЦИКЛА</strong><small>print(number)<br>number = number + 1</small>";
+  const exit=el("div","wl-node wl-exit");exit.innerHTML="<strong>ВЫХОД</strong><small>цикл завершён</small>";
+  const yes=el("div","wl-branch","ДА ↓");yes.style.textAlign="center";
+  const no=el("div","wl-branch","НЕТ → выход");no.style.textAlign="center";
+  const loop=el("div","wl-loop","↶ После команд Python возвращается к проверке условия");
+  flow.append(start,condition,body,yes,no,exit,loop);
+  const status=el("div","wl-status");
+  const controls=el("div","wl-controls");
+  const back=el("button","","← Назад");back.type="button";
+  const nextStep=el("button","","Следующий шаг →");nextStep.type="button";
+  const reset=el("button","","Сначала");reset.type="button";
+  const counter=el("span","wl-counter","Шаг 1 из 7");
+  controls.append(back,nextStep,reset,counter);
+  root.append(flow,status,controls);
+  const steps=[
+   ["Начинаем","Создали переменную number и присвоили ей 1. Теперь Python подходит к циклу while."],
+   ["Проверяем: 1 ≤ 3","Условие True — ответ «ДА». Значит, можно выполнить команды внутри цикла."],
+   ["Выполняем команды","На экран выводится 1. Затем number увеличивается: теперь number = 2."],
+   ["Проверяем: 2 ≤ 3","Условие снова True. Цикл не заканчивается — команды выполнятся ещё раз."],
+   ["Выполняем команды","На экран выводится 2. Затем number увеличивается: теперь number = 3."],
+   ["Ещё одно повторение","Проверка 3 ≤ 3 даёт True. Печатаем 3 и увеличиваем number до 4."],
+   ["Проверяем: 4 ≤ 3","Условие False — ответ «НЕТ». Команды цикла больше не выполняются, программа выходит из цикла."]
+  ];
+  let current=0;
+  function renderStep(){
+   [start,condition,body,exit].forEach(n=>n.classList.remove("wl-active","wl-muted"));
+   const active=current===0?start:(current===6?exit:(current===2||current===4||current===5?body:condition));
+   [start,condition,body,exit].forEach(n=>{if(n!==active)n.classList.add("wl-muted")});
+   active.classList.add("wl-active");
+   yes.style.opacity=current===1||current===3||current===5?"1":".35";
+   no.style.opacity=current===6?"1":".35";
+   loop.style.opacity=current>=2&&current<=5?"1":".35";
+   status.innerHTML="<strong>"+steps[current][0]+"</strong><span>"+steps[current][1]+"</span>";
+   counter.textContent="Шаг "+(current+1)+" из "+steps.length;
+   back.disabled=current===0;nextStep.disabled=current===steps.length-1;
+   nextStep.textContent=current===steps.length-1?"Цикл завершён":"Следующий шаг →";
+  }
+  back.addEventListener("click",()=>{if(current>0){current--;renderStep()}});
+  nextStep.addEventListener("click",()=>{if(current<steps.length-1){current++;renderStep()}});
+  reset.addEventListener("click",()=>{current=0;renderStep()});
+  renderStep();
+  return root;
+ }
  function outputIsPending(slide){return !!(slide.outputAfterReveal&&slide.output!==undefined&&!outputShown)}
  function updateControls(){
   const slide=slides[index];if(!slide)return;
@@ -104,6 +156,7 @@ window.Presentation = (() => {
   article.append(el("h1","slide-title",slide.title||""));
   if(slide.lead)article.append(el("p","slide-lead",slide.lead));
   if(slide.variablePlayground)article.append(makeVariablePlayground());
+  if(slide.whileAnimation)article.append(makeWhileAnimation());
   if(slide.branchDiagram)article.append(makeBranchDiagram());
   if(slide.code){const wrap=el("div","code-example");if(slide.codeCaption)wrap.append(el("div","code-caption",slide.codeCaption));wrap.append(el("pre","code-pre",slide.code));article.append(wrap)}
   if(slide.output!==undefined&&(!slide.outputAfterReveal||outputShown))article.append(makeOutput(slide))
