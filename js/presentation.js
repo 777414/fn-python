@@ -35,6 +35,65 @@ window.Presentation = (() => {
  function el(tag,cls,text){const node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node}
  function makeRevealRow(item,number){const row=el("div","reveal-item");row.append(el("span","reveal-number",String(number).padStart(2,"0")));row.append(el("p","",item));return row}
  function makeOutput(slide){const out=el("div","code-output");out.append(el("div","output-caption","РЕЗУЛЬТАТ"));out.append(el("pre","output-pre",slide.output));return out}
+ function makeModulesLab(){
+  const root=el("section","modules-lab");
+  const style=el("style","");
+  style.textContent=".modules-lab{margin:22px 0 10px;padding:16px;border:1px solid #34445d;border-radius:16px;background:linear-gradient(145deg,#111d2d,#17263a);color:#e6edf8}.modules-lab *{box-sizing:border-box}.modules-lab .ml-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,.9fr);gap:14px}.modules-lab .ml-panel{min-width:0;padding:14px;border:1px solid #34445d;border-radius:12px;background:#0d1928}.modules-lab .ml-heading{margin:0 0 12px;color:#a9bbd3;font-size:11px;font-weight:800;letter-spacing:.08em}.modules-lab .ml-module{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #28384e}.modules-lab .ml-module:last-child{border-bottom:0}.modules-lab .ml-toggle{width:19px;height:19px;accent-color:#43d49a;flex:0 0 auto}.modules-lab .ml-name{font-weight:750;color:#f1f5fb}.modules-lab .ml-desc{display:block;margin-top:2px;color:#9eacc1;font-size:12px}.modules-lab .ml-metric{margin:0 0 14px}.modules-lab .ml-metric:last-child{margin-bottom:0}.modules-lab .ml-metric-top{display:flex;justify-content:space-between;gap:10px;margin-bottom:6px;font-size:13px}.modules-lab .ml-value{font-weight:800;color:#7de3b0;font-variant-numeric:tabular-nums}.modules-lab .ml-track{height:8px;border-radius:99px;background:#26364b;overflow:hidden}.modules-lab .ml-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#32b98b,#69d6b0);transition:width .2s}.modules-lab .ml-code{margin-top:14px;padding:12px;border:1px solid #34445d;border-radius:10px;background:#081321}.modules-lab .ml-code-label{margin-bottom:7px;color:#8fa3bd;font-size:10px;font-weight:800;letter-spacing:.08em}.modules-lab .ml-code pre{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;color:#d5e8ff;font:12px/1.65 ui-monospace,monospace}.modules-lab .ml-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.modules-lab .ml-actions button{border:1px solid #49617d;background:#263b55;color:#f1f5fb;border-radius:8px;padding:8px 10px;font:inherit;font-size:11px;cursor:pointer}.modules-lab .ml-actions button:hover{background:#314c6c}.modules-lab .ml-foot{margin:12px 0 0;color:#91a2ba;font-size:11px;line-height:1.45}@media(max-width:640px){.modules-lab{padding:10px}.modules-lab .ml-layout{grid-template-columns:1fr}.modules-lab .ml-panel{padding:11px}}";
+  root.append(style);
+  const modules=[
+   {name:"math",desc:"Математические вычисления",weight:4,time:25,lines:2,example:"math.sqrt(81)"},
+   {name:"random",desc:"Случайные числа и выбор",weight:4,time:25,lines:2,example:"random.choice(topics)"},
+   {name:"datetime",desc:"Даты и время",weight:5,time:35,lines:2,example:"datetime.date.today()"},
+   {name:"statistics",desc:"Средние значения и статистика",weight:5,time:35,lines:2,example:"statistics.mean(scores)"},
+   {name:"json",desc:"Сохранение структурированных данных",weight:3,time:20,lines:2,example:"json.load(file)"},
+   {name:"turtle",desc:"Рисование и простая графика",weight:12,time:90,lines:3,example:"turtle.forward(100)"}
+  ];
+  const selected=new Set(["math","random"]);
+  const layout=el("div","ml-layout"),left=el("div","ml-panel"),right=el("div","ml-panel");
+  left.append(el("h3","ml-heading","ВЫБЕРИ НУЖНЫЕ МОДУЛИ"));
+  const moduleList=el("div","");
+  modules.forEach(mod=>{
+   const label=el("label","ml-module"),check=el("input","ml-toggle"),copy=el("span","");
+   check.type="checkbox";check.checked=selected.has(mod.name);check.setAttribute("aria-label","Подключить модуль "+mod.name);
+   const name=el("span","ml-name",mod.name),desc=el("span","ml-desc",mod.desc);copy.append(name,desc);label.append(check,copy);moduleList.append(label);
+   check.addEventListener("change",()=>{if(check.checked)selected.add(mod.name);else selected.delete(mod.name);render()});
+   mod.check=check;
+  });
+  left.append(moduleList);
+  right.append(el("h3","ml-heading","ЧТО ПОЛУЧАЕТСЯ"));
+  function metric(title,max,suffix){
+   const wrap=el("div","ml-metric"),top=el("div","ml-metric-top"),name=el("span","",title),val=el("span","ml-value");
+   const track=el("div","ml-track"),fill=el("div","ml-fill");track.append(fill);top.append(name,val);wrap.append(top,track);
+   return {wrap,val,fill,max,suffix};
+  }
+  const weight=metric("Условный вес проекта",60," усл. ед.");
+  const time=metric("Условная оценка запуска",400," усл. ед.");
+  const lines=metric("Строки с import",30,"");
+  [weight,time,lines].forEach(m=>right.append(m.wrap));
+  const feature=el("p","ml-foot","Дополнительных возможностей: 2");
+  const code=el("div","ml-code");code.append(el("div","ml-code-label","КАК ВЫГЛЯДИТ ПОДКЛЮЧЕНИЕ"));
+  const codeText=el("pre","","");
+  code.append(codeText);right.append(feature,code);
+  layout.append(left,right);root.append(layout);
+  const actions=el("div","ml-actions");
+  const all=el("button","","Подключить все"),extras=el("button","","Оставить math и random"),reset=el("button","","Вернуть исходный вариант");
+  [all,extras,reset].forEach(b=>{b.type="button";actions.append(b)});
+  root.append(actions);
+  root.append(el("p","ml-foot","Это учебная модель, а не измерение реальной скорости или размера программы. Сам import не добавляет автоматически код для использования функций."));
+  function render(){
+   const chosen=modules.filter(m=>selected.has(m.name));
+   const totals={weight:4,time:100,lines:8};
+   chosen.forEach(m=>{totals.weight+=m.weight;totals.time+=m.time;totals.lines+=m.lines});
+   [[weight,totals.weight],[time,totals.time],[lines,totals.lines]].forEach(([m,v])=>{m.val.textContent=v+m.suffix;m.fill.style.width=Math.min(100,v/m.max*100)+"%"});
+   feature.textContent="Дополнительных возможностей: "+chosen.length;
+   codeText.textContent=(chosen.length?chosen.map(m=>"import "+m.name).join("\n"):"# Дополнительные модули не подключены")+(chosen.length?"\n\n# Примеры использования\n"+chosen.map(m=>m.example).join("\n"):"");
+   modules.forEach(m=>{m.check.checked=selected.has(m.name)});
+  }
+  all.addEventListener("click",()=>{modules.forEach(m=>selected.add(m.name));render()});
+  extras.addEventListener("click",()=>{selected.clear();selected.add("math");selected.add("random");render()});
+  reset.addEventListener("click",()=>{selected.clear();selected.add("math");selected.add("random");render()});
+  render();return root;
+ }
  function makeVariablePlayground(){
   const data={name:{value:"Иван",options:["Иван","Анна","Пётр","Мария"]},city:{value:"Москва",options:["Москва","Казань","Сочи","Минск"]},game:{value:"Minecraft",options:["Minecraft","Roblox","шахматы","Тетрис"]}};
   let active="name";
@@ -411,6 +470,7 @@ window.Presentation = (() => {
   article.append(el("h1","slide-title",slide.title||""));
   if(slide.lead)article.append(el("p","slide-lead",slide.lead));
   if(slide.variablePlayground)article.append(makeVariablePlayground());
+  if(slide.modulesLab)article.append(makeModulesLab());
   if(slide.functionBlackBox)article.append(makeFunctionBlackBox());
   if(slide.whileAnimation)article.append(makeWhileAnimation());
   if(slide.loopControlAnimation)article.append(makeLoopControlAnimation());
