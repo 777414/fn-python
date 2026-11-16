@@ -320,3 +320,7 @@
  .slide-jump-menu{right:10px;bottom:calc(100% + 8px);width:min(360px,calc(100vw - 20px));max-height:58vh}
  .slide-jump-item{padding:11px 9px;font-size:11px}
 }
+
+/* Подсказка: счётчик слайдов открывает меню навигации. */
+.slide-counter-button::after{content:"≡";display:inline-block;margin-left:7px;color:var(--cyan);font:700 13px/1 var(--mono);vertical-align:1px;opacity:.9}
+.slide-counter-button:hover::after,.slide-counter-button[aria-expanded="true"]::after{color:#d9e7ff}
