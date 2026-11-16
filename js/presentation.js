@@ -58,8 +58,8 @@ window.Presentation = (() => {
    desc.style.cssText="margin-top:9px;color:#aab8cf;font-size:11px;line-height:1.5";
    card.append(tag,cmd,desc);return card;
   }
-  paths.append(path("TRUE · УСЛОВИЕ ВЕРНО",true,"print("Команда")","Зелёная команда выполняется."));
-  paths.append(path("FALSE · УСЛОВИЕ ЛОЖНО",false,"print("Команда")","Команда пропускается — она не запускается."));
+  paths.append(path("TRUE · УСЛОВИЕ ВЕРНО",true,'print("Команда")',"Зелёная команда выполняется."));
+  paths.append(path("FALSE · УСЛОВИЕ ЛОЖНО",false,'print("Команда")',"Команда пропускается — она не запускается."));
   paths.style.cssText="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:700px;margin:auto";
   const join=el("div","branch-join","↓  После блока if программа продолжает выполнение");
   join.style.cssText="margin:14px auto 0;padding:11px 14px;max-width:700px;border:1px dashed #6d91d6;border-radius:9px;color:#b8c7df;text-align:center;font-size:12px";
