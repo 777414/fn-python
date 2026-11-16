@@ -382,3 +382,7 @@
  .function-box-machine-column .function-box-machine{max-width:390px;justify-self:center}
  .function-box-result{justify-self:center;min-width:160px}
 }
+
+/* Author page navigation link */
+.topbar-author-link{display:inline-flex;align-items:center;gap:9px;color:#b8c6df;text-decoration:none;font-size:12px;font-weight:700;transition:color .2s}.topbar-author-link:hover{color:var(--cyan)}.topbar-author-link span{color:var(--cyan)}
+@media(max-width:620px){.topbar-author-link{font-size:10px}}
