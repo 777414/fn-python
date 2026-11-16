@@ -87,17 +87,35 @@ window.Presentation = (() => {
   const root=el("section","while-lab");
   root.style.cssText="margin:24px 0 10px;padding:18px;border:1px solid #34445d;border-radius:16px;background:linear-gradient(145deg,#111d2d,#17263a);color:#e6edf8";
   const style=el("style","");
-  style.textContent=".while-lab .wl-flow{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:12px;align-items:center}.while-lab .wl-node{border:2px solid #64748b;background:#25354b;border-radius:12px;padding:13px 10px;text-align:center;min-height:66px;display:flex;flex-direction:column;justify-content:center;gap:5px;transition:.25s}.while-lab .wl-node strong{font-size:14px}.while-lab .wl-node small{font-size:12px;color:#b8c6d9}.while-lab .wl-condition{border-color:#e5c84b;background:#554a1b}.while-lab .wl-body{border-color:#34bd7b;background:#164832}.while-lab .wl-exit{border-color:#e5c84b;background:#554a1b}.while-lab .wl-active{box-shadow:0 0 0 3px #67d9a1,0 0 22px #39c98566;transform:translateY(-2px)}.while-lab .wl-muted{opacity:.42}.while-lab .wl-arrow{text-align:center;color:#9fb0c8;font-size:22px;line-height:1}.while-lab .wl-loop{grid-column:1/4;text-align:center;color:#69dba5;font-size:13px;padding:8px;border-top:2px dashed #328b65;margin-top:2px}.while-lab .wl-branch{font-size:12px;font-weight:800;color:#f3d95d}.while-lab .wl-status{margin-top:14px;padding:13px 15px;border-radius:10px;background:#0c1726;border:1px solid #34445d;min-height:76px}.while-lab .wl-status strong{display:block;color:#7de3b0;margin-bottom:5px}.while-lab .wl-controls{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.while-lab .wl-controls button{border:1px solid #4a617d;background:#263b55;color:#f1f5fb;border-radius:9px;padding:10px 14px;font:inherit;font-size:13px;cursor:pointer}.while-lab .wl-controls button:disabled{opacity:.35;cursor:default}.while-lab .wl-counter{margin-left:auto;align-self:center;color:#9eacc1;font-size:12px}@media(max-width:620px){.while-lab{padding:12px!important}.while-lab .wl-flow{grid-template-columns:1fr;gap:7px}.while-lab .wl-loop{grid-column:1}.while-lab .wl-arrow{transform:rotate(90deg)}.while-lab .wl-counter{margin-left:0;width:100%}}";
+  style.textContent=".while-lab .wl-diagram{display:block;width:100%;height:auto}.while-lab .wl-node{transition:opacity .25s,filter .25s}.while-lab .wl-node rect{stroke-width:2.5}.while-lab .wl-node text{font-family:inherit;text-anchor:middle;fill:#edf4ff}.while-lab .wl-node .wl-sub{font-size:13px;fill:#bdcbe0}.while-lab .wl-node.wl-active rect{filter:drop-shadow(0 0 8px #53d99a);stroke-width:4}.while-lab .wl-node.wl-muted{opacity:.42}.while-lab .wl-path{fill:none;stroke:#aabbd0;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.while-lab .wl-status{margin-top:14px;padding:13px 15px;border-radius:10px;background:#0c1726;border:1px solid #34445d;min-height:76px}.while-lab .wl-status strong{display:block;color:#7de3b0;margin-bottom:5px}.while-lab .wl-controls{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.while-lab .wl-controls button{border:1px solid #4a617d;background:#263b55;color:#f1f5fb;border-radius:9px;padding:10px 14px;font:inherit;font-size:13px;cursor:pointer}.while-lab .wl-controls button:disabled{opacity:.35;cursor:default}.while-lab .wl-counter{margin-left:auto;align-self:center;color:#9eacc1;font-size:12px}@media(max-width:620px){.while-lab{padding:10px!important}.while-lab .wl-diagram{min-width:0}.while-lab .wl-counter{margin-left:0;width:100%}}";
   root.append(style);
-  const flow=el("div","wl-flow");
-  const start=el("div","wl-node");start.innerHTML="<strong>СТАРТ</strong><small>number = 1</small>";
-  const condition=el("div","wl-node wl-condition");condition.innerHTML="<strong>ПРОВЕРКА УСЛОВИЯ</strong><small>number ≤ 3</small>";
-  const body=el("div","wl-node wl-body");body.innerHTML="<strong>КОМАНДЫ ЦИКЛА</strong><small>print(number)<br>number = number + 1</small>";
-  const exit=el("div","wl-node wl-exit");exit.innerHTML="<strong>ВЫХОД</strong><small>цикл завершён</small>";
-  const yes=el("div","wl-branch","ДА ↓");yes.style.textAlign="center";
-  const no=el("div","wl-branch","НЕТ → выход");no.style.textAlign="center";
-  const loop=el("div","wl-loop","↶ После команд Python возвращается к проверке условия");
-  flow.append(start,condition,body,yes,no,exit,loop);
+  const ns="http://www.w3.org/2000/svg";
+  const svg=document.createElementNS(ns,"svg");
+  svg.setAttribute("viewBox","0 0 900 430");
+  svg.setAttribute("class","wl-diagram");
+  svg.setAttribute("role","img");
+  svg.setAttribute("aria-label","Схема цикла: старт ведёт к проверке условия. Из проверки путь ведёт к командам цикла и возвращается обратно к проверке; второй путь ведёт к выходу.");
+  function shape(tag,attrs,parent=svg){const n=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>n.setAttribute(k,v));parent.append(n);return n}
+  const defs=shape("defs",{});
+  const marker=shape("marker",{id:"wl-arrow-head",markerWidth:10,markerHeight:10,refX:8,refY:5,orient:"auto"},defs);
+  shape("path",{d:"M0 0 L9 5 L0 10",fill:"none",stroke:"#aabbd0","stroke-width":1.8},marker);
+  function path(d){shape("path",{d,class:"wl-path","marker-end":"url(#wl-arrow-head)"})}
+  path("M220 145 H300");
+  path("M520 145 H610");
+  path("M720 200 V285 Q720 320 685 320 H410 Q375 320 375 285 V205");
+  path("M410 200 V350");
+  function node(id,x,y,w,h,title,sub,kind){
+   const g=shape("g",{class:"wl-node "+kind,"data-node":id});
+   shape("rect",{x,y,width:w,height:h,rx:13,fill:kind==="wl-condition"?"#554a1b":kind==="wl-body"?"#164832":kind==="wl-exit"?"#554a1b":"#25354b",stroke:kind==="wl-condition"||kind==="wl-exit"?"#e5c84b":kind==="wl-body"?"#34bd7b":"#8292a9"},g);
+   const t=shape("text",{x:x+w/2,y:y+34},g);t.textContent=title;
+   const s=shape("text",{x:x+w/2,y:y+59,class:"wl-sub"},g);s.textContent=sub;
+   return g;
+  }
+  const startNode=node("start",20,105,200,80,"СТАРТ","number = 1","wl-start");
+  const conditionNode=node("condition",300,105,220,100,"ПРОВЕРКА УСЛОВИЯ","number ≤ 3","wl-condition");
+  const bodyNode=node("body",610,105,220,100,"КОМАНДЫ ЦИКЛА","print(number)  ·  number + 1","wl-body");
+  const exitNode=node("exit",300,350,220,70,"ВЫХОД","цикл завершён","wl-exit");
+  root.append(svg);
   const status=el("div","wl-status");
   const controls=el("div","wl-controls");
   const back=el("button","","← Назад");back.type="button";
@@ -105,25 +123,22 @@ window.Presentation = (() => {
   const reset=el("button","","Сначала");reset.type="button";
   const counter=el("span","wl-counter","Шаг 1 из 7");
   controls.append(back,nextStep,reset,counter);
-  root.append(flow,status,controls);
+  root.append(status,controls);
   const steps=[
-   ["Начинаем","Создали переменную number и присвоили ей 1. Теперь Python подходит к циклу while."],
-   ["Проверяем: 1 ≤ 3","Условие True — ответ «ДА». Значит, можно выполнить команды внутри цикла."],
-   ["Выполняем команды","На экран выводится 1. Затем number увеличивается: теперь number = 2."],
-   ["Проверяем: 2 ≤ 3","Условие снова True. Цикл не заканчивается — команды выполнятся ещё раз."],
-   ["Выполняем команды","На экран выводится 2. Затем number увеличивается: теперь number = 3."],
-   ["Ещё одно повторение","Проверка 3 ≤ 3 даёт True. Печатаем 3 и увеличиваем number до 4."],
-   ["Проверяем: 4 ≤ 3","Условие False — ответ «НЕТ». Команды цикла больше не выполняются, программа выходит из цикла."]
+   ["Старт","Создали переменную number и присвоили ей 1. Затем программа переходит к проверке условия."],
+   ["Первая проверка","number = 1. Условие number ≤ 3 выполняется, поэтому программа переходит к командам цикла."],
+   ["Первая итерация","Печатается 1. Затем number увеличивается до 2. Стрелка возвращает нас к проверке."],
+   ["Вторая проверка","number = 2. Условие всё ещё выполняется — снова переходим к командам цикла."],
+   ["Вторая итерация","Печатается 2. Затем number увеличивается до 3. Возвращаемся к проверке."],
+   ["Третья итерация","number = 3: условие ещё выполняется. Печатается 3, затем number становится 4."],
+   ["Выход из цикла","Теперь number = 4, и условие number ≤ 3 уже не выполняется. Программа переходит по второй стрелке к выходу."]
   ];
   let current=0;
   function renderStep(){
-   [start,condition,body,exit].forEach(n=>n.classList.remove("wl-active","wl-muted"));
-   const active=current===0?start:(current===6?exit:(current===2||current===4||current===5?body:condition));
-   [start,condition,body,exit].forEach(n=>{if(n!==active)n.classList.add("wl-muted")});
+   [startNode,conditionNode,bodyNode,exitNode].forEach(n=>n.classList.remove("wl-active","wl-muted"));
+   const active=current===0?startNode:current===6?exitNode:(current===2||current===4||current===5?bodyNode:conditionNode);
+   [startNode,conditionNode,bodyNode,exitNode].forEach(n=>{if(n!==active)n.classList.add("wl-muted")});
    active.classList.add("wl-active");
-   yes.style.opacity=current===1||current===3||current===5?"1":".35";
-   no.style.opacity=current===6?"1":".35";
-   loop.style.opacity=current>=2&&current<=5?"1":".35";
    status.innerHTML="<strong>"+steps[current][0]+"</strong><span>"+steps[current][1]+"</span>";
    counter.textContent="Шаг "+(current+1)+" из "+steps.length;
    back.disabled=current===0;nextStep.disabled=current===steps.length-1;
