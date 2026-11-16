@@ -261,6 +261,7 @@ window.LESSONS['january-2'] = [
   "lead": "Посмотри, как каждая операция оформлена отдельно. Измени числа и попробуй другие вычисления.",
   "code": "def add(a, b):\n    return a + b\n\ndef subtract(a, b):\n    return a - b\n\ndef multiply(a, b):\n    return a * b\n\ndef divide(a, b):\n    if b == 0:\n        return \"На ноль делить нельзя\"\n    return a / b\n\nfirst = 12\nsecond = 4\n\nprint(\"Сумма:\", add(first, second))\nprint(\"Разность:\", subtract(first, second))\nprint(\"Произведение:\", multiply(first, second))\nprint(\"Частное:\", divide(first, second))",
   "codeCaption": "ЧЕТЫРЕ ОПЕРАЦИИ — ЧЕТЫРЕ ФУНКЦИИ",
+  "outputAfterReveal": true,
   "output": "Сумма: 16\nРазность: 8\nПроизведение: 48\nЧастное: 3.0",
   "reveals": [
    "Каждая функция отвечает только за одну математическую операцию.",
