@@ -129,7 +129,7 @@ window.LESSONS['may-1'] = [
  {
   "kicker": "СТРУКТУРА ПРОЕКТА",
   "title": "К чему мы придём в конце проекта?",
-  "code": "SoundboardStudio/\\n  main.py\\n  storage.py\\n  recorder.py\\n  requirements.txt\\n  README.md\\n  interface/\\n    __init__.py\\n    window.py\\n    header.py\\n    sound_panel.py\\n    controls.py\\n  sounds/\\n    custom/\\n  data/\\n    sounds.json",
+  "code": "SoundboardStudio/\n  main.py\n  storage.py\n  recorder.py\n  requirements.txt\n  README.md\n  interface/\n    __init__.py\n    window.py\n    header.py\n    sound_panel.py\n    controls.py\n  sounds/\n    custom/\n  data/\n    sounds.json",
   "reveals": [
    "main.py запускает приложение.",
    "interface/ содержит части интерфейса.",
@@ -160,13 +160,13 @@ window.LESSONS['may-1'] = [
   "kicker": "ПАПКА INTERFACE",
   "title": "Создаём папку интерфейса",
   "lead": "Внутри SoundboardStudio создай папку interface. В ней будут функции для отдельных областей окна.",
-  "code": "SoundboardStudio/\\n└── interface/"
+  "code": "SoundboardStudio/\n└── interface/"
  },
  {
   "kicker": "INIT.PY",
   "title": "Добавляем файл __init__.py",
   "lead": "Создай внутри interface пустой файл __init__.py. Он обозначает папку как пакет Python.",
-  "code": "interface/\\n└── __init__.py",
+  "code": "interface/\n└── __init__.py",
   "reveals": [
    "По два символа подчёркивания с каждой стороны слова init.",
    "Файл на этом этапе остаётся пустым."
@@ -193,7 +193,7 @@ window.LESSONS['may-1'] = [
  {
   "kicker": "ИМПОРТЫ",
   "title": "Подключаем библиотеку и функции интерфейса",
-  "code": "import customtkinter as ctk\\n\\nfrom interface.header import create_header\\nfrom interface.sound_panel import create_sound_panel\\nfrom interface.controls import create_controls",
+  "code": "import customtkinter as ctk\n\nfrom interface.header import create_header\nfrom interface.sound_panel import create_sound_panel\nfrom interface.controls import create_controls",
   "reveals": [
    "customtkinter подключаем под коротким именем ctk.",
    "Остальные строки импортируют наши функции из соседних файлов.",
@@ -203,7 +203,7 @@ window.LESSONS['may-1'] = [
  {
   "kicker": "ФУНКЦИЯ ОКНА",
   "title": "Настраиваем главное окно",
-  "code": "def create_window():\\n    ctk.set_appearance_mode(\\\"dark\\\")\\n    ctk.set_default_color_theme(\\\"blue\\\")\\n\\n    app = ctk.CTk()\\n    app.title(\\\"Soundboard Studio\\\")\\n    app.geometry(\\\"760x560\\\")\\n    app.minsize(620, 460)",
+  "code": "def create_window():\n    ctk.set_appearance_mode(\\\"dark\\\")\n    ctk.set_default_color_theme(\\\"blue\\\")\n\n    app = ctk.CTk()\n    app.title(\\\"Soundboard Studio\\\")\n    app.geometry(\\\"760x560\\\")\n    app.minsize(620, 460)",
   "reveals": [
    "dark включает тёмную тему.",
    "blue выбирает синюю цветовую палитру.",
@@ -215,7 +215,7 @@ window.LESSONS['may-1'] = [
  {
   "kicker": "СОБИРАЕМ ЧАСТИ",
   "title": "Добавляем области и возвращаем окно",
-  "code": "    create_header(app)\\n    create_sound_panel(app)\\n    create_controls(app)\\n\\n    return app",
+  "code": "    create_header(app)\n    create_sound_panel(app)\n    create_controls(app)\n\n    return app",
   "reveals": [
    "Каждая функция создаёт одну часть интерфейса.",
    "app передаём как родительское окно.",
@@ -241,7 +241,7 @@ window.LESSONS['may-1'] = [
  {
   "kicker": "ФУНКЦИЯ ЗАГОЛОВКА",
   "title": "Создаём рамку и название",
-  "code": "import customtkinter as ctk\\n\\n\\ndef create_header(parent):\\n    header = ctk.CTkFrame(parent, corner_radius=16)\\n    header.pack(fill=\\\"x\\\", padx=24, pady=(24, 12))\\n\\n    title = ctk.CTkLabel(\\n        header,\\n        text=\\\"Soundboard Studio\\\",\\n        font=(\\\"Arial\\\", 28, \\\"bold\\\")\\n    )\\n    title.pack(anchor=\\\"w\\\", padx=20, pady=(16, 4))",
+  "code": "import customtkinter as ctk\n\n\ndef create_header(parent):\n    header = ctk.CTkFrame(parent, corner_radius=16)\n    header.pack(fill=\\\"x\\\", padx=24, pady=(24, 12))\n\n    title = ctk.CTkLabel(\n        header,\n        text=\\\"Soundboard Studio\\\",\n        font=(\\\"Arial\\\", 28, \\\"bold\\\")\n    )\n    title.pack(anchor=\\\"w\\\", padx=20, pady=(16, 4))",
   "reveals": [
    "CTkFrame создаёт контейнер.",
    "CTkLabel показывает текст.",
@@ -252,7 +252,7 @@ window.LESSONS['may-1'] = [
  {
   "kicker": "СТРОКА СОСТОЯНИЯ",
   "title": "Добавляем приветствие",
-  "code": "    status = ctk.CTkLabel(\\n        header,\\n        text=\\\"Добро пожаловать! Здесь появится статус приложения.\\\",\\n        anchor=\\\"w\\\"\\n    )\\n    status.pack(fill=\\\"x\\\", padx=20, pady=(0, 16))",
+  "code": "    status = ctk.CTkLabel(\n        header,\n        text=\\\"Добро пожаловать! Здесь появится статус приложения.\\\",\n        anchor=\\\"w\\\"\n    )\n    status.pack(fill=\\\"x\\\", padx=20, pady=(0, 16))",
   "reveals": [
    "Строка состояния будет показывать сообщения приложения.",
    "Позже её текст будем менять после действий пользователя."
@@ -276,7 +276,7 @@ window.LESSONS['may-1'] = [
  {
   "kicker": "ПУСТАЯ ПАНЕЛЬ",
   "title": "Создаём область и сообщение",
-  "code": "import customtkinter as ctk\\n\\n\\ndef create_sound_panel(parent):\\n    panel = ctk.CTkFrame(parent, corner_radius=16)\\n    panel.pack(fill=\\\"both\\\", expand=True, padx=24, pady=12)\\n\\n    heading = ctk.CTkLabel(\\n        panel,\\n        text=\\\"Моя звуковая коллекция\\\",\\n        font=(\\\"Arial\\\", 20, \\\"bold\\\")\\n    )\\n    heading.pack(anchor=\\\"w\\\", padx=20, pady=(18, 8))\\n\\n    empty_message = ctk.CTkLabel(\\n        panel,\\n        text=\\\"Коллекция пока пуста. Позже здесь появятся карточки звуков.\\\"\\n    )\\n    empty_message.pack(anchor=\\\"w\\\", padx=20, pady=(0, 18))",
+  "code": "import customtkinter as ctk\n\n\ndef create_sound_panel(parent):\n    panel = ctk.CTkFrame(parent, corner_radius=16)\n    panel.pack(fill=\\\"both\\\", expand=True, padx=24, pady=12)\n\n    heading = ctk.CTkLabel(\n        panel,\n        text=\\\"Моя звуковая коллекция\\\",\n        font=(\\\"Arial\\\", 20, \\\"bold\\\")\n    )\n    heading.pack(anchor=\\\"w\\\", padx=20, pady=(18, 8))\n\n    empty_message = ctk.CTkLabel(\n        panel,\n        text=\\\"Коллекция пока пуста. Позже здесь появятся карточки звуков.\\\"\n    )\n    empty_message.pack(anchor=\\\"w\\\", padx=20, pady=(0, 18))",
   "reveals": [
    "CTkFrame создаёт область будущих карточек.",
    "fill=both и expand=True позволяют панели занять свободное место.",
@@ -311,7 +311,7 @@ window.LESSONS['may-1'] = [
  {
   "kicker": "ПРОВЕРЯЕМ СТРУКТУРУ",
   "title": "Все файлы должны лежать на своих местах",
-  "code": "SoundboardStudio/\\n├── main.py\\n├── requirements.txt\\n└── interface/\\n    ├── __init__.py\\n    ├── window.py\\n    ├── header.py\\n    ├── sound_panel.py\\n    └── controls.py",
+  "code": "SoundboardStudio/\n├── main.py\n├── requirements.txt\n└── interface/\n    ├── __init__.py\n    ├── window.py\n    ├── header.py\n    ├── sound_panel.py\n    └── controls.py",
   "reveals": [
    "main.py и requirements.txt лежат в корне.",
    "Все четыре файла интерфейса лежат внутри interface/.",
