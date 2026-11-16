@@ -124,3 +124,64 @@
 .module-lesson-square:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
 .module-card .module-bottom{margin-top:17px}
 .module-arrow{display:none}
+
+
+/* Mobile layout fixes: keep every element inside the viewport and make slides scroll naturally. */
+@media(max-width:620px){
+  html,body{width:100%;max-width:100%;overflow-x:clip}
+  .page-shell{width:calc(100% - 32px);max-width:100%}
+  .hero-visual{max-width:100%;overflow:visible}
+  .module-grid,.module-entry,.module-card{min-width:0;max-width:100%}
+  .lesson-view{width:100%;max-width:100%;overflow:hidden}
+  .lesson-topbar{width:100%;min-width:0}
+  .slide-stage{
+    width:calc(100% - 32px);
+    max-width:100%;
+    margin:0 auto;
+    padding:22px 0 28px;
+    align-items:flex-start;
+    overflow-x:hidden;
+    overflow-y:auto;
+  }
+  .slide-content{width:100%;min-width:0;flex:0 0 auto}
+  .slide-kicker{font-size:9px;letter-spacing:.1em;line-height:1.5;margin-bottom:14px}
+  .slide-title{font-size:clamp(29px,8vw,39px);line-height:1.12;letter-spacing:-.055em;margin-bottom:15px;overflow-wrap:anywhere}
+  .slide-lead{font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+  .slide-note{margin-top:20px;padding:13px 14px;font-size:12px;line-height:1.55}
+  .slide-columns{margin-top:20px}
+  .code-example,.code-output{max-width:100%;width:100%;margin-top:17px}
+  .code-pre,.output-pre{white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal;font-size:11px;line-height:1.65;padding:12px}
+  .slide-checklist{margin-top:18px;gap:8px}
+  .slide-checklist li{padding:11px 12px 11px 36px;font-size:11px}
+  .slide-checklist li:before{left:12px}
+  .reveal-area{margin-top:16px;gap:7px}
+  .reveal-item{padding:11px 12px;gap:9px}
+  .reveal-item p{font-size:12px;line-height:1.5}
+  .lesson-controls{width:100%;padding:0 16px;gap:9px}
+  .slide-progress{min-width:24px}
+  .slide-counter{white-space:nowrap;font-size:9px}
+  .slide-buttons{flex-shrink:0}
+  .telegram-feedback{
+    left:12px;
+    right:12px;
+    bottom:calc(10px + env(safe-area-inset-bottom));
+    width:auto;
+    min-width:0;
+    max-width:none;
+    justify-content:center;
+    padding:9px 12px;
+    gap:9px;
+    border-radius:13px;
+  }
+  .telegram-feedback-icon{width:32px;height:32px;flex:0 0 32px}
+  .telegram-feedback-copy strong{font-size:11px}
+  .telegram-feedback-copy small{font-size:9px}
+}
+@media(max-width:380px){
+  .slide-stage{width:calc(100% - 26px)}
+  .slide-title{font-size:29px}
+  .lesson-controls{padding:0 12px;gap:7px}
+  .nav-button{width:33px;height:33px}
+  .slide-counter{font-size:8px}
+  .telegram-feedback{left:9px;right:9px}
+}
