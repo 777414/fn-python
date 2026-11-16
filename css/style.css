@@ -207,3 +207,23 @@
   }
   .slide-content{flex:0 0 auto;width:100%;margin-block:auto}
 }
+
+
+/* Prevent the home page artwork from creating a horizontal scroll area on phones. */
+@media(max-width:620px){
+  html,body,#app,main{width:100%;max-width:100%;overflow-x:clip}
+  .page-shell{width:calc(100% - 28px);max-width:calc(100% - 28px);min-width:0}
+  .hero{width:100%;max-width:100%;min-width:0;grid-template-columns:minmax(0,1fr);overflow-x:clip}
+  .hero-copy{width:100%;min-width:0;max-width:100%}
+  .hero-visual{
+    width:100%;min-width:0;max-width:100%;
+    margin:0!important;transform:none!important;
+    overflow:hidden!important;contain:paint;
+  }
+  .hero-visual .orbit-a{width:min(460px,120vw);max-width:120vw}
+  .hero-visual .orbit-b{width:min(500px,125vw);max-width:125vw}
+  .hero-visual .code-window{width:min(440px,calc(100% - 28px));max-width:100%}
+  .hero-visual .chip-top{right:4px}
+  .hero-visual .chip-bottom{left:4px}
+  .curriculum,.section-heading,.module-grid,.module-entry,.module-card{min-width:0;max-width:100%}
+}
