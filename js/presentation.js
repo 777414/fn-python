@@ -42,6 +42,30 @@ window.Presentation = (() => {
   reset.addEventListener("click",()=>{Object.keys(data).forEach(key=>data[key].value=data[key].options[0]);active="name";render()});
   render();return root;
  }
+ function makeBranchDiagram(){
+  const root=el("div","branch-diagram");
+  const condition=el("div","branch-condition","if условие");
+  condition.style.cssText="margin:0 auto 18px;padding:13px 22px;width:max-content;max-width:100%;border:2px solid #e9c84f;border-radius:10px;background:#594b16;color:#fff0a6;font:600 16px var(--mono);text-align:center";
+  const paths=el("div","branch-paths");
+  function path(label,active,command,description){
+   const card=el("div","branch-path");
+   card.style.cssText="min-width:0;padding:15px;border:1px solid "+(active?"#39c982":"#64748b")+";border-radius:11px;background:"+(active?"#123d31":"#202a3a")+";text-align:center";
+   const tag=el("div","branch-path-tag",label);
+   tag.style.cssText="font:10px var(--mono);letter-spacing:.12em;color:"+(active?"#72e5ae":"#a8b4c7")+";margin-bottom:10px";
+   const cmd=el("div","branch-command",command);
+   cmd.style.cssText="padding:13px 8px;border-radius:7px;background:"+(active?"#1b704d":"#354154")+";color:"+(active?"#d4ffe7":"#c1cad8")+";font:600 13px var(--mono)";
+   const desc=el("div","branch-path-desc",description);
+   desc.style.cssText="margin-top:9px;color:#aab8cf;font-size:11px;line-height:1.5";
+   card.append(tag,cmd,desc);return card;
+  }
+  paths.append(path("TRUE · УСЛОВИЕ ВЕРНО",true,"print("Команда")","Зелёная команда выполняется."));
+  paths.append(path("FALSE · УСЛОВИЕ ЛОЖНО",false,"print("Команда")","Команда пропускается — она не запускается."));
+  paths.style.cssText="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:700px;margin:auto";
+  const join=el("div","branch-join","↓  После блока if программа продолжает выполнение");
+  join.style.cssText="margin:14px auto 0;padding:11px 14px;max-width:700px;border:1px dashed #6d91d6;border-radius:9px;color:#b8c7df;text-align:center;font-size:12px";
+  root.append(condition,paths,join);
+  return root;
+ }
  function outputIsPending(slide){return !!(slide.outputAfterReveal&&slide.output!==undefined&&!outputShown)}
  function updateControls(){
   const slide=slides[index];if(!slide)return;
@@ -63,6 +87,7 @@ window.Presentation = (() => {
   article.append(el("h1","slide-title",slide.title||""));
   if(slide.lead)article.append(el("p","slide-lead",slide.lead));
   if(slide.variablePlayground)article.append(makeVariablePlayground());
+  if(slide.branchDiagram)article.append(makeBranchDiagram());
   if(slide.code){const wrap=el("div","code-example");if(slide.codeCaption)wrap.append(el("div","code-caption",slide.codeCaption));wrap.append(el("pre","code-pre",slide.code));article.append(wrap)}
   if(slide.output!==undefined&&(!slide.outputAfterReveal||outputShown))article.append(makeOutput(slide))
   if(slide.items?.length){const cards=el("div","slide-columns");slide.items.forEach(item=>{const box=el("div","slide-panel");box.append(el("h3","",item.title));box.append(el("p","",item.text));cards.append(box)});article.append(cards)}
