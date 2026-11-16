@@ -169,11 +169,11 @@ window.Presentation = (() => {
   const marker=shape("marker",{id:"fl-arrow-head",markerWidth:10,markerHeight:10,refX:8,refY:5,orient:"auto"},defs);
   shape("path",{d:"M0 0 L9 5 L0 10",fill:"none",stroke:"#aabbd0","stroke-width":1.8},marker);
   function path(d){shape("path",{d,class:"fl-path","marker-end":"url(#fl-arrow-head)"})}
-  path("M175 145 H225");
-  path("M395 145 H455");
-  path("M650 145 H700");
-  path("M790 200 V285 Q790 315 755 315 H555 Q520 315 520 285 V205");
-  path("M555 205 V345");
+
+  path("M295 145 H355");
+  path("M550 145 H600");
+  path("M695 200 V285 Q695 315 660 315 H455 Q420 315 420 285 V205");
+  path("M455 205 V345");
   function node(id,x,y,w,h,title,sub,kind){
    const g=shape("g",{class:"fl-node "+kind,"data-node":id});
    shape("rect",{x,y,width:w,height:h,rx:13,fill:kind==="fl-condition"?"#554a1b":kind==="fl-body"?"#164832":kind==="fl-exit"?"#554a1b":"#25354b",stroke:kind==="fl-condition"||kind==="fl-exit"?"#e5c84b":kind==="fl-body"?"#34bd7b":"#8292a9"},g);
@@ -181,10 +181,10 @@ window.Presentation = (() => {
    const s=shape("text",{x:x+w/2,y:y+53,class:"fl-sub"},g);s.textContent=sub;
    return g;
   }
-  const rangeNode=node("range",225,108,170,74,"НАБОР ЗНАЧЕНИЙ","range(1, 4)","fl-range");
-  const nextNode=node("next",455,105,195,100,"СЛЕДУЮЩЕЕ ЧИСЛО","получить значение","fl-condition");
-  const bodyNode=node("body",700,105,190,100,"КОМАНДЫ ЦИКЛА","print(number)","fl-body");
-  const exitNode=node("exit",455,345,200,68,"ВЫХОД","значения закончились","fl-exit");
+  const rangeNode=node("range",125,108,170,74,"НАБОР ЗНАЧЕНИЙ","range(1, 4)","fl-range");
+  const nextNode=node("next",355,105,195,100,"СЛЕДУЮЩЕЕ ЧИСЛО","получить значение","fl-condition");
+  const bodyNode=node("body",600,105,190,100,"КОМАНДЫ ЦИКЛА","print(number)","fl-body");
+  const exitNode=node("exit",355,345,200,68,"ВЫХОД","значения закончились","fl-exit");
   root.append(svg);
   const status=el("div","fl-status");
   const controls=el("div","fl-controls");
